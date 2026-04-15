@@ -1,0 +1,2 @@
+# SafeRAG v2 — self-contained (DirectRetriever, no Milvus/ES/torch)
+# No additional dependencies beyond inspect_ai base

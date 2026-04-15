@@ -1,0 +1,2 @@
+[inspect_ai]
+eval_benchmarks = eval_benchmarks._registry

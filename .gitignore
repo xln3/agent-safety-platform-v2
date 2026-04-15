@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.env
+*.log
+.DS_Store
+server/dist/
+server/eval-engine/.venvs/
+server/eval-engine/results/
+screenshots/
+__pycache__/
+*.pyc
+e2e/test-results/
+e2e/report/

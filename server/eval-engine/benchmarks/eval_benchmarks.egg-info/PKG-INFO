@@ -1,0 +1,8 @@
+Metadata-Version: 2.4
+Name: eval-benchmarks
+Version: 0.1.0
+Summary: Local security benchmarks for inspect_ai evaluation
+Requires-Python: >=3.10
+Requires-Dist: inspect-ai
+Requires-Dist: rouge-score
+Requires-Dist: tavily-python
