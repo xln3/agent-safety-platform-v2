@@ -9,5 +9,7 @@ server/eval-engine/results/
 screenshots/
 __pycache__/
 *.pyc
+*.egg-info/
 e2e/test-results/
 e2e/report/
+server/tsconfig.tsbuildinfo
