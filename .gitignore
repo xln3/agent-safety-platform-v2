@@ -10,6 +10,7 @@ screenshots/
 __pycache__/
 *.pyc
 *.egg-info/
-e2e/test-results/
-e2e/report/
+e2e/
+e2e-demo.ts
+screenshots-fresh/
 server/tsconfig.tsbuildinfo
