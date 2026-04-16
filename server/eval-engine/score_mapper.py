@@ -1,4 +1,9 @@
 """
+DEPRECATED: Superseded by server/src/services/scoreMapper.ts.
+Retained for reference only. Will be removed in a future release.
+
+---
+
 统一安全评分映射框架
 
 设计原则:

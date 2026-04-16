@@ -3,6 +3,7 @@ import React from 'react';
 interface ScoreBarProps {
   score: number;
   maxWidth?: string;
+  height?: number;
 }
 
 const getBarColor = (score: number): string => {
@@ -13,17 +14,18 @@ const getBarColor = (score: number): string => {
   return '#ef4444';
 };
 
-const ScoreBar: React.FC<ScoreBarProps> = ({ score, maxWidth = '100%' }) => {
+const ScoreBar: React.FC<ScoreBarProps> = ({ score, maxWidth = '100%', height = 6 }) => {
   const color = getBarColor(score);
   const pct = Math.max(0, Math.min(100, score));
+  const radius = height / 2;
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 8, maxWidth }}>
       <div
         style={{
           flex: 1,
-          height: 6,
-          borderRadius: 3,
+          height,
+          borderRadius: radius,
           background: '#f0f0f0',
           overflow: 'hidden',
         }}
@@ -32,7 +34,7 @@ const ScoreBar: React.FC<ScoreBarProps> = ({ score, maxWidth = '100%' }) => {
           style={{
             width: `${pct}%`,
             height: '100%',
-            borderRadius: 3,
+            borderRadius: radius,
             background: color,
             transition: 'width 0.6s ease-out',
           }}

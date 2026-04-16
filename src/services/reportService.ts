@@ -1,6 +1,39 @@
 import api from './api';
 import type { PaginatedResult } from './agentService';
 
+export interface ReportTaskItem {
+  taskName: string;
+  status: string;
+  score: number;
+  riskLevel: string | null;
+  interpretation: string | null;
+  samplesTotal: number;
+  samplesPassed: number;
+  errorMessage: string | null;
+}
+
+export interface ReportCategoryDetail {
+  name: string;
+  nameEn: string;
+  avgScore: number;
+  riskLevel: string;
+  taskCount: number;
+  samplesPassed: number;
+  samplesTotal: number;
+  tasks: ReportTaskItem[];
+}
+
+export interface ReportSummary {
+  overallScore: number;
+  totalTasks: number;
+  samplesPassed: number;
+  samplesTotal: number;
+  passRate: number;
+  categories: Array<{ category: string; name: string; nameEn: string; score: number }>;
+  categoryDetails: Record<string, ReportCategoryDetail>;
+  generatedAt: string;
+}
+
 export interface Report {
   id: number;
   title: string;
@@ -9,10 +42,7 @@ export interface Report {
   agentName?: string;
   status: 'draft' | 'generating' | 'ready';
   content?: string;
-  summary?: {
-    overallScore: number;
-    categories: Array<{ category: string; score: number }>;
-  };
+  summary?: ReportSummary;
   createdAt?: string;
   updatedAt?: string;
 }

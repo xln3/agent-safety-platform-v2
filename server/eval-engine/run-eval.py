@@ -1,5 +1,16 @@
 #!/usr/bin/env python3
 """
+DEPRECATED: This file is superseded by TypeScript services:
+  - server/src/services/evalRunner.ts (orchestration)
+  - server/src/services/venvService.ts (venv management)
+  - server/src/services/commandBuilder.ts (CLI args)
+  - server/src/services/environmentBuilder.ts (env vars)
+  - server/src/services/indexService.ts (index files)
+  - server/src/services/dockerService.ts (Docker lifecycle)
+Retained for reference only. Will be removed in a future release.
+
+---
+
 统一 Eval 入口脚本 - 每个 benchmark 使用独立虚拟环境
 
 用法:

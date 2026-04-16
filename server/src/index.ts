@@ -4,6 +4,7 @@ import sequelize from './config/database';
 import { syncDatabase } from './models';
 import config from './config';
 import logger from './utils/logger';
+import { recoverJobs } from './services/evalRunner';
 
 async function main(): Promise<void> {
   // Verify database connection
@@ -25,6 +26,11 @@ async function main(): Promise<void> {
     logger.info(`Agent Safety Evaluation Platform server running on port ${port}`);
     logger.info(`Environment: ${config.nodeEnv}`);
     logger.info(`Health check: http://localhost:${port}/api/health`);
+
+    // Recover any jobs that were interrupted by a server restart
+    recoverJobs().catch((err) => {
+      logger.error('Job recovery failed:', err.message);
+    });
   });
 }
 

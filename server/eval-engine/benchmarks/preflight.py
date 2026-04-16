@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 """
+DEPRECATED: Superseded by server/src/services/preflightService.ts.
+Retained for reference only. Will be removed in a future release.
+
+---
+
 预检查模块 - 在运行评测前检查环境依赖和收集配置
 
 提供细粒度的操作指引，确保"一键测评"真正可行。

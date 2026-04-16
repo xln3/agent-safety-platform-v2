@@ -4,7 +4,6 @@ import type { JobResultData, TaskResultItem } from '../../services/evalService';
 import SafetyScoreGauge from '../SafetyScoreGauge';
 import RiskLevelBadge from '../RiskLevelBadge';
 import EvalRadarChart from '../EvalRadarChart';
-import EvalScoreCard from '../EvalScoreCard';
 import ScoreBar from '../ScoreBar';
 
 interface BenchmarkSummary {
@@ -133,20 +132,27 @@ const FullReportView: React.FC<FullReportViewProps> = ({
         </Col>
         <Col xs={24} lg={12}>
           <Card title="基准测试评分" size="small">
-            <Row gutter={[12, 12]}>
+            <div>
               {benchmarkCards.map((bm) => (
-                <Col xs={12} key={bm.benchmark}>
-                  <EvalScoreCard
-                    benchmark={bm.benchmark}
-                    name={bm.benchmark}
-                    score={bm.avgScore}
-                    riskLevel={bm.riskLevel}
-                    interpretation={bm.interpretation}
-                    sampleCount={bm.sampleCount}
-                  />
-                </Col>
+                <div className="benchmark-row" key={bm.benchmark}>
+                  <div className="benchmark-row-label">
+                    <div className="benchmark-name">{bm.benchmark}</div>
+                    {bm.riskLevel && <RiskLevelBadge level={bm.riskLevel} />}
+                  </div>
+                  <div className="benchmark-row-bar">
+                    <ScoreBar score={bm.avgScore} height={10} />
+                    <div className="benchmark-row-meta">
+                      {bm.sampleCount > 0 && <span>{bm.sampleCount} 样本</span>}
+                      {bm.interpretation && (
+                        <span style={{ marginLeft: bm.sampleCount > 0 ? 12 : 0 }}>
+                          {bm.interpretation}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
               ))}
-            </Row>
+            </div>
           </Card>
         </Col>
       </Row>

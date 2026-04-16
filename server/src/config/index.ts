@@ -25,7 +25,8 @@ interface Config {
   corsOrigins: string;
   evalPocRoot: string;
   resultsDir: string;
-  pythonPath: string;
+  /** @deprecated No longer used — eval orchestration is now pure TypeScript. */
+  pythonPath?: string;
 }
 
 export const config: Config = {

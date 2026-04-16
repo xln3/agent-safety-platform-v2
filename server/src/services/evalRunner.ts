@@ -1,7 +1,7 @@
 /**
  * Evaluation Runner Service
  *
- * Orchestrates evaluation jobs by spawning `run-eval.py` subprocesses for each
+ * Orchestrates evaluation jobs by directly spawning `inspect eval` for each
  * EvalTask. Provides concurrency control, process management, retry logic with
  * error classification, and result file discovery.
  *
@@ -12,11 +12,18 @@
 import { ChildProcess, spawn } from 'child_process';
 import path from 'path';
 import fs from 'fs';
+import AdmZip from 'adm-zip';
 import { Agent, EvalJob, EvalTask } from '../models';
 import { EVAL_STATUS, TASK_STATUS } from '../constants';
 import { config } from '../config';
 import logger from '../utils/logger';
 import { computeTaskScore } from './scoreService';
+import catalogService from './catalogService';
+import * as venvService from './venvService';
+import { buildEnvironment } from './environmentBuilder';
+import { buildInspectCommand, normalizeModelName } from './commandBuilder';
+import { resolveIndexSampleIds } from './indexService';
+import { dockerPreCleanup, cleanupDockerNetworks, ensureThorServer } from './dockerService';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -43,8 +50,8 @@ const DEFAULT_MAX_CONCURRENCY = 2;
 /** Maximum retry attempts for retryable errors. */
 const MAX_RETRIES = 2;
 
-/** Per-task timeout in milliseconds (30 minutes). */
-const TASK_TIMEOUT_MS = 30 * 60 * 1000;
+/** Per-task timeout in milliseconds (90 minutes — full-sample runs can be long). */
+const TASK_TIMEOUT_MS = 90 * 60 * 1000;
 
 /** Max connections passed to inspect_ai per task. */
 const DEFAULT_MAX_CONNECTIONS = 16;
@@ -144,22 +151,50 @@ class Semaphore {
 // ---------------------------------------------------------------------------
 
 /**
+ * Check if an .eval file is complete by verifying it contains header.json
+ * with a terminal status (success/error/cancelled).
+ */
+function isEvalFileComplete(filePath: string): boolean {
+  try {
+    const zip = new AdmZip(filePath);
+    const headerEntry = zip.getEntry('header.json');
+    if (!headerEntry) {
+      return false;
+    }
+    const header = JSON.parse(headerEntry.getData().toString('utf8'));
+    // A complete eval file has a terminal status
+    return ['success', 'error', 'cancelled'].includes(header.status);
+  } catch {
+    return false;
+  }
+}
+
+/**
  * Find the most recent .eval file produced for a given model + task.
  *
- * Directory layout created by run-eval.py:
+ * Directory layout:
  *   results/{sanitized_model}/{benchmark}/logs/{timestamp}_{benchmark}_{hash}.eval
  *
- * The model name is sanitized (slashes replaced with underscores) by run-eval.py.
- * We search across all matching model directories and pick the newest file whose
+ * The model name is sanitized (slashes replaced with underscores).
+ * We search across all matching model directories and pick the newest
+ * **complete** file (contains header.json with terminal status) whose
  * name contains the task name.
+ *
+ * @param afterMs  Only consider files modified after this epoch (ms).
+ *                 Useful for recovery — skip stale files from earlier jobs.
  */
-function findLatestEvalFile(modelId: string, benchmark: string, taskName: string): string | null {
+function findLatestEvalFile(
+  modelId: string,
+  benchmark: string,
+  taskName: string,
+  afterMs = 0,
+): string | null {
   const resultsDir = config.resultsDir;
   if (!fs.existsSync(resultsDir)) {
     return null;
   }
 
-  // run-eval.py sanitizes model names: "openai/gpt-4o" -> "openai_gpt-4o"
+  // Sanitize model names: "openai/gpt-4o" -> "openai_gpt-4o"
   const sanitizedModel = modelId.replace(/\//g, '_');
   // Also try the short form (after the slash) for broader matching
   const modelShort = modelId.includes('/') ? modelId.split('/').pop()! : modelId;
@@ -213,7 +248,7 @@ function findLatestEvalFile(modelId: string, benchmark: string, taskName: string
       const filePath = path.join(logsDir, file);
       try {
         const stat = fs.statSync(filePath);
-        if (stat.mtimeMs > bestMtime) {
+        if (stat.mtimeMs > bestMtime && stat.mtimeMs > afterMs && isEvalFileComplete(filePath)) {
           bestMtime = stat.mtimeMs;
           bestFile = filePath;
         }
@@ -231,48 +266,110 @@ function findLatestEvalFile(modelId: string, benchmark: string, taskName: string
 // ---------------------------------------------------------------------------
 
 /**
- * Spawn run-eval.py for a single task and return a promise that resolves when
- * the process exits. Collects stdout/stderr for error reporting.
+ * Spawn `inspect eval` directly for a single task.
+ *
+ * Replaces the old flow (spawn python3 run-eval.py) with direct invocation
+ * of the venv's inspect binary + TS-built environment/command.
  */
-function spawnTaskProcess(
+function debugLog(msg: string) {
+  fs.appendFileSync('/tmp/eval-debug.log', `[${new Date().toISOString()}] ${msg}\n`);
+}
+
+async function spawnTaskProcess(
   task: EvalTask,
   agent: Agent,
   job: EvalJob,
-): { proc: ChildProcess; done: Promise<{ exitCode: number; stderr: string; stdout: string }> } {
-  const runEvalScript = path.join(config.evalPocRoot, 'run-eval.py');
+): Promise<{ proc: ChildProcess; done: Promise<{ exitCode: number; stderr: string; stdout: string }> }> {
+  debugLog(`spawnTaskProcess START: ${task.benchmark}/${task.taskName}`);
+  // 1. Load benchmark config from catalog
+  const benchmarkConfig = catalogService.getBenchmarkConfig(task.benchmark);
+  if (!benchmarkConfig) {
+    throw new Error(`Benchmark '${task.benchmark}' not found in catalog`);
+  }
+  const catalogModels = catalogService.getModels();
 
-  // Build the task spec: "benchmark:taskName" (or just benchmark if they match)
-  const taskSpec = task.benchmark !== task.taskName
-    ? `${task.benchmark}:${task.taskName}`
-    : task.benchmark;
+  // 2. Ensure venv is ready
+  debugLog(`setupBenchmarkEnv START: ${task.benchmark}`);
+  await venvService.setupBenchmarkEnv(task.benchmark, {
+    python: benchmarkConfig.python,
+    extras: benchmarkConfig.extras,
+    source: benchmarkConfig.source,
+    module: benchmarkConfig.module,
+  });
+  debugLog(`setupBenchmarkEnv DONE: ${task.benchmark}`);
 
-  // Build CLI arguments
-  const args: string[] = [
-    runEvalScript,
+  // 3. Resolve task spec and path
+  const taskInfo = benchmarkConfig.tasks.find((t) => t.name === task.taskName);
+  const taskSpec = taskInfo?.path || (
+    task.benchmark !== task.taskName
+      ? `${benchmarkConfig.module}/${task.taskName}`
+      : benchmarkConfig.module
+  );
+  // Merge model roles: benchmark-level then task-level override
+  const mergedModelRoles = { ...benchmarkConfig.modelRoles };
+  if (taskInfo?.taskArgs) {
+    // task-level model_roles would be in catalog but we pass taskArgs via -T
+  }
+
+  // 4. Build environment variables
+  const { env, effectiveJudge } = buildEnvironment({
+    benchmarkName: task.benchmark,
+    model: job.modelId,
+    apiBase: agent.apiBase,
+    apiKey: agent.apiKey,
+    judgeModel: job.judgeModel,
+    benchmarkConfig: {
+      judge_model: benchmarkConfig.judgeModel,
+      judge_param: benchmarkConfig.judgeParam,
+    },
+    catalogModels,
+  });
+
+  // Ensure results directory exists
+  const resultsDir = env.INSPECT_LOG_DIR;
+  fs.mkdirSync(resultsDir, { recursive: true });
+
+  // 5. Resolve index/sampling
+  const indexResult = resolveIndexSampleIds({
+    benchmarkName: task.benchmark,
+    taskName: task.taskName,
+  });
+
+  // 6. Build inspect eval command
+  const inspectPath = venvService.getInspectPath(task.benchmark);
+  const cmd = buildInspectCommand({
+    inspectPath,
     taskSpec,
-    '--model', job.modelId,
-    '--api-base', agent.apiBase,
-    '--api-key', agent.apiKey,
-    '--max-connections', String(DEFAULT_MAX_CONNECTIONS),
-  ];
+    modelForInspect: normalizeModelName(job.modelId),
+    apiBase: agent.apiBase,
+    limit: job.limit || undefined,
+    effectiveJudge,
+    judgeParam: benchmarkConfig.judgeParam,
+    modelRoles: mergedModelRoles,
+    taskArgs: taskInfo?.taskArgs as Record<string, unknown> | undefined,
+    sampleIds: indexResult?.sampleIds,
+    indexMode: indexResult?.mode,
+    maxConnections: DEFAULT_MAX_CONNECTIONS,
+    systemMessage: job.systemPrompt || undefined,
+    catalogModels,
+  });
 
-  if (job.limit) {
-    args.push('--limit', String(job.limit));
+  // 7. Docker lifecycle
+  if (benchmarkConfig.needsDocker) {
+    await dockerPreCleanup(task.benchmark, task.taskName);
   }
-  if (job.judgeModel) {
-    args.push('--judge-model', job.judgeModel);
-  }
-  if (job.systemPrompt) {
-    args.push('--system-message', job.systemPrompt);
+  if (task.benchmark === 'safeagentbench') {
+    await ensureThorServer();
   }
 
-  logger.debug(`Spawning: ${config.pythonPath} ${args.join(' ')}`);
+  // 8. Spawn inspect eval directly
+  debugLog(`Spawning: ${cmd.join(' ')}`);
+  logger.debug(`Spawning: ${cmd.join(' ')}`);
 
-  const proc = spawn(config.pythonPath, args, {
+  const proc = spawn(cmd[0], cmd.slice(1), {
     cwd: config.evalPocRoot,
-    env: { ...process.env },
+    env,
     stdio: ['ignore', 'pipe', 'pipe'],
-    // Create a new process group so we can kill the tree on cancel
     detached: true,
   });
 
@@ -283,7 +380,6 @@ function spawnTaskProcess(
     proc.stdout?.on('data', (chunk: Buffer) => {
       const text = chunk.toString();
       stdout += text;
-      // Log subprocess output line by line
       for (const line of text.split('\n')) {
         const trimmed = line.trim();
         if (trimmed) {
@@ -308,6 +404,10 @@ function spawnTaskProcess(
     });
 
     proc.on('close', (code) => {
+      // Docker post-cleanup (best-effort)
+      if (benchmarkConfig.needsDocker) {
+        cleanupDockerNetworks().catch(() => {});
+      }
       resolve({ exitCode: code ?? 1, stderr, stdout });
     });
   });
@@ -325,6 +425,7 @@ async function executeTask(
   job: EvalJob,
   jobId: string,
 ): Promise<void> {
+  debugLog(`executeTask START: ${task.benchmark}/${task.taskName}`);
   await task.update({
     status: TASK_STATUS.RUNNING,
     startedAt: new Date(),
@@ -408,7 +509,7 @@ async function runTaskAttempt(
   job: EvalJob,
   jobId: string,
 ): Promise<void> {
-  const { proc, done } = spawnTaskProcess(task, agent, job);
+  const { proc, done } = await spawnTaskProcess(task, agent, job);
 
   // Track the process for cancellation
   const procs = runningProcesses.get(jobId);
@@ -696,4 +797,141 @@ function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export default { runJob, cancelJob };
+// ---------------------------------------------------------------------------
+// Job recovery (handles server restart while jobs are in-flight)
+// ---------------------------------------------------------------------------
+
+/**
+ * Recover jobs that were in "running" state when the server restarted.
+ *
+ * For each task still marked "running":
+ *   - If a complete .eval file exists → compute scores, mark as success
+ *   - Otherwise → mark as failed (orphaned process)
+ *
+ * For each task still "pending":
+ *   - Re-execute them (the job orchestration continues)
+ *
+ * After processing all tasks, update the job's final status.
+ */
+export async function recoverJobs(): Promise<void> {
+  const stuckJobs = await EvalJob.findAll({
+    where: { status: EVAL_STATUS.RUNNING },
+    include: [{ model: Agent, as: 'agent' }],
+  });
+
+  if (stuckJobs.length === 0) {
+    return;
+  }
+
+  debugLog(`recoverJobs: Found ${stuckJobs.length} stuck job(s)`);
+  logger.info(`recoverJobs: Found ${stuckJobs.length} stuck job(s), attempting recovery...`);
+
+  for (const job of stuckJobs) {
+    const agent = (job as any).agent as Agent | undefined;
+    if (!agent) {
+      logger.warn(`recoverJobs: No agent for job ${job.id}, marking as failed`);
+      await job.update({ status: EVAL_STATUS.FAILED, completedAt: new Date() });
+      continue;
+    }
+
+    const tasks = await EvalTask.findAll({ where: { jobId: job.id } });
+    let completedCount = 0;
+    let hasFailure = false;
+    const pendingTasks: EvalTask[] = [];
+
+    // Phase 1: recover tasks that were "running" (process may have finished)
+    for (const task of tasks) {
+      if (task.status === TASK_STATUS.SUCCESS) {
+        completedCount++;
+        continue;
+      }
+
+      if (task.status === TASK_STATUS.FAILED) {
+        completedCount++;
+        hasFailure = true;
+        continue;
+      }
+
+      if (task.status === TASK_STATUS.RUNNING) {
+        // Try to find a completed .eval file created after this task started
+        const afterMs = task.startedAt ? new Date(task.startedAt).getTime() : 0;
+        const evalFile = findLatestEvalFile(job.modelId, task.benchmark, task.taskName, afterMs);
+        if (evalFile) {
+          logger.info(`recoverJobs: Found completed eval file for ${task.benchmark}/${task.taskName}`);
+          await task.update({ evalFile });
+          try {
+            await computeTaskScore(task.id, evalFile);
+          } catch (scoreErr: any) {
+            logger.warn(`recoverJobs: Score computation failed for ${task.benchmark}/${task.taskName}: ${scoreErr.message}`);
+          }
+          await task.update({ status: TASK_STATUS.SUCCESS, completedAt: new Date() });
+          completedCount++;
+        } else {
+          // No complete file — re-queue for execution
+          logger.info(`recoverJobs: No completed eval file for ${task.benchmark}/${task.taskName}, re-queuing`);
+          await task.update({ status: TASK_STATUS.PENDING, startedAt: null });
+          pendingTasks.push(task);
+        }
+        continue;
+      }
+
+      if (task.status === TASK_STATUS.PENDING) {
+        pendingTasks.push(task);
+      }
+    }
+
+    // Phase 2: re-run pending tasks
+    if (pendingTasks.length > 0) {
+      logger.info(`recoverJobs: Re-running ${pendingTasks.length} pending task(s) for job ${job.id}`);
+
+      const jobIdStr = String(job.id);
+      runningProcesses.set(jobIdStr, []);
+      const sem = new Semaphore(DEFAULT_MAX_CONCURRENCY);
+
+      const runPending = async (task: EvalTask) => {
+        await sem.acquire();
+        try {
+          await executeTask(task, agent, job, jobIdStr);
+          if (task.status === TASK_STATUS.FAILED) {
+            hasFailure = true;
+          }
+        } catch (err: any) {
+          hasFailure = true;
+          logger.error(`recoverJobs: Error running ${task.benchmark}/${task.taskName}: ${err.message}`);
+          await task.update({
+            status: TASK_STATUS.FAILED,
+            errorMessage: `Recovery error: ${err.message}`,
+            completedAt: new Date(),
+          }).catch(() => {});
+        } finally {
+          completedCount++;
+          await job.update({ completedTasks: completedCount }).catch(() => {});
+          sem.release();
+        }
+      };
+
+      try {
+        await Promise.all(pendingTasks.map(runPending));
+      } catch (err: any) {
+        logger.error(`recoverJobs: Unexpected error in job ${job.id}: ${err.message}`);
+        hasFailure = true;
+      }
+
+      runningProcesses.delete(jobIdStr);
+    }
+
+    // Phase 3: finalize job status
+    await job.update({
+      status: hasFailure ? EVAL_STATUS.FAILED : EVAL_STATUS.COMPLETED,
+      completedAt: new Date(),
+      completedTasks: completedCount,
+    });
+
+    logger.info(
+      `recoverJobs: Job ${job.id} recovered — status=${hasFailure ? 'failed' : 'completed'}, ` +
+      `completed=${completedCount}/${tasks.length}`,
+    );
+  }
+}
+
+export default { runJob, cancelJob, recoverJobs };

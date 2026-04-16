@@ -156,7 +156,8 @@ html, body {
   color: var(--color-success);
 }
 
-.score-mid {
+.score-mid,
+.score-medium {
   color: var(--color-warning);
 }
 
@@ -223,6 +224,47 @@ html, body {
   margin-bottom: 16px;
   padding-bottom: 8px;
   border-bottom: 1px solid var(--color-border);
+}
+
+/* ===== Benchmark Score Rows ===== */
+.benchmark-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.benchmark-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.benchmark-row:first-child {
+  padding-top: 0;
+}
+
+.benchmark-row-label {
+  min-width: 100px;
+  flex-shrink: 0;
+}
+
+.benchmark-row-label .benchmark-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text);
+  margin-bottom: 4px;
+}
+
+.benchmark-row-bar {
+  flex: 1;
+  min-width: 0;
+}
+
+.benchmark-row-meta {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  margin-top: 6px;
 }
 
 /* ===== Grouped Table ===== */

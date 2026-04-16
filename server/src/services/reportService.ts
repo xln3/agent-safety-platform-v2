@@ -19,6 +19,35 @@ function getCategoryInfo(key: string): { name: string; nameEn: string } {
     : { name: key, nameEn: key };
 }
 
+function getRiskLevel(score: number): string {
+  if (score >= 80) return 'MINIMAL';
+  if (score >= 60) return 'LOW';
+  if (score >= 40) return 'MEDIUM';
+  if (score >= 20) return 'HIGH';
+  return 'CRITICAL';
+}
+
+function getScoreColor(score: number): string {
+  if (score >= 80) return '#3b82f6';
+  if (score >= 60) return '#22c55e';
+  if (score >= 40) return '#eab308';
+  if (score >= 20) return '#f97316';
+  return '#ef4444';
+}
+
+function getRiskBadgeHtml(level: string): string {
+  const labels: Record<string, string> = {
+    CRITICAL: '极危', HIGH: '高危', MEDIUM: '中危', LOW: '低危', MINIMAL: '极低',
+  };
+  return `<span class="risk-badge risk-${level}">${labels[level] || level}</span>`;
+}
+
+function getScoreBarHtml(score: number): string {
+  const color = getScoreColor(score);
+  const pct = Math.max(0, Math.min(100, score));
+  return `<div class="score-bar"><div class="score-bar-track"><div class="score-bar-fill" style="width:${pct}%;background:${color}"></div></div><span class="score-bar-value" style="color:${color}">${score.toFixed(1)}</span></div>`;
+}
+
 export const reportService = {
   async createReport(agentId: number, jobId: number | null, title: string): Promise<EvalReport> {
     const report = await EvalReport.create({
@@ -177,17 +206,35 @@ export const reportService = {
       const allSamplesPassed = Object.values(categoryData).reduce((s, d) => s + d.samplesPassed, 0);
       const allSamplesTotal = Object.values(categoryData).reduce((s, d) => s + d.samplesTotal, 0);
 
+      const categories = Object.entries(radarData).map(([key, value]) => {
+        const info = getCategoryInfo(key);
+        return { category: key, name: info.name, nameEn: info.nameEn, score: value };
+      });
+
+      const categoryDetails = Object.fromEntries(
+        Object.entries(categoryData).map(([cat, data]) => [
+          cat,
+          {
+            name: data.info.name,
+            nameEn: data.info.nameEn,
+            avgScore: data.taskCount > 0 ? Number((data.totalScore / data.taskCount).toFixed(2)) : 0,
+            riskLevel: getRiskLevel(data.taskCount > 0 ? data.totalScore / data.taskCount : 0),
+            taskCount: data.taskCount,
+            samplesPassed: data.samplesPassed,
+            samplesTotal: data.samplesTotal,
+            tasks: data.tasks,
+          },
+        ])
+      );
+
       const summary = {
         overallScore,
         totalTasks: allTaskCount,
         samplesPassed: allSamplesPassed,
         samplesTotal: allSamplesTotal,
         passRate: allSamplesTotal > 0 ? Number(((allSamplesPassed / allSamplesTotal) * 100).toFixed(1)) : 0,
-        categoryScores: radarData,
-        radarChartData: Object.entries(radarData).map(([key, value]) => {
-          const info = getCategoryInfo(key);
-          return { category: key, name: info.name, nameEn: info.nameEn, score: value };
-        }),
+        categories,
+        categoryDetails,
         generatedAt: new Date().toISOString(),
       };
 
@@ -219,123 +266,189 @@ function buildReportHtml(
   summary: any
 ): string {
   const now = new Date().toISOString().replace('T', ' ').substring(0, 19);
+  const overallColor = getScoreColor(summary.overallScore);
+  const overallRisk = getRiskLevel(summary.overallScore);
 
   let categorySectionsHtml = '';
-  for (const [cat, data] of Object.entries(categoryData)) {
-    const avgScore = data.taskCount > 0
-      ? (data.totalScore / data.taskCount).toFixed(2)
-      : '0.00';
+  for (const [, data] of Object.entries(categoryData)) {
+    const avgScore = data.taskCount > 0 ? data.totalScore / data.taskCount : 0;
+    const catRisk = getRiskLevel(avgScore);
 
     let taskRowsHtml = '';
     for (const task of data.tasks) {
-      const scoreClass = task.score >= 80 ? 'score-high' : task.score >= 60 ? 'score-medium' : 'score-low';
-      const riskTag = task.riskLevel ? ` [${task.riskLevel}]` : '';
+      const statusLabel = task.status === 'success' ? '成功' : task.status === 'failed' ? '失败' : task.status;
+      const statusClass = task.status === 'success' ? 'status-success' : task.status === 'failed' ? 'status-fail' : 'status-other';
       taskRowsHtml += `
-        <tr>
-          <td>${escapeHtml(task.taskName)}</td>
-          <td>${escapeHtml(task.status)}</td>
-          <td class="${scoreClass}">${task.score.toFixed(1)}${riskTag}</td>
-          <td>${task.samplesPassed}/${task.samplesTotal}</td>
-          <td>${task.interpretation ? escapeHtml(task.interpretation) : (task.errorMessage ? escapeHtml(task.errorMessage) : '-')}</td>
-        </tr>`;
+          <tr>
+            <td style="font-weight:500">${escapeHtml(task.taskName)}</td>
+            <td class="text-center"><span class="${statusClass}">${statusLabel}</span></td>
+            <td>${getScoreBarHtml(task.score)}</td>
+            <td class="text-center">${task.riskLevel ? getRiskBadgeHtml(task.riskLevel) : '<span style="color:#9ca3af">-</span>'}</td>
+            <td class="text-center">${task.samplesPassed}/${task.samplesTotal}</td>
+            <td class="text-muted">${task.interpretation ? escapeHtml(task.interpretation) : (task.errorMessage ? escapeHtml(task.errorMessage) : '-')}</td>
+          </tr>`;
     }
 
     categorySectionsHtml += `
-    <div class="category-section">
-      <h3>${escapeHtml(data.info.name)} (${escapeHtml(data.info.nameEn)})</h3>
-      <div class="category-summary">
-        <span class="metric">Average Safety Score: <strong>${Number(avgScore).toFixed(1)}</strong></span>
-        <span class="metric">Tasks: <strong>${data.taskCount}</strong></span>
-        <span class="metric">Samples Passed: <strong>${data.samplesPassed}/${data.samplesTotal}</strong></span>
-      </div>
-      <table class="task-table">
-        <thead>
-          <tr>
-            <th>Task</th>
-            <th>Status</th>
-            <th>Score</th>
-            <th>Passed/Total</th>
-            <th>Error</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${taskRowsHtml}
-        </tbody>
-      </table>
-    </div>`;
+      <div class="category-section">
+        <div class="category-header">
+          <div class="category-title">
+            <span class="category-name">${escapeHtml(data.info.name)}</span>
+            <span class="category-name-en">${escapeHtml(data.info.nameEn)}</span>
+            ${getRiskBadgeHtml(catRisk)}
+          </div>
+          <div class="category-stats">
+            <span>平均分：<strong>${avgScore.toFixed(1)}</strong></span>
+            <span>任务：<strong>${data.taskCount}</strong></span>
+            <span>样本通过：<strong>${data.samplesPassed}/${data.samplesTotal}</strong></span>
+          </div>
+        </div>
+        <div class="category-score-bar">${getScoreBarHtml(avgScore)}</div>
+        <table class="task-table">
+          <thead>
+            <tr>
+              <th>任务名称</th>
+              <th class="text-center" style="width:70px">状态</th>
+              <th style="width:140px">安全评分</th>
+              <th class="text-center" style="width:80px">风险等级</th>
+              <th class="text-center" style="width:80px">通过/总计</th>
+              <th>说明</th>
+            </tr>
+          </thead>
+          <tbody>${taskRowsHtml}
+          </tbody>
+        </table>
+      </div>`;
   }
 
-  const overallClass = summary.overallScore >= 80 ? 'score-high' : summary.overallScore >= 60 ? 'score-medium' : 'score-low';
+  // High risk analysis section
+  const highRiskTasks: any[] = [];
+  for (const [, data] of Object.entries(categoryData)) {
+    for (const task of data.tasks) {
+      if (task.riskLevel === 'CRITICAL' || task.riskLevel === 'HIGH') {
+        highRiskTasks.push({ ...task, categoryName: data.info.name });
+      }
+    }
+  }
+
+  let riskAnalysisHtml = '';
+  if (highRiskTasks.length > 0) {
+    let riskCardsHtml = '';
+    for (const task of highRiskTasks) {
+      riskCardsHtml += `
+        <div class="risk-card">
+          <div class="risk-card-info">
+            <div class="risk-card-name">${escapeHtml(task.taskName)}</div>
+            <div class="risk-card-meta">${escapeHtml(task.categoryName)} · 评分 ${task.score.toFixed(1)}${task.interpretation ? ` · ${escapeHtml(task.interpretation)}` : ''}</div>
+          </div>
+          ${getRiskBadgeHtml(task.riskLevel)}
+        </div>`;
+    }
+    riskAnalysisHtml = `
+    <div class="section">
+      <h2>风险分析（${highRiskTasks.length} 个高危任务）</h2>
+      ${riskCardsHtml}
+    </div>`;
+  }
 
   return `<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${escapeHtml(agent.name)} - Safety Evaluation Report</title>
+  <title>${escapeHtml(agent.name)} - 安全评估报告</title>
   <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 20px; background: #f5f5f5; color: #333; }
-    .report-container { max-width: 1200px; margin: 0 auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); padding: 40px; }
-    h1 { color: #1a1a2e; border-bottom: 3px solid #4361ee; padding-bottom: 10px; }
-    h2 { color: #2b2d42; margin-top: 30px; }
-    h3 { color: #3d405b; }
-    .meta-info { color: #666; margin-bottom: 30px; }
-    .meta-info span { margin-right: 20px; }
-    .summary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin: 20px 0; }
-    .summary-card { background: #f8f9fa; border-radius: 8px; padding: 20px; text-align: center; border-left: 4px solid #4361ee; }
-    .summary-card .value { font-size: 2em; font-weight: bold; }
-    .summary-card .label { color: #666; margin-top: 5px; }
-    .score-high { color: #2ecc71; }
-    .score-medium { color: #f39c12; }
-    .score-low { color: #e74c3c; }
-    .category-section { margin: 20px 0; padding: 20px; background: #fafafa; border-radius: 8px; }
-    .category-summary { margin: 10px 0; }
-    .category-summary .metric { margin-right: 30px; color: #555; }
-    .task-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-    .task-table th, .task-table td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #eee; }
-    .task-table th { background: #f0f0f0; font-weight: 600; color: #444; }
-    .task-table tr:hover { background: #f5f5ff; }
-    .radar-data { display: none; }
-    .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; color: #999; font-size: 0.9em; text-align: center; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif; background: #f5f7fa; color: #1f2937; padding: 40px 20px; line-height: 1.6; }
+    .report { max-width: 1100px; margin: 0 auto; }
+    .report-header { text-align: center; margin-bottom: 40px; }
+    .report-title { font-size: 28px; font-weight: 700; color: #111827; margin-bottom: 8px; }
+    .report-subtitle { font-size: 14px; color: #6b7280; }
+    .report-subtitle span { margin: 0 12px; }
+    .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+    .summary-card { background: #fff; border-radius: 12px; padding: 24px 16px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border-top: 4px solid #e5e7eb; }
+    .summary-value { font-size: 28px; font-weight: 700; line-height: 1.3; }
+    .summary-label { font-size: 13px; color: #6b7280; margin-top: 4px; }
+    .risk-badge { display: inline-flex; align-items: center; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 500; white-space: nowrap; }
+    .risk-CRITICAL { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+    .risk-HIGH { background: #fff7ed; color: #9a3412; border: 1px solid #fed7aa; }
+    .risk-MEDIUM { background: #fefce8; color: #854d0e; border: 1px solid #fef08a; }
+    .risk-LOW { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+    .risk-MINIMAL { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
+    .score-bar { display: flex; align-items: center; gap: 8px; }
+    .score-bar-track { flex: 1; height: 8px; background: #f3f4f6; border-radius: 4px; overflow: hidden; }
+    .score-bar-fill { height: 100%; border-radius: 4px; }
+    .score-bar-value { font-size: 13px; font-weight: 600; min-width: 36px; text-align: right; }
+    .section { margin-bottom: 24px; }
+    .section h2 { font-size: 18px; font-weight: 600; color: #111827; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #e5e7eb; }
+    .category-section { background: #fff; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); overflow: hidden; }
+    .category-header { padding: 20px 24px; border-bottom: 1px solid #f3f4f6; }
+    .category-title { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .category-name { font-size: 16px; font-weight: 600; color: #111827; }
+    .category-name-en { font-size: 13px; color: #9ca3af; }
+    .category-stats { display: flex; gap: 24px; font-size: 13px; color: #6b7280; }
+    .category-stats strong { color: #374151; }
+    .category-score-bar { padding: 12px 24px; border-bottom: 1px solid #f3f4f6; }
+    .task-table { width: 100%; border-collapse: collapse; }
+    .task-table th { padding: 12px 16px; text-align: left; font-size: 12px; font-weight: 600; color: #6b7280; background: #f9fafb; border-bottom: 1px solid #f3f4f6; }
+    .task-table td { padding: 12px 16px; border-bottom: 1px solid #f9fafb; font-size: 13px; color: #374151; }
+    .task-table tr:last-child td { border-bottom: none; }
+    .task-table tr:hover td { background: #f9fafb; }
+    .text-center { text-align: center; }
+    .text-muted { color: #9ca3af; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .status-success { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; background: #f0fdf4; color: #166534; }
+    .status-fail { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; background: #fef2f2; color: #991b1b; }
+    .status-other { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; background: #f5f5f5; color: #666; }
+    .risk-card { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; background: #fff5f5; border: 1px solid #fecaca; border-radius: 8px; margin-bottom: 10px; }
+    .risk-card-info { flex: 1; min-width: 0; }
+    .risk-card-name { font-size: 14px; font-weight: 500; color: #1f2937; }
+    .risk-card-meta { font-size: 12px; color: #6b7280; margin-top: 2px; }
+    .report-footer { text-align: center; color: #9ca3af; font-size: 13px; margin-top: 40px; padding-top: 24px; border-top: 1px solid #e5e7eb; }
+    @media print { body { padding: 0; background: #fff; } .category-section { break-inside: avoid; } }
   </style>
 </head>
 <body>
-  <div class="report-container">
-    <h1>Agent Safety Evaluation Report</h1>
-    <div class="meta-info">
-      <span>Agent: <strong>${escapeHtml(agent.name)}</strong></span>
-      <span>Model: <strong>${escapeHtml(agent.modelId)}</strong></span>
-      <span>Job: <strong>${escapeHtml(job.name)}</strong></span>
-      <span>Generated: <strong>${now}</strong></span>
+  <div class="report">
+    <div class="report-header">
+      <h1 class="report-title">智能体安全评估报告</h1>
+      <p class="report-subtitle">
+        <span>智能体：${escapeHtml(agent.name)}</span>
+        <span>模型：${escapeHtml(agent.modelId)}</span>
+        <span>评估任务：${escapeHtml(job.name)}</span>
+        <span>生成时间：${now}</span>
+      </p>
     </div>
 
-    <h2>Overall Summary</h2>
-    <div class="summary-cards">
-      <div class="summary-card">
-        <div class="value ${overallClass}">${summary.overallScore.toFixed(1)}</div>
-        <div class="label">Overall Safety Score (0-100)</div>
+    <div class="summary-grid">
+      <div class="summary-card" style="border-top-color:${overallColor}">
+        <div class="summary-value" style="color:${overallColor}">${summary.overallScore.toFixed(1)}</div>
+        <div class="summary-label">综合安全评分</div>
+        <div style="margin-top:6px">${getRiskBadgeHtml(overallRisk)}</div>
       </div>
-      <div class="summary-card">
-        <div class="value">${summary.totalTasks}</div>
-        <div class="label">Total Tasks</div>
+      <div class="summary-card" style="border-top-color:#3b82f6">
+        <div class="summary-value" style="color:#3b82f6">${summary.totalTasks}</div>
+        <div class="summary-label">评估任务数</div>
       </div>
-      <div class="summary-card">
-        <div class="value">${summary.samplesPassed}/${summary.samplesTotal}</div>
-        <div class="label">Samples Passed</div>
+      <div class="summary-card" style="border-top-color:#22c55e">
+        <div class="summary-value" style="color:#22c55e">${summary.samplesPassed}<span style="font-size:16px;color:#9ca3af">/${summary.samplesTotal}</span></div>
+        <div class="summary-label">样本通过</div>
       </div>
-      <div class="summary-card">
-        <div class="value">${summary.passRate}%</div>
-        <div class="label">Pass Rate</div>
+      <div class="summary-card" style="border-top-color:${summary.passRate >= 60 ? '#22c55e' : '#ef4444'}">
+        <div class="summary-value" style="color:${summary.passRate >= 60 ? '#22c55e' : '#ef4444'}">${summary.passRate}%</div>
+        <div class="summary-label">通过率</div>
       </div>
     </div>
 
-    <h2>Category Breakdown</h2>
-    ${categorySectionsHtml}
+    <div class="section">
+      <h2>评估分类详情</h2>
+      ${categorySectionsHtml}
+    </div>
 
-    <div class="radar-data" id="radarChartData">${JSON.stringify(summary.radarChartData)}</div>
+    ${riskAnalysisHtml}
 
-    <div class="footer">
-      <p>Generated by Agent Safety Evaluation Platform v2.0</p>
+    <div class="report-footer">
+      <p>由智能体安全评估平台 v2.0 自动生成</p>
+      <p>${now}</p>
     </div>
   </div>
 </body>

@@ -1,25 +1,20 @@
 /**
  * scoreService.ts
  *
- * Convert raw benchmark scores to normalised safety scores (0-100) by
- * calling the Python `score_mapper.py` module via child_process.
+ * Convert raw benchmark scores to normalised safety scores (0-100)
+ * using the pure TypeScript scoreMapper module (no Python dependency).
  *
  * Flow:
  *   1. readEvalHeader() -> raw metrics
  *   2. Determine benchmark name via TASK_BENCHMARK_MAP
- *   3. Call Python score_mapper.convert_score(benchmark, rawScore)
- *   4. Parse JSON result -> safetyScore, riskLevel, interpretation
- *   5. Update EvalTask record in MySQL
+ *   3. Call convertScore(benchmark, rawScore)
+ *   4. Update EvalTask record in MySQL
  */
 
-import { execFile } from 'child_process';
-import { promisify } from 'util';
-import config from '../config';
 import logger from '../utils/logger';
 import EvalTask from '../models/EvalTask';
 import { readEvalHeader, extractPrimaryMetric } from './resultReader';
-
-const execFileAsync = promisify(execFile);
+import { convertScore, type ScoreResult as MapperResult } from './scoreMapper';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -179,89 +174,31 @@ const TASK_BENCHMARK_MAP: Record<string, string> = {
 };
 
 // ---------------------------------------------------------------------------
-// Python bridge
+// Score mapper bridge (pure TypeScript — no Python dependency)
 // ---------------------------------------------------------------------------
 
 /**
- * Call `score_mapper.convert_score` for a single benchmark/raw_score pair.
+ * Convert a single benchmark raw score to a safety score.
  */
-async function callScoreMapper(
+function callScoreMapper(
   benchmarkName: string,
   rawScore: number,
-): Promise<ScoreResult> {
-  const pythonScript = [
-    'import sys, json',
-    `sys.path.insert(0, ${JSON.stringify(config.evalPocRoot)})`,
-    'from score_mapper import convert_score',
-    `result = convert_score(${JSON.stringify(benchmarkName)}, ${rawScore})`,
-    'print(json.dumps({',
-    '  "safety_score": result.safety_score,',
-    '  "risk_level": result.risk_level.value,',
-    '  "interpretation": result.interpretation',
-    '}))',
-  ].join('\n');
-
-  const { stdout } = await execFileAsync(config.pythonPath, ['-c', pythonScript], {
-    timeout: 30_000,
-    env: { ...process.env, PYTHONIOENCODING: 'utf-8' },
-  });
-
-  const parsed = JSON.parse(stdout.trim());
+): ScoreResult {
+  const result = convertScore(benchmarkName, rawScore);
   return {
-    safetyScore: parsed.safety_score,
-    riskLevel: parsed.risk_level,
-    interpretation: parsed.interpretation,
+    safetyScore: result.safetyScore,
+    riskLevel: result.riskLevel,
+    interpretation: result.interpretation,
   };
 }
 
 /**
- * Call `score_mapper.convert_score` for multiple tasks in a single Python
- * invocation. Returns results keyed by the input array index.
+ * Batch convert multiple benchmark scores.
  */
-async function callBatchScoreMapper(
+function callBatchScoreMapper(
   tasks: Array<{ benchmarkName: string; rawScore: number }>,
-): Promise<ScoreResult[]> {
-  if (tasks.length === 0) return [];
-
-  const tasksJson = JSON.stringify(
-    tasks.map((t) => ({ benchmark: t.benchmarkName, raw_score: t.rawScore })),
-  );
-
-  const pythonScript = [
-    'import sys, json',
-    `sys.path.insert(0, ${JSON.stringify(config.evalPocRoot)})`,
-    'from score_mapper import convert_score',
-    `tasks = json.loads(${JSON.stringify(tasksJson)})`,
-    'results = []',
-    'for t in tasks:',
-    '    try:',
-    '        r = convert_score(t["benchmark"], t["raw_score"])',
-    '        results.append({',
-    '            "safety_score": r.safety_score,',
-    '            "risk_level": r.risk_level.value,',
-    '            "interpretation": r.interpretation',
-    '        })',
-    '    except Exception as e:',
-    '        results.append({"error": str(e)})',
-    'print(json.dumps(results))',
-  ].join('\n');
-
-  const { stdout } = await execFileAsync(config.pythonPath, ['-c', pythonScript], {
-    timeout: 60_000,
-    env: { ...process.env, PYTHONIOENCODING: 'utf-8' },
-  });
-
-  const parsed: Array<any> = JSON.parse(stdout.trim());
-  return parsed.map((item) => {
-    if (item.error) {
-      throw new Error(`score_mapper error: ${item.error}`);
-    }
-    return {
-      safetyScore: item.safety_score,
-      riskLevel: item.risk_level,
-      interpretation: item.interpretation,
-    };
-  });
+): ScoreResult[] {
+  return tasks.map((t) => callScoreMapper(t.benchmarkName, t.rawScore));
 }
 
 // ---------------------------------------------------------------------------
@@ -344,7 +281,7 @@ export async function computeTaskScore(
 
   let scoreResult: ScoreResult;
   try {
-    scoreResult = await callScoreMapper(benchmarkName, rawScore);
+    scoreResult = callScoreMapper(benchmarkName, rawScore);
   } catch (err) {
     logger.error(
       `computeTaskScore: score_mapper failed for task ${taskId} ` +
@@ -444,7 +381,7 @@ export async function computeBatchScores(
   // Phase 2: batch call score_mapper
   let scoreResults: ScoreResult[];
   try {
-    scoreResults = await callBatchScoreMapper(
+    scoreResults = callBatchScoreMapper(
       prepared.map((p) => ({ benchmarkName: p.benchmarkName, rawScore: p.rawScore })),
     );
   } catch (err) {
@@ -452,7 +389,7 @@ export async function computeBatchScores(
     logger.warn('computeBatchScores: batch call failed, falling back to individual calls', err);
     for (const p of prepared) {
       try {
-        const result = await callScoreMapper(p.benchmarkName, p.rawScore);
+        const result = callScoreMapper(p.benchmarkName, p.rawScore);
         await p.task.update({
           rawScore: p.rawScore,
           safetyScore: result.safetyScore,

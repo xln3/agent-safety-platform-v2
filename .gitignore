@@ -6,6 +6,8 @@ dist/
 server/dist/
 server/eval-engine/.venvs/
 server/eval-engine/results/
+server/eval-engine/datasets-cache/*
+!server/eval-engine/datasets-cache/.gitkeep
 screenshots/
 __pycache__/
 *.pyc

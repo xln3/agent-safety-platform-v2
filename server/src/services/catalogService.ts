@@ -57,6 +57,7 @@ interface CatalogYamlTask {
   name: string;
   path?: string;
   task_args?: Record<string, unknown>;
+  model_roles?: Record<string, string>;
 }
 
 interface CatalogYamlBenchmark {
@@ -64,62 +65,93 @@ interface CatalogYamlBenchmark {
   module?: string;
   python?: string;
   judge_model?: string;
+  judge_param?: string;
   needs_docker?: boolean;
+  extras?: string[];
+  model_roles?: Record<string, string>;
   tasks?: CatalogYamlTask[];
+}
+
+interface CatalogYamlModelDef {
+  provider?: string;
+  base_url?: string;
+  api_key_env?: string;
 }
 
 interface CatalogYaml {
   benchmarks?: Record<string, CatalogYamlBenchmark>;
+  models?: Record<string, CatalogYamlModelDef>;
+}
+
+/** Full benchmark config for the eval runner (includes fields not exposed to API) */
+export interface BenchmarkConfig {
+  name: string;
+  source: string;
+  module: string;
+  python: string;
+  judgeModel?: string;
+  judgeParam?: string;
+  needsDocker: boolean;
+  extras: string[];
+  modelRoles: Record<string, string>;
+  tasks: TaskInfo[];
 }
 
 let cachedBenchmarks: BenchmarkInfo[] | null = null;
+let cachedRawData: CatalogYaml | null = null;
+
+function loadRawCatalog(): CatalogYaml {
+  if (cachedRawData) return cachedRawData;
+
+  const catalogPath = path.join(config.evalPocRoot, 'benchmarks', 'catalog.yaml');
+  if (!fs.existsSync(catalogPath)) {
+    logger.warn('catalog.yaml not found at', catalogPath);
+    cachedRawData = {};
+    return cachedRawData;
+  }
+
+  try {
+    const raw = fs.readFileSync(catalogPath, 'utf-8');
+    cachedRawData = (yaml.load(raw) as CatalogYaml) || {};
+    return cachedRawData;
+  } catch (err: any) {
+    logger.error('Failed to parse catalog.yaml:', err.message);
+    cachedRawData = {};
+    return cachedRawData;
+  }
+}
 
 function loadCatalog(): BenchmarkInfo[] {
   if (cachedBenchmarks) {
     return cachedBenchmarks;
   }
 
-  const catalogPath = path.join(config.evalPocRoot, 'benchmarks', 'catalog.yaml');
+  const data = loadRawCatalog();
+  const benchmarksMap = data?.benchmarks ?? {};
 
-  if (!fs.existsSync(catalogPath)) {
-    logger.warn('catalog.yaml not found at', catalogPath);
-    cachedBenchmarks = [];
-    return cachedBenchmarks;
+  const benchmarks: BenchmarkInfo[] = [];
+
+  for (const [name, cfg] of Object.entries(benchmarksMap)) {
+    const tasks: TaskInfo[] = (cfg.tasks ?? []).map((t) => ({
+      name: t.name,
+      path: t.path ?? '',
+      taskArgs: t.task_args ?? {},
+    }));
+
+    benchmarks.push({
+      name,
+      source: cfg.source ?? 'upstream',
+      module: cfg.module ?? '',
+      python: cfg.python ?? '3.10',
+      judgeModel: cfg.judge_model,
+      needsDocker: cfg.needs_docker ?? false,
+      tasks,
+    });
   }
 
-  try {
-    const raw = fs.readFileSync(catalogPath, 'utf-8');
-    const data = yaml.load(raw) as CatalogYaml;
-    const benchmarksMap = data?.benchmarks ?? {};
-
-    const benchmarks: BenchmarkInfo[] = [];
-
-    for (const [name, cfg] of Object.entries(benchmarksMap)) {
-      const tasks: TaskInfo[] = (cfg.tasks ?? []).map((t) => ({
-        name: t.name,
-        path: t.path ?? '',
-        taskArgs: t.task_args ?? {},
-      }));
-
-      benchmarks.push({
-        name,
-        source: cfg.source ?? 'upstream',
-        module: cfg.module ?? '',
-        python: cfg.python ?? '3.10',
-        judgeModel: cfg.judge_model,
-        needsDocker: cfg.needs_docker ?? false,
-        tasks,
-      });
-    }
-
-    cachedBenchmarks = benchmarks;
-    logger.info(`Loaded ${benchmarks.length} benchmarks from catalog.yaml`);
-    return cachedBenchmarks;
-  } catch (err: any) {
-    logger.error('Failed to parse catalog.yaml:', err.message);
-    cachedBenchmarks = [];
-    return cachedBenchmarks;
-  }
+  cachedBenchmarks = benchmarks;
+  logger.info(`Loaded ${benchmarks.length} benchmarks from catalog.yaml`);
+  return cachedBenchmarks;
 }
 
 // ---------------------------------------------------------------------------
@@ -417,6 +449,44 @@ export const catalogService = {
    */
   getBenchmarkMeta(benchmarkName: string): BenchmarkMeta | null {
     return BENCHMARK_META[benchmarkName] ?? null;
+  },
+
+  /**
+   * Returns the full config for a single benchmark (for eval runner).
+   * Includes extras, judge_param, model_roles not exposed to the API.
+   */
+  getBenchmarkConfig(benchmarkName: string): BenchmarkConfig | null {
+    const data = loadRawCatalog();
+    const cfg = data?.benchmarks?.[benchmarkName];
+    if (!cfg) return null;
+
+    const tasks: TaskInfo[] = (cfg.tasks ?? []).map((t) => ({
+      name: t.name,
+      path: t.path ?? '',
+      taskArgs: t.task_args ?? {},
+    }));
+
+    return {
+      name: benchmarkName,
+      source: cfg.source ?? 'upstream',
+      module: cfg.module ?? '',
+      python: cfg.python ?? '3.10',
+      judgeModel: cfg.judge_model,
+      judgeParam: cfg.judge_param,
+      needsDocker: cfg.needs_docker ?? false,
+      extras: cfg.extras ?? [],
+      modelRoles: cfg.model_roles ?? {},
+      tasks,
+    };
+  },
+
+  /**
+   * Returns the global models dict from catalog.yaml.
+   * Used by environmentBuilder to resolve judge model short names.
+   */
+  getModels(): Record<string, CatalogYamlModelDef> {
+    const data = loadRawCatalog();
+    return data?.models ?? {};
   },
 };
 

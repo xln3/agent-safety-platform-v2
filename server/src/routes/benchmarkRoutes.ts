@@ -6,5 +6,7 @@ const router = Router();
 router.get('/', benchmarkController.listBenchmarks);
 router.get('/task-meta', benchmarkController.getTaskMeta);
 router.get('/by-category/:category', benchmarkController.getBenchmarksByCategory);
+router.get('/datasets/status', benchmarkController.getDatasetStatus);
+router.post('/datasets/prepare', benchmarkController.prepareDatasets);
 
 export default router;
