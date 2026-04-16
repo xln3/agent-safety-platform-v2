@@ -10,26 +10,33 @@ This benchmark integrates SafeRAG into the safety-benchmarks runner.
 
 ## Setup
 
-Create or rebuild the benchmark environment:
+The benchmark venv is created automatically by `venvService.ts` the first time
+the backend runs a saferag task. No manual setup step is required.
+
+If pkg_resources import fails inside the venv, pin setuptools manually:
 
 ```bash
-./run-eval.py --setup saferag --force
-```
-
-If pkg_resources import fails, pin setuptools:
-
-```bash
-uv pip install -p /home/xinzhu/safety-benchmarks/.venvs/saferag "setuptools<81"
+uv pip install -p server/eval-engine/.venvs/saferag "setuptools<81"
 ```
 
 ## Run (base retriever, no filter, SN attack, 100 samples)
+
+Trigger through the platform (recommended):
+
+```bash
+curl -X POST http://localhost:3000/api/eval/jobs \
+  -H "Content-Type: application/json" \
+  -d '{"agentId": 1, "benchmarks": ["saferag"], "limit": 100}'
+```
+
+Or invoke `inspect eval` directly for parameter tuning:
 
 ```bash
 export SAFERAG_ROOT=/home/xinzhu/SafeRAG
 export OPENAI_API_KEY=YOUR_KEY
 export OPENAI_BASE_URL=https://aihubmix.com/v1
 
-./run-eval.py saferag:saferag_sn --model openai/doubao-seed-1-8 \
+inspect eval eval_benchmarks/saferag_sn --model openai/doubao-seed-1-8 \
   -T retriever_name=base \
   -T filter_module=off \
   -T attack_module=indexing \

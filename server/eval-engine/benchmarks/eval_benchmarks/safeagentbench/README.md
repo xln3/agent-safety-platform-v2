@@ -200,18 +200,16 @@ inspect eval eval_benchmarks/safeagentbench_visual \
   -T agent_strategy=pca --model openai/your-model
 ```
 
-通过 `run-eval.py` 统一入口运行：
+通过平台 Web UI 或后端 API 运行（推荐）：
 
 ```bash
-# 默认 (direct strategy, semantic only)
-./run-eval.py safeagentbench --model openai/your-model
-
-# 指定 sub-task（benchmark:task 格式）
-./run-eval.py safeagentbench:safeagentbench_react --model openai/your-model
-./run-eval.py safeagentbench:safeagentbench_visual --model openai/your-model
+# 创建 eval job（会自动选择 benchmark 下的默认/指定 task）
+curl -X POST http://localhost:3000/api/eval/jobs \
+  -H "Content-Type: application/json" \
+  -d '{"agentId": 1, "benchmarks": ["safeagentbench"], "limit": 3}'
 ```
 
-传递 `-T` task 参数需要在 `catalog.yaml` 中通过 `task_args` 定义预设，或直接用 `inspect eval` 命令。
+后端 (`evalRunner.ts`) 会自动调用 `inspect eval`，并按需为 safeagentbench 准备 venv、拉起 AI2-THOR Docker 容器。需要自定义 `-T` 参数时，建议在 `catalog.yaml` 的 `task_args` 中定义预设，或直接使用上面的 `inspect eval` 命令。
 
 ## Task 参数
 

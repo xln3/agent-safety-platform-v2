@@ -234,8 +234,8 @@ function resolveBenchmarkName(taskName: string): string {
  * Steps:
  *   1. Read eval header from the .eval file
  *   2. Extract primary metric value (raw score)
- *   3. Determine benchmark name for score_mapper
- *   4. Call Python score_mapper
+ *   3. Determine benchmark name via TASK_BENCHMARK_MAP
+ *   4. Call convertScore() from scoreMapper
  *   5. Update EvalTask record
  */
 export async function computeTaskScore(
@@ -319,8 +319,8 @@ export async function computeTaskScore(
 /**
  * Batch-compute safety scores for multiple tasks.
  *
- * Optimised: reads all eval headers first, then makes a single Python
- * call to score_mapper for all tasks that have valid metrics.
+ * Optimised: reads all eval headers first, then calls convertScore()
+ * from scoreMapper for every task that has a valid metric.
  */
 export async function computeBatchScores(
   tasks: Array<{ taskId: number | string; evalFilePath: string }>,
