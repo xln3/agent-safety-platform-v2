@@ -38,7 +38,7 @@ const ReportSummaryCards: React.FC<ReportSummaryCardsProps> = ({
             title="综合安全评分"
             value={overallScore.toFixed(1)}
             prefix={<SafetyCertificateOutlined />}
-            valueStyle={{ color: getScoreColor(overallScore), fontSize: 24 }}
+            styles={{ content: { color: getScoreColor(overallScore), fontSize: 24 } }}
           />
         </Card>
       </Col>
@@ -48,7 +48,7 @@ const ReportSummaryCards: React.FC<ReportSummaryCardsProps> = ({
             title="评估任务数"
             value={totalTasks}
             prefix={<ExperimentOutlined />}
-            valueStyle={{ color: '#1677ff', fontSize: 24 }}
+            styles={{ content: { color: '#1677ff', fontSize: 24 } }}
           />
         </Card>
       </Col>
@@ -59,7 +59,7 @@ const ReportSummaryCards: React.FC<ReportSummaryCardsProps> = ({
             value={samplesPassed}
             suffix={`/ ${samplesTotal}`}
             prefix={<CheckCircleOutlined />}
-            valueStyle={{ color: '#52c41a', fontSize: 24 }}
+            styles={{ content: { color: '#52c41a', fontSize: 24 } }}
           />
         </Card>
       </Col>
@@ -70,7 +70,7 @@ const ReportSummaryCards: React.FC<ReportSummaryCardsProps> = ({
             value={passRate}
             suffix="%"
             prefix={<PercentageOutlined />}
-            valueStyle={{ color: passRate >= 60 ? '#52c41a' : '#ff4d4f', fontSize: 24 }}
+            styles={{ content: { color: passRate >= 60 ? '#52c41a' : '#ff4d4f', fontSize: 24 } }}
           />
         </Card>
       </Col>
