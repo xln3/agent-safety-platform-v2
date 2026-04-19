@@ -205,8 +205,13 @@ const EvalNewPage: React.FC = () => {
       return {
         key: cat.key,
         label: (
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div
+            data-testid={`category-header-${cat.key}`}
+            data-category-key={cat.key}
+            style={{ display: 'flex', alignItems: 'center', gap: 12 }}
+          >
             <Checkbox
+              data-testid={`category-checkbox-${cat.key}`}
               checked={allSel}
               indeterminate={partial}
               onClick={(e) => {
@@ -220,6 +225,7 @@ const EvalNewPage: React.FC = () => {
               <div style={{ fontSize: 12, color: '#999' }}>{cat.description}</div>
             </div>
             <Badge
+              data-testid={`category-badge-${cat.key}`}
               count={selCount > 0 ? `${selCount}/${benchmarks.length}` : benchmarks.length}
               style={{
                 backgroundColor: selCount > 0 ? '#1677ff' : '#d9d9d9',
@@ -240,6 +246,9 @@ const EvalNewPage: React.FC = () => {
                 return (
                   <div
                     key={b.name}
+                    data-testid={`benchmark-row-${b.name}`}
+                    data-benchmark-name={b.name}
+                    data-category-key={cat.key}
                     onClick={() => toggleBenchmark(b.name)}
                     style={{
                       display: 'flex',
@@ -255,6 +264,7 @@ const EvalNewPage: React.FC = () => {
                     }}
                   >
                     <Checkbox
+                      data-testid={`benchmark-checkbox-${b.name}`}
                       checked={checked}
                       style={{ marginTop: 2 }}
                       onClick={(e) => e.stopPropagation()}

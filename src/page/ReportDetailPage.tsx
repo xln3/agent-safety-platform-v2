@@ -226,15 +226,20 @@ const ReportDetailPage: React.FC = () => {
             <Row gutter={16} style={{ marginBottom: 24 }}>
               <Col xs={24} lg={12}>
                 <Card title="评估维度雷达图" size="small">
-                  <EvalRadarChart data={radarData} height={320} />
+                  <div data-testid="eval-radar-chart" data-axis-count={radarData.length}>
+                    <EvalRadarChart data={radarData} height={320} />
+                  </div>
                 </Card>
               </Col>
               <Col xs={24} lg={12}>
                 <Card title="分类评分概览" size="small">
-                  <div style={{ padding: '8px 0' }}>
+                  <div data-testid="category-score-overview" style={{ padding: '8px 0' }}>
                     {summary.categories.map((cat) => (
                       <div
                         key={cat.category}
+                        data-testid={`category-score-row-${cat.category}`}
+                        data-category-key={cat.category}
+                        data-category-score={cat.score}
                         style={{
                           display: 'flex',
                           alignItems: 'center',
@@ -269,7 +274,7 @@ const ReportDetailPage: React.FC = () => {
 
           {/* Category Detail Sections */}
           {Object.keys(categoryDetails).length > 0 && (
-            <div style={{ marginBottom: 24 }}>
+            <div data-testid="category-detail-sections" style={{ marginBottom: 24 }}>
               <Text
                 strong
                 style={{
@@ -294,12 +299,18 @@ const ReportDetailPage: React.FC = () => {
 
           {/* Risk Analysis */}
           {highRiskTasks.length > 0 && (
-            <div className="eval-section">
+            <div data-testid="risk-analysis-section" className="eval-section">
               <div className="eval-section-title">
                 风险分析（{highRiskTasks.length} 个高危任务）
               </div>
               {highRiskTasks.map((task, idx) => (
-                <div key={idx} className="high-risk-card">
+                <div
+                  key={idx}
+                  data-testid="high-risk-task"
+                  data-category-name={task.category}
+                  data-risk-level={task.riskLevel}
+                  className="high-risk-card"
+                >
                   <div className="high-risk-info">
                     <div className="high-risk-name">{task.taskName}</div>
                     <div className="high-risk-desc">

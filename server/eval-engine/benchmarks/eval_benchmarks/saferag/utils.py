@@ -1,4 +1,9 @@
-"""Path resolution for SafeRAG vendor data (dataset, prompts, knowledge base)."""
+"""Path resolution for SafeRAG vendor data (dataset, prompts, knowledge base).
+
+The data is now bundled inside the package at ``saferag/data/`` so the platform
+is fully self-contained — no SAFERAG_ROOT environment variable required.
+For backwards compatibility, SAFERAG_ROOT is still honored when explicitly set.
+"""
 
 from __future__ import annotations
 
@@ -9,19 +14,23 @@ from pathlib import Path
 
 @lru_cache(maxsize=1)
 def resolve_saferag_root() -> Path:
-    """Locate the SafeRAG vendor directory containing nctd_datasets/, etc."""
+    """Locate the SafeRAG data directory containing nctd_datasets/, etc.
+
+    Resolution order:
+      1. ``SAFERAG_ROOT`` env var (if set and exists) — legacy escape hatch
+      2. Bundled ``saferag/data/`` directory shipped with the package
+    """
     env_root = os.environ.get("SAFERAG_ROOT")
     if env_root:
         root = Path(env_root).expanduser().resolve()
-    else:
-        # Default: eval-poc/vendor/SafeRAG
-        # From source: benchmarks/eval_benchmarks/saferag/utils.py → parents[3] = eval-poc/
-        root = Path(__file__).resolve().parents[3] / "vendor" / "SafeRAG"
-        root = root.resolve()
+        if root.exists():
+            return root
+
+    root = (Path(__file__).resolve().parent / "data").resolve()
 
     if not root.exists():
         raise FileNotFoundError(
-            f"SafeRAG root not found at {root}. "
-            "Set SAFERAG_ROOT or place SafeRAG in eval-poc/vendor/."
+            f"SafeRAG data not found at {root}. "
+            "The bundled data directory should ship inside the saferag package."
         )
     return root

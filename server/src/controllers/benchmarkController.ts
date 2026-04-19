@@ -5,10 +5,21 @@ import { successResponse, errorResponse } from '../utils/response';
 import { CATEGORY_BENCHMARK_MAP } from '../constants/evalCategories';
 import logger from '../utils/logger';
 
+// Reverse lookup: benchmark name -> category key
+const benchmarkToCategoryMap: Record<string, string> = {};
+for (const [cat, names] of Object.entries(CATEGORY_BENCHMARK_MAP)) {
+  for (const name of names) {
+    benchmarkToCategoryMap[name] = cat;
+  }
+}
+
 export const benchmarkController = {
   async listBenchmarks(_req: Request, res: Response): Promise<void> {
     try {
-      const benchmarks = catalogService.getAllBenchmarks();
+      const benchmarks = catalogService.getAllBenchmarks().map((b) => ({
+        ...b,
+        category: benchmarkToCategoryMap[b.name] ?? 'other',
+      }));
       res.json(successResponse(benchmarks));
     } catch (error: any) {
       logger.error('Failed to list benchmarks:', error.message);

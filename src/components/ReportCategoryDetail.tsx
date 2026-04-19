@@ -10,7 +10,12 @@ interface ReportCategoryDetailProps {
 
 const ReportCategoryDetailComp: React.FC<ReportCategoryDetailProps> = ({ categoryKey, detail }) => {
   return (
-    <div className="eval-section" style={{ marginBottom: 16 }}>
+    <div
+      className="eval-section"
+      data-testid={`category-detail-${categoryKey}`}
+      data-category-key={categoryKey}
+      style={{ marginBottom: 16 }}
+    >
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <span style={{ fontSize: 16, fontWeight: 600 }}>{detail.name}</span>
@@ -29,7 +34,7 @@ const ReportCategoryDetailComp: React.FC<ReportCategoryDetailProps> = ({ categor
       </div>
 
       <div style={{ overflowX: 'auto' }}>
-        <table style={{ width: '100%', fontSize: 13, borderCollapse: 'collapse' }}>
+        <table data-testid={`category-detail-table-${categoryKey}`} style={{ width: '100%', fontSize: 13, borderCollapse: 'collapse' }}>
           <thead>
             <tr style={{ borderBottom: '2px solid #f0f0f0' }}>
               <th style={{ textAlign: 'left', padding: '10px 12px', fontWeight: 600, color: '#666' }}>任务名称</th>

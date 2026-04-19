@@ -11,6 +11,8 @@ import path from 'path';
 import { execFile } from 'child_process';
 import { promisify } from 'util';
 import https from 'https';
+import http from 'http';
+import type { IncomingMessage } from 'http';
 import { config } from '../config';
 import logger from '../utils/logger';
 import * as venvService from './venvService';
@@ -30,15 +32,23 @@ const MANIFEST_PATH = path.join(DATASET_CACHE_DIR, '.manifest.json');
 // Types
 // ---------------------------------------------------------------------------
 
-export type DatasetSource = 'hf' | 'github' | 'local';
+export type DatasetSource = 'hf' | 'github' | 'http' | 'local';
 
 export interface DatasetSpec {
   benchmark: string;
   source: DatasetSource;
+  /** HuggingFace repo id, e.g. "gorilla-llm/Berkeley-Function-Calling-Leaderboard" */
   hfRepo?: string;
+  /** Single split (kept for backward compat with xstest entry) */
   hfSplit?: string;
+  /** Multiple splits (e.g. agentharm val + test_public) */
+  hfSplits?: string[];
+  /** Pin HF dataset to a specific revision (commit sha / tag) */
+  hfRevision?: string;
+  /** Direct URL for github/http sources */
   url?: string;
   localPath?: string;
+  /** Gated or token-required dataset; skipped with warning if HF_TOKEN absent */
   requiresToken?: boolean;
 }
 
@@ -63,7 +73,7 @@ interface Manifest {
 // ---------------------------------------------------------------------------
 
 const DATASET_REGISTRY: DatasetSpec[] = [
-  // HuggingFace gated dataset
+  // ---- Pre-existing entries ---------------------------------------------
   {
     benchmark: 'xstest',
     source: 'hf',
@@ -71,8 +81,6 @@ const DATASET_REGISTRY: DatasetSpec[] = [
     hfSplit: 'test',
     requiresToken: true,
   },
-
-  // GitHub direct downloads
   {
     benchmark: 'strong_reject',
     source: 'github',
@@ -83,6 +91,76 @@ const DATASET_REGISTRY: DatasetSpec[] = [
     source: 'github',
     url: 'https://raw.githubusercontent.com/SALT-NLP/PrivacyLens/main/data/main_data.json',
   },
+
+  // ---- Priority category: tool_calling ----------------------------------
+  {
+    benchmark: 'bfcl',
+    source: 'hf',
+    hfRepo: 'gorilla-llm/Berkeley-Function-Calling-Leaderboard',
+    hfRevision: '1bf8bbc3c0e35d04d00339c223a3fd653aa195ac',
+  },
+  {
+    benchmark: 'b3',
+    source: 'hf',
+    hfRepo: 'Lakera/b3-agent-security-benchmark-weak',
+    hfSplit: 'test',
+  },
+  {
+    benchmark: 'agentharm',
+    source: 'hf',
+    hfRepo: 'ai-safety-institute/AgentHarm',
+    hfSplits: ['val', 'test_public'],
+  },
+  // agentdojo: uses inspect_evals bundled data, no download needed
+  // open_agent_safety: local (bundled under eval_benchmarks/open_agent_safety/data)
+
+  // ---- Priority category: rag_safety ------------------------------------
+  // saferag + clash_eval: local (data bundled under eval_benchmarks/*/data)
+
+  // ---- Priority category: task_planning ---------------------------------
+  {
+    benchmark: 'gaia',
+    source: 'hf',
+    hfRepo: 'gaia-benchmark/GAIA',
+    hfSplit: 'validation',
+    requiresToken: true,
+  },
+  {
+    benchmark: 'mind2web',
+    source: 'hf',
+    hfRepo: 'osunlp/Multimodal-Mind2Web',
+  },
+  {
+    benchmark: 'mind2web_scores',
+    source: 'http',
+    url: 'https://huggingface.co/datasets/osunlp/Mind2Web/resolve/main/scores_all_data.pkl',
+  },
+  {
+    benchmark: 'assistant_bench',
+    source: 'hf',
+    hfRepo: 'AssistantBench/AssistantBench',
+  },
+  // mind2web_sc: bundled in inspect_evals package
+  // safeagentbench: local (data bundled)
+
+  // ---- Priority category: business_safety -------------------------------
+  {
+    benchmark: 'truthfulqa',
+    source: 'hf',
+    hfRepo: 'truthfulqa/truthful_qa',
+    hfSplit: 'validation',
+  },
+  {
+    benchmark: 'gdpval',
+    source: 'hf',
+    hfRepo: 'openai/gdpval',
+  },
+  {
+    benchmark: 'healthbench',
+    source: 'http',
+    url: 'https://openaipublic.blob.core.windows.net/simple-evals/healthbench/2025-05-07-06-14-12_oss_eval.jsonl',
+  },
+  // raccoon: local (data bundled)
 ];
 
 // ---------------------------------------------------------------------------
@@ -109,71 +187,138 @@ function writeManifest(manifest: Manifest): void {
 // Download helpers
 // ---------------------------------------------------------------------------
 
-function downloadFile(url: string, dest: string): Promise<void> {
-  return new Promise((resolve, reject) => {
-    fs.mkdirSync(path.dirname(dest), { recursive: true });
-    const file = fs.createWriteStream(dest);
+/**
+ * Download a single URL to disk with redirect + retry/backoff.
+ * Remote targets like Azure Blob occasionally return 5xx or disconnect mid-stream;
+ * caller gets up to `maxAttempts` retries with exponential backoff.
+ */
+function downloadFile(url: string, dest: string, maxAttempts = 3): Promise<void> {
+  const attempt = (n: number): Promise<void> =>
+    new Promise((resolve, reject) => {
+      fs.mkdirSync(path.dirname(dest), { recursive: true });
+      const file = fs.createWriteStream(dest);
 
-    const doRequest = (requestUrl: string, redirectCount = 0) => {
-      if (redirectCount > 5) {
-        reject(new Error('Too many redirects'));
-        return;
-      }
-
-      https.get(requestUrl, { timeout: 60_000 }, (res) => {
-        if (res.statusCode && res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
-          doRequest(res.headers.location, redirectCount + 1);
-          return;
-        }
-        if (res.statusCode !== 200) {
-          reject(new Error(`HTTP ${res.statusCode} from ${requestUrl}`));
-          return;
-        }
-        res.pipe(file);
-        file.on('finish', () => {
-          file.close();
-          resolve();
-        });
-      }).on('error', (err) => {
-        fs.unlinkSync(dest);
+      const cleanupAndReject = (err: Error) => {
+        try { file.close(); } catch { /* ignore */ }
+        try { if (fs.existsSync(dest)) fs.unlinkSync(dest); } catch { /* ignore */ }
         reject(err);
-      });
-    };
+      };
 
-    doRequest(url);
-  });
+      const doRequest = (requestUrl: string, redirectCount = 0) => {
+        if (redirectCount > 5) {
+          cleanupAndReject(new Error('Too many redirects'));
+          return;
+        }
+
+        const lib = requestUrl.startsWith('http://') ? http : https;
+        lib.get(requestUrl, { timeout: 120_000 }, (res: IncomingMessage) => {
+          if (res.statusCode && res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+            doRequest(res.headers.location, redirectCount + 1);
+            return;
+          }
+          if (res.statusCode !== 200) {
+            cleanupAndReject(new Error(`HTTP ${res.statusCode} from ${requestUrl}`));
+            return;
+          }
+          res.pipe(file);
+          file.on('finish', () => {
+            file.close();
+            resolve();
+          });
+          file.on('error', cleanupAndReject);
+        }).on('error', cleanupAndReject);
+      };
+
+      doRequest(url);
+    });
+
+  return (async () => {
+    let lastErr: Error | null = null;
+    for (let i = 1; i <= maxAttempts; i++) {
+      try {
+        await attempt(i);
+        return;
+      } catch (err: any) {
+        lastErr = err;
+        if (i < maxAttempts) {
+          const backoff = Math.min(1000 * Math.pow(2, i - 1), 8000);
+          logger.warn(`downloadFile ${url} attempt ${i}/${maxAttempts} failed (${err.message}); retrying in ${backoff}ms`);
+          await new Promise((r) => setTimeout(r, backoff));
+        }
+      }
+    }
+    throw lastErr ?? new Error(`downloadFile exhausted ${maxAttempts} attempts`);
+  })();
+}
+
+/**
+ * Find any benchmark venv that can host HF `datasets` calls.
+ * Prefers the spec's own venv; falls back to any available benchmark venv
+ * so dataset prep can run before/after individual venvs are set up.
+ */
+function resolveHostPython(benchmark: string): string {
+  const own = venvService.getPythonPath(benchmark);
+  if (fs.existsSync(own)) return own;
+
+  const venvsRoot = path.join(config.evalPocRoot, '.venvs');
+  if (fs.existsSync(venvsRoot)) {
+    for (const name of fs.readdirSync(venvsRoot)) {
+      const candidate = path.join(venvsRoot, name, 'bin', 'python');
+      if (fs.existsSync(candidate)) return candidate;
+    }
+  }
+  throw new Error(
+    `No Python venv found for ${benchmark} (expected ${own}). ` +
+    `Run 'npm run setup:venvs' (at least for one benchmark) before preparing datasets.`,
+  );
 }
 
 async function downloadHfDataset(spec: DatasetSpec): Promise<void> {
   if (!spec.hfRepo) return;
 
-  // Use the benchmark's venv Python to call datasets.load_dataset
-  // This ensures proper caching in HF cache format
-  const pythonPath = venvService.getPythonPath(spec.benchmark);
-  if (!fs.existsSync(pythonPath)) {
-    throw new Error(`Venv not found for ${spec.benchmark}. Run setup first.`);
-  }
-
+  const pythonPath = resolveHostPython(spec.benchmark);
   const cacheDir = DATASETS_DIR;
   fs.mkdirSync(cacheDir, { recursive: true });
 
-  const script = [
+  // Gracefully skip gated datasets when no token is available
+  if (spec.requiresToken && !process.env.HF_TOKEN) {
+    throw new Error(
+      `${spec.benchmark}: requires HF_TOKEN for gated HF repo '${spec.hfRepo}'. ` +
+      `Obtain access at https://huggingface.co/${spec.hfRepo} and export HF_TOKEN before retrying.`,
+    );
+  }
+
+  const splits = spec.hfSplits && spec.hfSplits.length > 0
+    ? spec.hfSplits
+    : (spec.hfSplit ? [spec.hfSplit] : [null]);
+
+  const revisionArg = spec.hfRevision ? `, revision=${JSON.stringify(spec.hfRevision)}` : '';
+  const tokenArg = spec.requiresToken ? ', token=True' : '';
+
+  const pyLines = [
+    'import os, sys',
     'from datasets import load_dataset',
-    `load_dataset("${spec.hfRepo}"`,
-    spec.hfSplit ? `, split="${spec.hfSplit}"` : '',
-    `, cache_dir="${cacheDir}")`,
+    `repo = ${JSON.stringify(spec.hfRepo)}`,
+    `cache = ${JSON.stringify(cacheDir)}`,
+    ...splits.map((s) => {
+      const splitArg = s ? `, split=${JSON.stringify(s)}` : '';
+      return `load_dataset(repo${splitArg}, cache_dir=cache${revisionArg}${tokenArg})`;
+    }),
     'print("OK")',
-  ].join('');
+  ];
 
   const env: Record<string, string> = { ...process.env as Record<string, string> };
   env.HF_DATASETS_CACHE = cacheDir;
-  // Don't set offline mode during download
+  env.HF_HOME = DATASET_CACHE_DIR;
+  // Strip offline flags so download can actually hit the network
   delete env.HF_DATASETS_OFFLINE;
   delete env.HF_HUB_OFFLINE;
+  delete env.TRANSFORMERS_OFFLINE;
 
-  await execFileAsync(pythonPath, ['-c', script], {
-    timeout: 300_000,
+  await execFileAsync(pythonPath, ['-c', pyLines.join('\n')], {
+    timeout: 600_000,
     env,
+    maxBuffer: 32 * 1024 * 1024,
   });
 }
 
@@ -233,8 +378,8 @@ export async function prepareBenchmarkDataset(benchmark: string): Promise<void> 
 
   logger.info(`Preparing dataset for ${benchmark} (source: ${spec.source})...`);
 
-  if (spec.source === 'github' && spec.url) {
-    const filename = path.basename(spec.url);
+  if ((spec.source === 'github' || spec.source === 'http') && spec.url) {
+    const filename = path.basename(spec.url.split('?')[0]);
     const dest = path.join(GITHUB_DIR, benchmark, filename);
     await downloadFile(spec.url, dest);
     logger.info(`Downloaded: ${dest}`);

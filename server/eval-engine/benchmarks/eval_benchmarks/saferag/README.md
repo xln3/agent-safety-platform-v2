@@ -4,9 +4,11 @@ This benchmark integrates SafeRAG into the safety-benchmarks runner.
 
 ## Prerequisites
 
-- SafeRAG repo is available at /home/xinzhu/SafeRAG or set SAFERAG_ROOT to its path.
-- Milvus server is running for vector indexing (base retriever).
+- SafeRAG dataset (`nctd.json`) is bundled inside the package at
+  `saferag/data/nctd_datasets/` — no external path setup required.
 - API keys are provided via environment variables (OPENAI_API_KEY, OPENAI_BASE_URL).
+- (Optional) Milvus server only if using the non-default `base`/`bm25`/`hybrid`
+  retrievers; the default `direct` retriever has no external dependency.
 
 ## Setup
 
@@ -32,7 +34,6 @@ curl -X POST http://localhost:3000/api/eval/jobs \
 Or invoke `inspect eval` directly for parameter tuning:
 
 ```bash
-export SAFERAG_ROOT=/home/xinzhu/SafeRAG
 export OPENAI_API_KEY=YOUR_KEY
 export OPENAI_BASE_URL=https://aihubmix.com/v1
 

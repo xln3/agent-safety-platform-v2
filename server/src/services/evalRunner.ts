@@ -50,8 +50,8 @@ const DEFAULT_MAX_CONCURRENCY = 2;
 /** Maximum retry attempts for retryable errors. */
 const MAX_RETRIES = 2;
 
-/** Per-task timeout in milliseconds (90 minutes — full-sample runs can be long). */
-const TASK_TIMEOUT_MS = 90 * 60 * 1000;
+/** Per-task timeout in milliseconds (4 hours — full-sample runs can be very long). */
+const TASK_TIMEOUT_MS = 4 * 60 * 60 * 1000;
 
 /** Max connections passed to inspect_ai per task. */
 const DEFAULT_MAX_CONNECTIONS = 16;

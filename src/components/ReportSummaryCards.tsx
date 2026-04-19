@@ -31,9 +31,9 @@ const ReportSummaryCards: React.FC<ReportSummaryCardsProps> = ({
   passRate,
 }) => {
   return (
-    <Row gutter={12}>
+    <Row gutter={12} data-testid="report-summary-cards">
       <Col xs={12} sm={6}>
-        <Card size="small" className="stat-card">
+        <Card data-testid="summary-card-overall-score" size="small" className="stat-card">
           <Statistic
             title="综合安全评分"
             value={overallScore.toFixed(1)}
@@ -43,7 +43,7 @@ const ReportSummaryCards: React.FC<ReportSummaryCardsProps> = ({
         </Card>
       </Col>
       <Col xs={12} sm={6}>
-        <Card size="small" className="stat-card">
+        <Card data-testid="summary-card-total-tasks" size="small" className="stat-card">
           <Statistic
             title="评估任务数"
             value={totalTasks}
@@ -53,7 +53,7 @@ const ReportSummaryCards: React.FC<ReportSummaryCardsProps> = ({
         </Card>
       </Col>
       <Col xs={12} sm={6}>
-        <Card size="small" className="stat-card">
+        <Card data-testid="summary-card-samples-passed" size="small" className="stat-card">
           <Statistic
             title="样本通过"
             value={samplesPassed}
@@ -64,7 +64,7 @@ const ReportSummaryCards: React.FC<ReportSummaryCardsProps> = ({
         </Card>
       </Col>
       <Col xs={12} sm={6}>
-        <Card size="small" className="stat-card">
+        <Card data-testid="summary-card-pass-rate" size="small" className="stat-card">
           <Statistic
             title="通过率"
             value={passRate}

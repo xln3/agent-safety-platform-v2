@@ -25,8 +25,6 @@ interface Config {
   corsOrigins: string;
   evalPocRoot: string;
   resultsDir: string;
-  /** @deprecated No longer used — eval orchestration is now pure TypeScript. */
-  pythonPath?: string;
 }
 
 export const config: Config = {
@@ -49,7 +47,6 @@ export const config: Config = {
   corsOrigins: process.env.CORS_ORIGINS || 'http://localhost:5173',
   evalPocRoot,
   resultsDir: process.env.RESULTS_DIR || path.join(evalPocRoot, 'results'),
-  pythonPath: process.env.PYTHON_PATH || 'python3',
 };
 
 export default config;
