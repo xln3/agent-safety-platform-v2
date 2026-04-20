@@ -31,7 +31,15 @@ const MARKER_FILE = '.eval-poc-marker.json';
 const VENV_PATCHES: Record<string, Array<[string, string]>> = {
   makemesay: [['inspect_evals/makemesay/utils.py', 'makemesay_utils.py']],
   osworld: [['inspect_evals/osworld/sparse_clone.py', 'osworld_sparse_clone.py']],
+  // Fix: unseeded Random() causes non-deterministic choice shuffling across runs
+  mind2web: [['inspect_evals/mind2web/dataset.py', 'mind2web_dataset.py']],
 };
+
+/** Global patches applied to every venv (e.g. inspect_ai framework fixes) */
+const GLOBAL_PATCHES: Array<[string, string]> = [
+  // Fix: choice scorer fails to parse "$C$" style answers (dollar signs around letter)
+  ['inspect_ai/solver/_multiple_choice.py', 'inspect_ai_multiple_choice.py'],
+];
 
 // ---------------------------------------------------------------------------
 // In-process lock map (prevents duplicate concurrent setups for same benchmark)
@@ -121,7 +129,7 @@ function findSitePackages(venvPath: string): string | null {
 }
 
 function applyPatches(benchmarkName: string, venvPath: string): void {
-  const patches = VENV_PATCHES[benchmarkName] || [];
+  const patches = [...GLOBAL_PATCHES, ...(VENV_PATCHES[benchmarkName] || [])];
   const sp = findSitePackages(venvPath);
 
   if (!sp) {
@@ -140,7 +148,7 @@ function applyPatches(benchmarkName: string, venvPath: string): void {
       continue;
     }
     if (!fs.existsSync(path.dirname(target))) {
-      logger.warn(`Patch target dir not found: ${path.dirname(target)}`);
+      // Global patches target may not exist in every venv — skip silently
       continue;
     }
 

@@ -32,7 +32,7 @@ const MANIFEST_PATH = path.join(DATASET_CACHE_DIR, '.manifest.json');
 // Types
 // ---------------------------------------------------------------------------
 
-export type DatasetSource = 'hf' | 'github' | 'http' | 'local';
+export type DatasetSource = 'hf' | 'github' | 'http' | 'local' | 'inspect_cache';
 
 export interface DatasetSpec {
   benchmark: string;
@@ -95,9 +95,10 @@ const DATASET_REGISTRY: DatasetSpec[] = [
   // ---- Priority category: tool_calling ----------------------------------
   {
     benchmark: 'bfcl',
-    source: 'hf',
-    hfRepo: 'gorilla-llm/Berkeley-Function-Calling-Leaderboard',
-    hfRevision: '1bf8bbc3c0e35d04d00339c223a3fd653aa195ac',
+    source: 'inspect_cache',
+    // inspect_evals/bfcl downloads from GitHub via sparse-checkout, NOT from HF datasets.
+    // Cache location: ~/.cache/inspect_evals/BFCL/
+    // We trigger the download by running inspect_evals' own download logic in the bfcl venv.
   },
   {
     benchmark: 'b3',
@@ -181,6 +182,68 @@ function readManifest(): Manifest {
 function writeManifest(manifest: Manifest): void {
   fs.mkdirSync(DATASET_CACHE_DIR, { recursive: true });
   fs.writeFileSync(MANIFEST_PATH, JSON.stringify(manifest, null, 2));
+}
+
+// ---------------------------------------------------------------------------
+// Disk-presence helpers (fallback when manifest is missing / incomplete)
+// ---------------------------------------------------------------------------
+
+/** Return true if dirPath is a directory containing at least one file (max 3 levels deep). */
+function dirHasFiles(dirPath: string): boolean {
+  try {
+    if (!fs.statSync(dirPath).isDirectory()) return false;
+  } catch { return false; }
+
+  function scan(dir: string, depth: number): boolean {
+    if (depth > 3) return false;
+    try {
+      for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+        if (entry.isFile()) return true;
+        if (entry.isDirectory() && scan(path.join(dir, entry.name), depth + 1)) return true;
+      }
+    } catch { /* permission errors etc */ }
+    return false;
+  }
+  return scan(dirPath, 0);
+}
+
+/**
+ * Check whether a dataset's files exist on disk, independent of the manifest.
+ * Used as a fallback when the manifest has no entry for a benchmark.
+ */
+function checkDiskForDataset(spec: DatasetSpec): boolean {
+  switch (spec.source) {
+    case 'hf': {
+      if (!spec.hfRepo || !fs.existsSync(DATASETS_DIR)) return false;
+      const [org, name] = spec.hfRepo.split('/');
+      const prefix = org.toLowerCase() + '___';
+      const nameNorm = name.toLowerCase().replace(/[^a-z0-9]/g, '');
+      try {
+        return fs.readdirSync(DATASETS_DIR).some((entry) => {
+          const entryLower = entry.toLowerCase();
+          if (!entryLower.startsWith(prefix)) return false;
+          const entryNamePart = entryLower.slice(prefix.length).replace(/[^a-z0-9]/g, '');
+          if (entryNamePart !== nameNorm) return false;
+          return dirHasFiles(path.join(DATASETS_DIR, entry));
+        });
+      } catch { return false; }
+    }
+    case 'github':
+    case 'http': {
+      if (!spec.url) return false;
+      const filename = path.basename(spec.url.split('?')[0]);
+      const dest = path.join(GITHUB_DIR, spec.benchmark, filename);
+      try { return fs.statSync(dest).isFile(); } catch { return false; }
+    }
+    case 'inspect_cache': {
+      const inspectDir = path.join(DATASET_CACHE_DIR, 'inspect_evals', 'BFCL');
+      return dirHasFiles(inspectDir);
+    }
+    case 'local':
+      return true;
+    default:
+      return false;
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -331,8 +394,9 @@ async function downloadHfDataset(spec: DatasetSpec): Promise<void> {
  */
 export function checkAllDatasetStatus(): DatasetStatus[] {
   const manifest = readManifest();
+  let manifestDirty = false;
 
-  return DATASET_REGISTRY.map((spec) => {
+  const statuses = DATASET_REGISTRY.map((spec) => {
     const entry = manifest.datasets[spec.benchmark];
     if (entry) {
       return {
@@ -343,6 +407,22 @@ export function checkAllDatasetStatus(): DatasetStatus[] {
         message: `Cached at ${entry.cachedAt}`,
       };
     }
+
+    // Manifest miss — check disk as fallback
+    const onDisk = checkDiskForDataset(spec);
+    if (onDisk) {
+      const now = new Date().toISOString();
+      manifest.datasets[spec.benchmark] = { cachedAt: now, source: spec.source };
+      manifestDirty = true;
+      return {
+        benchmark: spec.benchmark,
+        ready: true,
+        source: spec.source,
+        cachedAt: now,
+        message: `Found on disk (manifest repaired)`,
+      };
+    }
+
     return {
       benchmark: spec.benchmark,
       ready: false,
@@ -352,18 +432,28 @@ export function checkAllDatasetStatus(): DatasetStatus[] {
         : 'Not cached',
     };
   });
+
+  if (manifestDirty) {
+    try { writeManifest(manifest); } catch (err) {
+      logger.warn('Failed to auto-repair dataset manifest:', err);
+    }
+  }
+
+  return statuses;
 }
 
 /**
  * Check if a specific benchmark's dataset is ready.
  */
 export function checkDatasetReady(benchmark: string): boolean {
-  // Local benchmarks are always ready
   const spec = DATASET_REGISTRY.find((s) => s.benchmark === benchmark);
   if (!spec) return true; // Not in registry = local data, always ready
 
   const manifest = readManifest();
-  return !!manifest.datasets[benchmark];
+  if (manifest.datasets[benchmark]) return true;
+
+  // Manifest miss — check disk as fallback
+  return checkDiskForDataset(spec);
 }
 
 /**
@@ -386,6 +476,28 @@ export async function prepareBenchmarkDataset(benchmark: string): Promise<void> 
   } else if (spec.source === 'hf') {
     await downloadHfDataset(spec);
     logger.info(`HF dataset cached for ${benchmark}`);
+  } else if (spec.source === 'inspect_cache') {
+    // Self-contained: copy bundled BFCL data (300 curated records) to the
+    // inspect_evals cache location so inspect eval runs fully offline.
+    // If a cache already exists (full or bundled), leave it untouched —
+    // the full dataset is a valid superset and --sample-id handles filtering.
+    const pythonPath = resolveHostPython(benchmark);
+    const bundledDir = path.join(config.evalPocRoot, 'benchmarks', 'data', 'bfcl');
+    const pyScript = [
+      'import os, shutil, sys',
+      'from inspect_evals.constants import INSPECT_EVALS_CACHE_PATH',
+      'cache_dir = str(INSPECT_EVALS_CACHE_PATH / "BFCL")',
+      'bundled = sys.argv[1]',
+      'if os.path.exists(cache_dir):',
+      '    print(f"BFCL cache already present at {cache_dir}, keeping as-is")',
+      'else:',
+      '    shutil.copytree(bundled, cache_dir)',
+      '    print(f"Copied bundled BFCL data to {cache_dir}")',
+    ].join('\n');
+    await execFileAsync(pythonPath, ['-c', pyScript, bundledDir], {
+      timeout: 60_000,
+    });
+    logger.info(`inspect_cache dataset ready for ${benchmark}`);
   }
 
   // Update manifest

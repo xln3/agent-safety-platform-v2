@@ -149,6 +149,9 @@ export function buildEnvironment(options: EnvBuildOptions): EnvBuildResult {
   env.HF_HUB_OFFLINE = '1';
   env.HF_UPDATE_DOWNLOAD_COUNTS = '0';
 
+  // inspect_evals cache (scores.pkl, BFCL data, etc.) — keep inside project
+  env.INSPECT_EVALS_CACHE_PATH = path.join(datasetsCacheDir, 'inspect_evals');
+
   // Resolve judge model
   const judgeResult = resolveJudgeModel(judgeModel, benchmarkConfig, catalogModels);
   Object.assign(env, judgeResult.env);
