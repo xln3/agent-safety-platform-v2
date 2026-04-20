@@ -3,6 +3,8 @@ import { agentService } from '../services/agentService';
 import { successResponse, errorResponse, paginatedResponse } from '../utils/response';
 import logger from '../utils/logger';
 
+const EXCLUDE_SENSITIVE = { exclude: ['apiKey'] as string[] };
+
 export const agentController = {
   async list(req: Request, res: Response): Promise<void> {
     try {
@@ -10,7 +12,9 @@ export const agentController = {
       const pageSize = Math.max(1, Math.min(100, parseInt(req.query.pageSize as string, 10) || 10));
       const keyword = (req.query.keyword as string) || undefined;
 
-      const { rows, count } = await agentService.findAll(page, pageSize, keyword);
+      const { rows, count } = await agentService.findAll(page, pageSize, keyword, {
+        attributes: EXCLUDE_SENSITIVE,
+      });
       res.json(paginatedResponse(rows, count, page, pageSize));
     } catch (error: any) {
       logger.error('Failed to list agents:', error.message);
@@ -43,7 +47,9 @@ export const agentController = {
         return;
       }
 
-      const agent = await agentService.findById(id);
+      const agent = await agentService.findById(id, {
+        attributes: EXCLUDE_SENSITIVE,
+      });
       if (!agent) {
         res.status(404).json(errorResponse('Agent not found'));
         return;

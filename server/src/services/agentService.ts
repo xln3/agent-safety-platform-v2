@@ -1,4 +1,4 @@
-import { Op } from 'sequelize';
+import { FindOptions, Op } from 'sequelize';
 import { Agent } from '../models';
 import { AgentCreationAttributes } from '../models/Agent';
 import logger from '../utils/logger';
@@ -7,7 +7,8 @@ export const agentService = {
   async findAll(
     page: number = 1,
     pageSize: number = 10,
-    keyword?: string
+    keyword?: string,
+    extra?: Pick<FindOptions, 'attributes'>
   ): Promise<{ rows: Agent[]; count: number }> {
     const offset = (page - 1) * pageSize;
     const where: any = {
@@ -27,14 +28,16 @@ export const agentService = {
       limit: pageSize,
       offset,
       order: [['createdAt', 'DESC']],
+      ...extra,
     });
 
     return { rows: result.rows, count: result.count };
   },
 
-  async findById(id: number): Promise<Agent | null> {
+  async findById(id: number, extra?: Pick<FindOptions, 'attributes'>): Promise<Agent | null> {
     return Agent.findOne({
       where: { id, status: { [Op.ne]: 'deleted' } },
+      ...extra,
     });
   },
 

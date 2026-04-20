@@ -12,14 +12,8 @@
 - [x] Agent CRUD API（`/api/agents`，RESTful）
 - [x] 前端 AgentListPage + AgentDetailPage + AgentFormModal
 - [x] 数据模型 Agent（name, apiBase, apiKey, modelId, systemPrompt, toolsEnabled, ragEnabled 等）
-- [ ] **Agent API Key 不应在 GET 响应中返回明文**
-  - 文件: `server/src/controllers/agentController.ts`
-  - 问题: `GET /api/agents` 和 `GET /api/agents/:id` 返回完整 Agent 对象含 apiKey
-  - 修复: 使用 Sequelize `attributes: { exclude: ['apiKey'] }` 或响应时脱敏（仅显示后 4 位）
-- [ ] **Agent name 无唯一约束**
-  - 文件: `server/src/models/Agent.ts`
-  - 问题: 可创建同名智能体，UI 无法区分
-  - 修复: 加 `unique: true`
+- [x] **Agent API Key 不应在 GET 响应中返回明文** — `attributes: { exclude: ['apiKey'] }`
+- [x] **Agent name 唯一约束** — `unique: true`
 
 ### 2. 智能体评估
 
@@ -31,30 +25,11 @@
 - [x] 数据集离线缓存机制（datasetService + prepare-datasets 脚本）
 - [x] HuggingFace 离线模式（HF_DATASETS_OFFLINE=1 等环境变量）
 - [x] 磁盘检测 fallback（checkDiskForDataset，本次修复）
-
-**待修复:**
-
-- [ ] **基准数量对齐: catalog 64 个 vs UI 仅展示 16 个**
-  - 文件: `server/src/services/catalogService.ts`、`src/page/EvalNewPage.tsx`
-  - 问题: catalog.yaml 定义 64 个基准，但 CATEGORY_BENCHMARK_MAP 只映射 16 个到 4 大类，其余 48 个归入 "other" 类别。前端可以选但用户不知道它们属于什么
-  - 修复方案: (A) 将 48 个基准归入合理子类别并在 UI 展示；或 (B) 文档明确说明"16 个核心 + 48 个扩展"
-- [ ] **并发评估竞态条件**
-  - 文件: `server/src/services/evalRunner.ts`
-  - 问题 1: `completedCount++` 非原子操作（多 Promise 并发修改）
-  - 问题 2: `findLatestEvalFile()` 用子串匹配模型名，并发跑同模型可能匹配到错误的 .eval 文件
-  - 修复: completedCount 改为 Sequelize 计数查询；findLatestEvalFile 加任务 ID 精确匹配
-- [ ] **子进程 stdout/stderr 无大小限制**
-  - 文件: `server/src/services/evalRunner.ts`（约 line 376-400）
-  - 问题: 变量持续拼接输出，长时间评估可能 OOM
-  - 修复: 限制最大缓冲（如 10MB），超出后只保留尾部
-- [ ] **venv setup 无超时**
-  - 文件: `server/src/services/venvService.ts`
-  - 问题: pip install 挂住时无超时机制，会无限阻塞任务
-  - 修复: 加 30 分钟超时
-- [ ] **评估任务输入校验不足**
-  - 文件: `server/src/controllers/evalController.ts`（line 17-28）
-  - 问题: benchmark 名称不验证合法性，limit 可为负数，无效 benchmark 被静默跳过而非返回 400
-  - 修复: 用 zod 或手动校验，未知 benchmark 返回错误
+- [x] **基准数量对齐** — catalogService.ts 文档化分类策略，DELIVERY.md 说明 16 核心 + 扩展
+- [x] **并发评估竞态修复** — completedCount 改为 DB 查询，findLatestEvalFile 精确匹配
+- [x] **子进程 stdout/stderr 10MB 大小限制**
+- [x] **venv setup 30 分钟超时**
+- [x] **评估任务输入校验** — benchmark 名称、limit 范围、judgeModel 格式校验
 
 ### 3. 评估报告
 
@@ -64,12 +39,9 @@
 - [x] HTML 报告内容生成（reportService.buildReportHtml）
 - [x] XSS 防护（escapeHtml 函数）
 
-**待修复:**
+**后续优化:**
 
-- [ ] **报告 HTML 拼接易遗漏转义**
-  - 文件: `server/src/services/reportService.ts`
-  - 问题: 手动调用 `escapeHtml()`，新增字段容易忘记
-  - 建议: 低优先级，当前覆盖完整，后续可考虑模板引擎
+- [ ] **报告 HTML 拼接易遗漏转义** — 低优先级，当前覆盖完整，后续可考虑模板引擎
 
 ---
 
@@ -100,45 +72,44 @@
 
 ## 三、安全问题
 
-| 优先级 | 问题 | 文件 | 修复方案 |
-|--------|------|------|----------|
-| [ ] 高 | API 无认证鉴权 | `server/src/app.ts` | 加 JWT 或固定 Token 中间件，至少保护写操作 |
-| [ ] 高 | Agent apiKey 明文返回 | `server/src/controllers/agentController.ts` | GET 响应排除 apiKey 字段 |
-| [ ] 高 | Agent apiKey 数据库明文 | `server/src/models/Agent.ts` | 加密存储（AES），使用时解密 |
-| [ ] 中 | 无安全 HTTP 头 | `server/src/app.ts` | 集成 helmet.js |
-| [ ] 中 | CORS 生产配置 | `server/src/app.ts` | 确保 CORS_ORIGINS 在生产环境配置正确域名 |
-| [ ] 中 | 子进程环境变量暴露 apiKey | `server/src/services/evalRunner.ts` | 进程环境变量不可避免，但应确保日志不打印 |
-| [ ] 低 | 日志可能泄露 API Key | `server/src/services/evalRunner.ts` | debug 日志 spawn 命令前过滤敏感环境变量 |
+| 状态 | 优先级 | 问题 | 修复 |
+|------|--------|------|------|
+| [x] | 高 | API 无认证鉴权 | Bearer Token 中间件（API_TOKEN 环境变量） |
+| [x] | 高 | Agent apiKey 明文返回 | GET 响应 exclude apiKey |
+| [ ] | 高 | Agent apiKey 数据库明文 | 加密存储（AES），使用时解密 |
+| [x] | 中 | 无安全 HTTP 头 | helmet.js 已集成 |
+| [ ] | 中 | CORS 生产配置 | 部署时配置 CORS_ORIGINS |
+| [ ] | 低 | 日志可能泄露 API Key | debug 日志过滤敏感环境变量 |
 
 ---
 
 ## 四、工程质量
 
-| 优先级 | 问题 | 修复方案 |
-|--------|------|----------|
-| [ ] 高 | 零单元测试 | 配置 vitest；优先覆盖 scoreMapper, evalRunner, reportService |
-| [ ] 高 | 无 CI/CD | 添加 GitHub Actions: tsc + vitest + lint |
-| [ ] 高 | 无 Dockerfile | 编写 Dockerfile + docker-compose.yml（app + mysql） |
-| [ ] 中 | 无 ESLint/Prettier | 添加统一格式化配置 |
-| [ ] 中 | 无数据库迁移 | 引入 sequelize-cli，替代 sync({ alter: true }) |
-| [ ] 中 | 无 404 兜底路由 | `src/App.tsx` 加 `<Route path="*" />` |
-| [ ] 中 | 外键无级联删除 | models 加 `onDelete: 'CASCADE'` |
-| [ ] 中 | 外键列无索引 | models 加 `indexes` 定义 |
-| [ ] 低 | 前端 bundle 2.3MB | 按路由做 code splitting（React.lazy） |
-| [ ] 低 | 日志无结构化 | 替换为 pino/winston，输出 JSON 格式 |
+| 状态 | 优先级 | 问题 | 修复 |
+|------|--------|------|------|
+| [x] | 高 | 零单元测试 | vitest + 86 个测试（scoreMapper/datasetService/reportService） |
+| [x] | 高 | 无 CI/CD | GitHub Actions: tsc + test + build |
+| [x] | 高 | 无 Dockerfile | Dockerfile + docker-compose.yml（server + mysql） |
+| [ ] | 中 | 无 ESLint/Prettier | 添加统一格式化配置 |
+| [ ] | 中 | 无数据库迁移 | 引入 sequelize-cli，替代 sync({ alter: true }) |
+| [x] | 中 | 无 404 兜底路由 | NotFoundPage + `<Route path="*">` |
+| [x] | 中 | 外键无级联删除 | onDelete: 'CASCADE' |
+| [x] | 中 | 外键列无索引 | indexes 定义 |
+| [ ] | 低 | 前端 bundle 2.3MB | 按路由做 code splitting（React.lazy） |
+| [ ] | 低 | 日志无结构化 | 替换为 pino/winston，输出 JSON 格式 |
 
 ---
 
 ## 五、文档与交付
 
-| 优先级 | 问题 | 修复方案 |
-|--------|------|----------|
-| [ ] 高 | DELIVERY.md 缺离线运行说明 | 补充: 运行 setup:venvs + prepare:datasets → 全程离线 |
-| [ ] 高 | DELIVERY.md 未说明基准数量 | 补充: 16 核心基准(4 类) + 48 扩展基准 = 64 总计 |
-| [ ] 中 | DELIVERY.md 未提 HF_TOKEN | 补充: xstest/gaia 需要 HF_TOKEN，其余不需要 |
-| [ ] 中 | DELIVERY.md 未提 venv 耗时 | 补充: 首次 setup:venvs 约 30-60 分钟 |
-| [ ] 中 | 3 个未提交的改动 | 提交 datasetService / environmentBuilder / venvService |
-| [ ] 低 | 分析目录未清理 | 将 *-analysis/ 加入 .gitignore |
+| 状态 | 优先级 | 问题 | 修复 |
+|------|--------|------|------|
+| [x] | 高 | DELIVERY.md 缺离线运行说明 | 新增"离线运行保障"章节 |
+| [x] | 高 | DELIVERY.md 未说明基准数量 | 新增"基准测试覆盖范围"章节 |
+| [x] | 中 | DELIVERY.md 未提 HF_TOKEN | 已补充 |
+| [x] | 中 | DELIVERY.md 未提 venv 耗时 | 已补充 |
+| [x] | 中 | 3 个未提交的改动 | 已提交（commit 496af16） |
+| [x] | 低 | 分析目录未清理 | *-analysis/ 已加入 .gitignore |
 
 ---
 
@@ -153,3 +124,8 @@
 - [x] E2E test-id 标注
 - [x] 旧文件清理（截图、e2e 脚本、Python 文件）
 - [x] Ant Design deprecated API 修复（valueStyle → styles.content）
+- [x] 安全加固（auth 中间件、helmet、apiKey 脱敏、模型索引/级联）
+- [x] 评估引擎健壮性（竞态修复、stdout 限制、venv 超时、输入校验）
+- [x] 测试基础设施（vitest + 86 个单元测试）
+- [x] Docker + CI/CD（Dockerfile、docker-compose、GitHub Actions）
+- [x] 文档补全（DELIVERY.md 离线/基准/Docker 章节、404 页面）

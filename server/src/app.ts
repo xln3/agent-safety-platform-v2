@@ -1,5 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
 import morgan from 'morgan';
 import config from './config';
 import routes from './routes';
@@ -7,6 +8,8 @@ import { successResponse, errorResponse } from './utils/response';
 import logger from './utils/logger';
 
 const app = express();
+
+app.use(helmet());
 
 // CORS middleware
 const corsOrigins = config.corsOrigins.split(',').map((origin) => origin.trim());
@@ -24,9 +27,6 @@ app.use(express.urlencoded({ extended: true }));
 // Request logging
 app.use(morgan('dev'));
 
-// Mount API routes
-app.use('/api', routes);
-
 // Health check endpoint
 app.get('/api/health', (_req: Request, res: Response) => {
   res.json(
@@ -36,6 +36,18 @@ app.get('/api/health', (_req: Request, res: Response) => {
     })
   );
 });
+
+// Bearer token auth
+app.use('/api', (req: Request, res: Response, next: NextFunction) => {
+  if (!config.apiToken) return next();
+  if (req.path === '/health') return next();
+  const auth = req.headers.authorization;
+  if (auth && auth === `Bearer ${config.apiToken}`) return next();
+  res.status(401).json({ code: 401, message: '未授权，请提供有效的 API Token', data: null });
+});
+
+// Mount API routes
+app.use('/api', routes);
 
 // 404 handler
 app.use((_req: Request, res: Response) => {

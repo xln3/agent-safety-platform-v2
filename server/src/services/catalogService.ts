@@ -6,6 +6,19 @@ import { CATEGORY_BENCHMARK_MAP } from '../constants/evalCategories';
 import logger from '../utils/logger';
 
 // ---------------------------------------------------------------------------
+// Benchmark categorization
+//
+// 16 core benchmarks mapped to 4 safety evaluation modules:
+//   - tool_calling (5): agentdojo, bfcl, b3, agentharm, open_agent_safety
+//   - rag_safety (2): saferag, clash_eval
+//   - task_planning (5): safeagentbench, gaia, mind2web, mind2web_sc, assistant_bench
+//   - business_safety (4): raccoon, healthbench, truthfulqa, gdpval
+//
+// All other benchmarks from catalog.yaml are available as "other" (extended).
+// They can be selected in the UI but are not assigned to a core category.
+// ---------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------
 // Type definitions
 // ---------------------------------------------------------------------------
 

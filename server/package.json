@@ -8,7 +8,9 @@
     "start": "node dist/index.js",
     "db:sync": "ts-node src/scripts/syncDatabase.ts",
     "setup:venvs": "ts-node scripts/setup-venvs.ts",
-    "prepare:datasets": "ts-node scripts/prepare-datasets.ts"
+    "prepare:datasets": "ts-node scripts/prepare-datasets.ts",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "adm-zip": "^0.5.17",
@@ -16,6 +18,7 @@
     "cors": "^2.8.5",
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
+    "helmet": "^8.1.0",
     "js-yaml": "^4.1.1",
     "morgan": "^1.10.0",
     "mysql2": "^3.11.0",
@@ -32,6 +35,7 @@
     "@types/uuid": "^10.0.0",
     "ts-node": "^10.9.0",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^6.0.2"
+    "typescript": "^6.0.2",
+    "vitest": "^4.1.4"
   }
 }

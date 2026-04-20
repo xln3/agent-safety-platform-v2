@@ -73,6 +73,10 @@ EvalReport.init(
     sequelize,
     tableName: 'eval_reports',
     modelName: 'EvalReport',
+    indexes: [
+      { fields: ['agent_id'] },
+      { fields: ['job_id'] },
+    ],
   }
 );
 

@@ -50,6 +50,7 @@ Agent.init(
     name: {
       type: DataTypes.STRING(256),
       allowNull: false,
+      unique: true,
     },
     description: {
       type: DataTypes.TEXT,

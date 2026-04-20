@@ -10,6 +10,7 @@ import EvalResultsPage from './page/EvalResultsPage';
 import EvalSamplesPage from './page/EvalSamplesPage';
 import ReportListPage from './page/ReportListPage';
 import ReportDetailPage from './page/ReportDetailPage';
+import NotFoundPage from './page/NotFoundPage';
 
 const App: React.FC = () => {
   return (
@@ -25,6 +26,7 @@ const App: React.FC = () => {
         <Route path="/eval/results/:jobId/samples/:taskId" element={<EvalSamplesPage />} />
         <Route path="/reports" element={<ReportListPage />} />
         <Route path="/reports/:id" element={<ReportDetailPage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
   );

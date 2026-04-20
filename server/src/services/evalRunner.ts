@@ -13,6 +13,7 @@ import { ChildProcess, spawn } from 'child_process';
 import path from 'path';
 import fs from 'fs';
 import AdmZip from 'adm-zip';
+import { Op } from 'sequelize';
 import { Agent, EvalJob, EvalTask } from '../models';
 import { EVAL_STATUS, TASK_STATUS } from '../constants';
 import { config } from '../config';
@@ -50,11 +51,14 @@ const DEFAULT_MAX_CONCURRENCY = 2;
 /** Maximum retry attempts for retryable errors. */
 const MAX_RETRIES = 2;
 
-/** Per-task timeout in milliseconds (4 hours — full-sample runs can be very long). */
-const TASK_TIMEOUT_MS = 4 * 60 * 60 * 1000;
+/** Per-task timeout in milliseconds (90 minutes — full-sample runs can be long). */
+const TASK_TIMEOUT_MS = 90 * 60 * 1000;
 
 /** Max connections passed to inspect_ai per task. */
 const DEFAULT_MAX_CONNECTIONS = 16;
+
+/** Maximum captured stdout/stderr size per subprocess (10 MB). Prevents OOM. */
+const MAX_OUTPUT_SIZE = 10 * 1024 * 1024;
 
 /** Errors that should never be retried. */
 const NON_RETRYABLE: Set<ErrorType> = new Set([
@@ -211,9 +215,8 @@ function findLatestEvalFile(
 
   for (const modelDir of modelDirs) {
     const dirName = modelDir.trim();
-    // Match if directory name contains the sanitized model or short name
-    if (!dirName.includes(sanitizedModel) && !dirName.includes(modelShort) &&
-        !sanitizedModel.includes(dirName) && !modelShort.includes(dirName)) {
+    // Prefer exact match on sanitized model name; fall back to short name exact match
+    if (dirName !== sanitizedModel && dirName !== modelShort) {
       continue;
     }
 
@@ -237,11 +240,16 @@ function findLatestEvalFile(
 
       // Match task name in the filename. Task names use underscores;
       // filenames may use hyphens. Normalize both for comparison.
+      // Use word-boundary regex to prevent cross-task false positives
+      // (e.g. "saferag_sn" should not match a file for "saferag_sa").
       const fileNormalized = file.replace(/_/g, '-').toLowerCase();
       const taskNormalized = taskName.replace(/_/g, '-').toLowerCase();
       const benchNormalized = benchmark.replace(/_/g, '-').toLowerCase();
 
-      if (!fileNormalized.includes(taskNormalized) && !fileNormalized.includes(benchNormalized)) {
+      const taskPattern = new RegExp(`(^|[^a-z0-9])${taskNormalized.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}([^a-z0-9]|$)`);
+      const benchPattern = new RegExp(`(^|[^a-z0-9])${benchNormalized.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}([^a-z0-9]|$)`);
+
+      if (!taskPattern.test(fileNormalized) && !benchPattern.test(fileNormalized)) {
         continue;
       }
 
@@ -379,7 +387,9 @@ async function spawnTaskProcess(
   const done = new Promise<{ exitCode: number; stderr: string; stdout: string }>((resolve, reject) => {
     proc.stdout?.on('data', (chunk: Buffer) => {
       const text = chunk.toString();
-      stdout += text;
+      if (stdout.length < MAX_OUTPUT_SIZE) {
+        stdout += text;
+      }
       for (const line of text.split('\n')) {
         const trimmed = line.trim();
         if (trimmed) {
@@ -390,7 +400,9 @@ async function spawnTaskProcess(
 
     proc.stderr?.on('data', (chunk: Buffer) => {
       const text = chunk.toString();
-      stderr += text;
+      if (stderr.length < MAX_OUTPUT_SIZE) {
+        stderr += text;
+      }
       for (const line of text.split('\n')) {
         const trimmed = line.trim();
         if (trimmed) {
@@ -562,6 +574,20 @@ async function runTaskAttempt(
 // ---------------------------------------------------------------------------
 
 /**
+ * Query the database for the number of completed (success or failed) tasks
+ * belonging to a job. Using a live DB count avoids any potential
+ * inconsistency from an in-memory counter modified across awaits.
+ */
+async function getCompletedCount(jobId: number): Promise<number> {
+  return EvalTask.count({
+    where: {
+      jobId,
+      status: { [Op.in]: [TASK_STATUS.SUCCESS, TASK_STATUS.FAILED] },
+    },
+  });
+}
+
+/**
  * Run an evaluation job. This function is designed to be called fire-and-forget:
  * it starts processing asynchronously and does not block the caller.
  *
@@ -621,7 +647,6 @@ export async function runJob(jobId: number): Promise<void> {
   runningProcesses.set(jobIdStr, []);
 
   const sem = new Semaphore(DEFAULT_MAX_CONCURRENCY);
-  let completedCount = 0;
   let hasFailure = false;
 
   /**
@@ -654,10 +679,10 @@ export async function runJob(jobId: number): Promise<void> {
         completedAt: new Date(),
       }).catch(() => {});
     } finally {
-      completedCount++;
-      await theJob.update({ completedTasks: completedCount }).catch(() => {});
+      const completed = await getCompletedCount(jobId);
+      await theJob.update({ completedTasks: completed }).catch(() => {});
       logger.info(
-        `Task finished: ${task.benchmark}/${task.taskName} [${task.status}] (${completedCount}/${tasks.length})`,
+        `Task finished: ${task.benchmark}/${task.taskName} [${task.status}] (${completed}/${tasks.length})`,
       );
       sem.release();
     }
@@ -672,10 +697,11 @@ export async function runJob(jobId: number): Promise<void> {
   }
 
   // Update final job status
+  const finalCompleted = await getCompletedCount(jobId);
   await theJob.update({
     status: hasFailure ? EVAL_STATUS.FAILED : EVAL_STATUS.COMPLETED,
     completedAt: new Date(),
-    completedTasks: completedCount,
+    completedTasks: finalCompleted,
   });
 
   // Clean up process tracking
@@ -683,7 +709,7 @@ export async function runJob(jobId: number): Promise<void> {
 
   logger.info(
     `Eval job finished: ${jobId}, status=${hasFailure ? 'failed' : 'completed'}, ` +
-    `completed=${completedCount}/${tasks.length}`,
+    `completed=${finalCompleted}/${tasks.length}`,
   );
 }
 
@@ -835,19 +861,16 @@ export async function recoverJobs(): Promise<void> {
     }
 
     const tasks = await EvalTask.findAll({ where: { jobId: job.id } });
-    let completedCount = 0;
     let hasFailure = false;
     const pendingTasks: EvalTask[] = [];
 
     // Phase 1: recover tasks that were "running" (process may have finished)
     for (const task of tasks) {
       if (task.status === TASK_STATUS.SUCCESS) {
-        completedCount++;
         continue;
       }
 
       if (task.status === TASK_STATUS.FAILED) {
-        completedCount++;
         hasFailure = true;
         continue;
       }
@@ -865,7 +888,6 @@ export async function recoverJobs(): Promise<void> {
             logger.warn(`recoverJobs: Score computation failed for ${task.benchmark}/${task.taskName}: ${scoreErr.message}`);
           }
           await task.update({ status: TASK_STATUS.SUCCESS, completedAt: new Date() });
-          completedCount++;
         } else {
           // No complete file — re-queue for execution
           logger.info(`recoverJobs: No completed eval file for ${task.benchmark}/${task.taskName}, re-queuing`);
@@ -904,8 +926,8 @@ export async function recoverJobs(): Promise<void> {
             completedAt: new Date(),
           }).catch(() => {});
         } finally {
-          completedCount++;
-          await job.update({ completedTasks: completedCount }).catch(() => {});
+          const completed = await getCompletedCount(job.id);
+          await job.update({ completedTasks: completed }).catch(() => {});
           sem.release();
         }
       };
@@ -921,15 +943,16 @@ export async function recoverJobs(): Promise<void> {
     }
 
     // Phase 3: finalize job status
+    const recoveredCount = await getCompletedCount(job.id);
     await job.update({
       status: hasFailure ? EVAL_STATUS.FAILED : EVAL_STATUS.COMPLETED,
       completedAt: new Date(),
-      completedTasks: completedCount,
+      completedTasks: recoveredCount,
     });
 
     logger.info(
       `recoverJobs: Job ${job.id} recovered — status=${hasFailure ? 'failed' : 'completed'}, ` +
-      `completed=${completedCount}/${tasks.length}`,
+      `completed=${recoveredCount}/${tasks.length}`,
     );
   }
 }

@@ -16,3 +16,9 @@ e2e/
 e2e-demo.ts
 screenshots-fresh/
 server/tsconfig.tsbuildinfo
+
+# Analysis artifacts
+*-analysis/
+
+# Build
+tsconfig.tsbuildinfo

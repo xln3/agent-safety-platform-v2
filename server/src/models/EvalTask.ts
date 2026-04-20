@@ -153,6 +153,10 @@ EvalTask.init(
     sequelize,
     tableName: 'eval_tasks',
     modelName: 'EvalTask',
+    indexes: [
+      { fields: ['job_id'] },
+      { fields: ['agent_id'] },
+    ],
   }
 );
 

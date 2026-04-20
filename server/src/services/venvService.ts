@@ -27,19 +27,14 @@ const LOCAL_BENCH_DIR = path.join(BENCHMARKS_DIR, 'eval_benchmarks');
 const PATCHES_DIR = path.join(BENCHMARKS_DIR, 'patches');
 const MARKER_FILE = '.eval-poc-marker.json';
 
+/** Timeout for the entire venv setup process (30 minutes). */
+const VENV_SETUP_TIMEOUT = 30 * 60 * 1000;
+
 /** Post-install patches: benchmark -> [(site-packages relative target, patch filename)] */
 const VENV_PATCHES: Record<string, Array<[string, string]>> = {
   makemesay: [['inspect_evals/makemesay/utils.py', 'makemesay_utils.py']],
   osworld: [['inspect_evals/osworld/sparse_clone.py', 'osworld_sparse_clone.py']],
-  // Fix: unseeded Random() causes non-deterministic choice shuffling across runs
-  mind2web: [['inspect_evals/mind2web/dataset.py', 'mind2web_dataset.py']],
 };
-
-/** Global patches applied to every venv (e.g. inspect_ai framework fixes) */
-const GLOBAL_PATCHES: Array<[string, string]> = [
-  // Fix: choice scorer fails to parse "$C$" style answers (dollar signs around letter)
-  ['inspect_ai/solver/_multiple_choice.py', 'inspect_ai_multiple_choice.py'],
-];
 
 // ---------------------------------------------------------------------------
 // In-process lock map (prevents duplicate concurrent setups for same benchmark)
@@ -129,7 +124,7 @@ function findSitePackages(venvPath: string): string | null {
 }
 
 function applyPatches(benchmarkName: string, venvPath: string): void {
-  const patches = [...GLOBAL_PATCHES, ...(VENV_PATCHES[benchmarkName] || [])];
+  const patches = VENV_PATCHES[benchmarkName] || [];
   const sp = findSitePackages(venvPath);
 
   if (!sp) {
@@ -148,7 +143,7 @@ function applyPatches(benchmarkName: string, venvPath: string): void {
       continue;
     }
     if (!fs.existsSync(path.dirname(target))) {
-      // Global patches target may not exist in every venv — skip silently
+      logger.warn(`Patch target dir not found: ${path.dirname(target)}`);
       continue;
     }
 
@@ -326,7 +321,15 @@ export async function setupBenchmarkEnv(
     return existing;
   }
 
-  const promise = doSetup(benchmarkName, benchmarkConfig, force);
+  const promise = Promise.race([
+    doSetup(benchmarkName, benchmarkConfig, force),
+    new Promise<never>((_, reject) => {
+      setTimeout(
+        () => reject(new Error(`Venv setup for '${benchmarkName}' timed out after ${VENV_SETUP_TIMEOUT / 1000}s`)),
+        VENV_SETUP_TIMEOUT,
+      );
+    }),
+  ]);
   pendingSetups.set(benchmarkName, promise);
   try {
     return await promise;

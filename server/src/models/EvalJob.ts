@@ -113,6 +113,9 @@ EvalJob.init(
     sequelize,
     tableName: 'eval_jobs',
     modelName: 'EvalJob',
+    indexes: [
+      { fields: ['agent_id'] },
+    ],
   }
 );
 

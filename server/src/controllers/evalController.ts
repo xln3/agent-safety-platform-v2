@@ -27,6 +27,31 @@ export const evalController = {
         return;
       }
 
+      // Validate benchmark names against the catalog
+      const knownBenchmarks = new Set(catalogService.getAllBenchmarks().map((b) => b.name));
+      const unknownBenchmarks = (benchmarks as string[]).filter((name) => !knownBenchmarks.has(name));
+      if (unknownBenchmarks.length > 0) {
+        res.status(400).json(errorResponse(`Unknown benchmark(s): ${unknownBenchmarks.join(', ')}`));
+        return;
+      }
+
+      // Validate limit range
+      if (limit !== undefined && limit !== null) {
+        const limitNum = Number(limit);
+        if (!Number.isFinite(limitNum) || limitNum <= 0 || limitNum > 10000) {
+          res.status(400).json(errorResponse('limit must be a positive integer no greater than 10000'));
+          return;
+        }
+      }
+
+      // Validate judgeModel if provided
+      if (judgeModel !== undefined && judgeModel !== null) {
+        if (typeof judgeModel !== 'string' || judgeModel.trim().length === 0) {
+          res.status(400).json(errorResponse('judgeModel must be a non-empty string'));
+          return;
+        }
+      }
+
       const agent = await Agent.findByPk(agentId);
       if (!agent) {
         res.status(404).json(errorResponse(`Agent not found: ${agentId}`));
@@ -42,8 +67,7 @@ export const evalController = {
       for (const bmName of benchmarks) {
         const bmInfo = benchmarkMap.get(bmName);
         if (!bmInfo) {
-          // Skip unknown benchmarks (could also 400, but lenient approach)
-          logger.warn(`createJob: unknown benchmark "${bmName}", skipping`);
+          // Already validated above; guard for safety
           continue;
         }
 

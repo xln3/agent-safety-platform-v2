@@ -23,8 +23,11 @@ interface Config {
     judgeModel: string;
   };
   corsOrigins: string;
+  apiToken: string;
   evalPocRoot: string;
   resultsDir: string;
+  /** @deprecated No longer used — eval orchestration is now pure TypeScript. */
+  pythonPath?: string;
 }
 
 export const config: Config = {
@@ -45,8 +48,10 @@ export const config: Config = {
     judgeModel: process.env.LLM_JUDGE_MODEL || 'gpt-4o-mini',
   },
   corsOrigins: process.env.CORS_ORIGINS || 'http://localhost:5173',
+  apiToken: process.env.API_TOKEN || '',
   evalPocRoot,
   resultsDir: process.env.RESULTS_DIR || path.join(evalPocRoot, 'results'),
+  pythonPath: process.env.PYTHON_PATH || 'python3',
 };
 
 export default config;
