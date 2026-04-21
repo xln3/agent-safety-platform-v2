@@ -1,0 +1,1206 @@
+# BFCL 300-item curated index
+# Generated: 2026-04-20
+# Selection: Category proportionality, data quality, scoring reliability
+# See bfcl-analysis/SELECTION_REPORT.md for full rationale
+mode: include
+samples:
+  exec_multiple_12:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_multiple_13:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_multiple_14:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_multiple_15:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_multiple_19:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_multiple_23:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_multiple_25:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_multiple_27:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_multiple_28:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_multiple_33:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_multiple_34:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_multiple_38:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_multiple_39:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_multiple_41:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_multiple_44:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_multiple_7:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_parallel_0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_parallel_1:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_parallel_14:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_parallel_2:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_parallel_21:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_parallel_3:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_parallel_35:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_parallel_37:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_parallel_4:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_parallel_40:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_parallel_42:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_parallel_43:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_parallel_44:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_parallel_46:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_parallel_48:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_parallel_49:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_parallel_multiple_13:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_parallel_multiple_15:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_parallel_multiple_17:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_parallel_multiple_25:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_parallel_multiple_28:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_parallel_multiple_3:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_parallel_multiple_30:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_parallel_multiple_31:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_parallel_multiple_32:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_parallel_multiple_34:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_parallel_multiple_35:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_parallel_multiple_36:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_parallel_multiple_38:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_parallel_multiple_39:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_parallel_multiple_6:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_parallel_multiple_8:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_simple_0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_simple_13:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_simple_14:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_simple_20:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_simple_22:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_simple_33:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_simple_37:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_simple_38:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_simple_43:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_simple_55:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_simple_58:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_simple_64:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_simple_80:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_simple_81:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_simple_82:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_simple_92:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  exec_simple_97:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  irrelevance_136:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  irrelevance_155:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  irrelevance_162:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  irrelevance_165:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  irrelevance_171:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  irrelevance_174:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  irrelevance_179:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  irrelevance_18:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  irrelevance_186:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  irrelevance_239:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  irrelevance_41:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  irrelevance_43:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  irrelevance_53:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  irrelevance_62:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  irrelevance_68:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  irrelevance_90:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  irrelevance_94:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_irrelevance_163-20-2:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_irrelevance_225-35-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_irrelevance_284-66-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_irrelevance_348-81-9:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_irrelevance_429-104-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_irrelevance_432-107-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_irrelevance_459-125-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_irrelevance_558-171-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_irrelevance_6-0-6:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_irrelevance_603-193-5:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_irrelevance_665-211-5:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_irrelevance_714-237-1:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_irrelevance_718-237-5:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_irrelevance_733-248-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_irrelevance_777-286-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_irrelevance_825-318-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_irrelevance_828-321-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_multiple_1034-262-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_multiple_178-75-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_multiple_191-85-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_multiple_209-91-3:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_multiple_228-102-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_multiple_285-129-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_multiple_407-140-3:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_multiple_447-144-7:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_multiple_457-145-8:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_multiple_476-146-1:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_multiple_501-148-11:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_multiple_51-21-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_multiple_54-22-1:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_multiple_563-155-3:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_multiple_61-23-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_multiple_65-26-1:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_multiple_864-182-1:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_parallel_0-0-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_parallel_1-0-1:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_parallel_10-6-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_parallel_11-7-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_parallel_12-8-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_parallel_13-9-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_parallel_14-10-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_parallel_15-11-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_parallel_2-0-2:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_parallel_3-0-3:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_parallel_4-1-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_parallel_5-2-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_parallel_6-3-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_parallel_7-3-1:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_parallel_8-4-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_parallel_9-5-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_parallel_multiple_1-1-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_parallel_multiple_10-9-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_parallel_multiple_11-10-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_parallel_multiple_13-11-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_parallel_multiple_14-12-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_parallel_multiple_15-13-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_parallel_multiple_16-14-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_parallel_multiple_17-15-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_parallel_multiple_20-17-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_parallel_multiple_21-18-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_parallel_multiple_22-19-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_parallel_multiple_23-20-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_parallel_multiple_3-2-1:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_parallel_multiple_5-4-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_parallel_multiple_6-5-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_parallel_multiple_9-8-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_relevance_0-0-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_relevance_1-1-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_relevance_10-10-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_relevance_11-11-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_relevance_12-12-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_relevance_13-13-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_relevance_14-14-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_relevance_15-15-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_relevance_2-2-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_relevance_3-3-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_relevance_4-4-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_relevance_5-5-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_relevance_6-6-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_relevance_7-7-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_relevance_8-8-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_relevance_9-9-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_simple_116-72-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_simple_119-75-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_simple_142-94-1:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_simple_148-95-5:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_simple_150-95-7:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_simple_185-110-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_simple_186-111-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_simple_193-116-1:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_simple_194-116-2:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_simple_23-5-1:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_simple_232-122-1:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_simple_35-12-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_simple_40-17-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_simple_51-23-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_simple_63-29-3:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_simple_83-44-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  live_simple_98-58-0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  multiple_102:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  multiple_118:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  multiple_14:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  multiple_142:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  multiple_163:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  multiple_175:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  multiple_176:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  multiple_196:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  multiple_198:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  multiple_56:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  multiple_58:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  multiple_68:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  multiple_69:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  multiple_8:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  multiple_80:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  multiple_83:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  multiple_97:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  parallel_101:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  parallel_117:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  parallel_127:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  parallel_137:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  parallel_143:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  parallel_145:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  parallel_16:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  parallel_164:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  parallel_167:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  parallel_183:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  parallel_190:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  parallel_35:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  parallel_36:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  parallel_54:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  parallel_63:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  parallel_67:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  parallel_80:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  parallel_multiple_102:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  parallel_multiple_109:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  parallel_multiple_12:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  parallel_multiple_126:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  parallel_multiple_130:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  parallel_multiple_149:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  parallel_multiple_160:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  parallel_multiple_191:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  parallel_multiple_193:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  parallel_multiple_23:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  parallel_multiple_28:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  parallel_multiple_35:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  parallel_multiple_39:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  parallel_multiple_40:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  parallel_multiple_56:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  parallel_multiple_67:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  parallel_multiple_92:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_java_1:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_java_14:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_java_32:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_java_34:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_java_48:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_java_49:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_java_54:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_java_59:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_java_67:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_java_68:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_java_70:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_java_76:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_java_8:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_java_87:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_java_92:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_java_96:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_java_98:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_javascript_10:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_javascript_15:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_javascript_16:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_javascript_19:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_javascript_3:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_javascript_30:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_javascript_31:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_javascript_33:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_javascript_34:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_javascript_35:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_javascript_36:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_javascript_39:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_javascript_4:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_javascript_44:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_javascript_48:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_javascript_5:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_javascript_8:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_python_110:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_python_135:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_python_142:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_python_172:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_python_176:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_python_183:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_python_194:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_python_22:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_python_235:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_python_274:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_python_309:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_python_373:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_python_390:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_python_47:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_python_49:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_python_52:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  simple_python_79:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  sql_0:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  sql_14:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  sql_19:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  sql_2:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  sql_20:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  sql_25:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  sql_41:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  sql_46:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  sql_47:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  sql_62:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  sql_64:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  sql_67:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  sql_69:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  sql_76:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  sql_77:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  sql_97:
+    added: '2026-04-20'
+    sources:
+    - curation_v1
+  sql_99:
+    added: '2026-04-20'
+    sources:
+    - curation_v1

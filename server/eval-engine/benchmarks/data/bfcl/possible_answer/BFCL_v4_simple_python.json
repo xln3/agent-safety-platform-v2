@@ -1,0 +1,17 @@
+{"id": "simple_python_22", "ground_truth": [{"math.gcd": {"num1": [12], "num2": [15]}}]}
+{"id": "simple_python_47", "ground_truth": [{"get_boiling_melting_points": {"substance": ["water"], "sea_level": [5000]}}]}
+{"id": "simple_python_49", "ground_truth": [{"calc_absolute_pressure": {"atm_pressure": [1], "gauge_pressure": [2]}}]}
+{"id": "simple_python_52", "ground_truth": [{"calc_heat_capacity": {"temp": [298], "volume": [10], "gas": ["air", ""]}}]}
+{"id": "simple_python_79", "ground_truth": [{"create_histogram": {"data": [[85, 90, 88, 92, 86, 89, 91]], "bins": [5]}}]}
+{"id": "simple_python_110", "ground_truth": [{"predict_house_price": {"bedrooms": [3], "bathrooms": [2], "area": [1800], "location": ["San Francisco", "San Francisco, CA"]}}]}
+{"id": "simple_python_135", "ground_truth": [{"calculate_return_on_investment": {"purchase_price": [20], "sale_price": [25], "dividend": [2]}}]}
+{"id": "simple_python_142", "ground_truth": [{"get_stock_price": {"company_name": ["Amazon", "AMZN"], "date": ["2022-03-11"], "exchange": ["NASDAQ", ""]}}]}
+{"id": "simple_python_172", "ground_truth": [{"legal_case.fetch": {"case_id": ["R vs Adams"], "details": [true]}}]}
+{"id": "simple_python_176", "ground_truth": [{"lawsuit_details.find": {"company_name": ["Apple Inc."], "year": [2010], "case_type": ["Patent", "IPR"]}}]}
+{"id": "simple_python_183", "ground_truth": [{"lawsuit_search": {"entity": ["Apple"], "county": ["Santa Clara County", "Santa Clara"], "state": ["California", ""]}}]}
+{"id": "simple_python_194", "ground_truth": [{"get_plants_for_slope": {"slope_type": ["hill", "steep", "moderate"], "num_results": [3]}}]}
+{"id": "simple_python_235", "ground_truth": [{"get_event_date": {"event": ["Treaty of Lisbon", "Signing of the Treaty of Lisbon", "The signing of the Treaty of Lisbon"], "location": ["", "Lisbon", "Lisbon, Portugal"]}}]}
+{"id": "simple_python_274", "ground_truth": [{"museum_info": {"museum_name": ["Metropolitan Museum of Art", "The Metropolitan Museum of Art", "Met Museum"], "info_type": ["opening_hours", ""]}}]}
+{"id": "simple_python_309", "ground_truth": [{"nfl_data.player_record": {"player_name": ["Tom Brady"], "season_year": [2020], "team": ["", "Tampa Bay Buccaneers"]}}]}
+{"id": "simple_python_373", "ground_truth": [{"walmart.purchase": {"loc": ["San Jose", "San Jose, CA"], "product_list": [["apples", "rice", "bottled water"], ["apples", "rice", "water"]], "pack_size": [[1, 1, 12]]}}]}
+{"id": "simple_python_390", "ground_truth": [{"currency_conversion.convert": {"amount": [150], "from_currency": ["EUR", "Euros"], "to_currency": ["CAD", "Canadian dollars"]}}]}

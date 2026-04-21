@@ -1,0 +1,17 @@
+{"id": "simple_java_1", "ground_truth": [{"SQLCompletionAnalyzer.makeProposalsFromObject": {"object": ["Customers"], "useShortName": [true], "params": [{"limit": [50], "schemaFilter": ["public"]}]}}]}
+{"id": "simple_java_8", "ground_truth": [{"EFSNIOFile.setContents": {"source": ["fileStream"], "force": [true], "keepHistory": [false], "monitor": ["progressMonitor"]}}]}
+{"id": "simple_java_14", "ground_truth": [{"FunGameBase.onFinish": {"layout": ["gameLayout"], "success": [true]}}]}
+{"id": "simple_java_32", "ground_truth": [{"RedissonPermitExpirableSemaphore.tryAcquireAsync": {"waitTime": [5], "leaseTime": [120], "unit": ["SECONDS"]}}]}
+{"id": "simple_java_34", "ground_truth": [{"ServiceManager.newTimeout": {"task": ["cleanupTask"], "delay": [5], "unit": ["TimeUnit.MINUTES"]}}]}
+{"id": "simple_java_48", "ground_truth": [{"CookieHeaderTest.create": {"sa": ["new InetSocketAddress(\"192.168.1.10\", 8080)"], "sslContext": ["testSSLContext"]}}]}
+{"id": "simple_java_49", "ground_truth": [{"Http2TestExchangeImpl.sendResponseHeaders": {"rCode": [404], "responseLength": [1500]}}]}
+{"id": "simple_java_54", "ground_truth": [{"AbstractTransportSearchableSnapshotsAction.shardOperation": {"request": ["snapshotRequest"], "shardRouting": ["shardRouteInfo"], "task": ["snapshotTask"], "listener": ["operationListener"]}}]}
+{"id": "simple_java_59", "ground_truth": [{"TruncateTranslogAction.execute": {"terminal": ["terminalInterface"], "shardPath": ["new ShardPath(Paths.get('/var/data/elasticsearch/nodes/0/indices/1shard'))"], "indexDirectory": ["FSDirectory.open(Paths.get('/var/data/elasticsearch/nodes/0/indices/1shard/index'))"]}}]}
+{"id": "simple_java_67", "ground_truth": [{"MacDmgBundler.prepareDMGSetupScript": {"appLocation": ["/Applications/PhotoEditor.app"], "params": [{"APP_NAME": ["PhotoEditor"]}, {"IMAGES_ROOT": ["/path/to/images"]}, {"BACKGROUND_IMAGE_FOLDER": ["background"]}, {"BACKGROUND_IMAGE": ["custom-bg.png"]}]}}]}
+{"id": "simple_java_68", "ground_truth": [{"MacBaseInstallerBundler.validateAppImageAndBundeler": {"params": [{"/Applications/MyApp.app": ["MyApp"]}]}}]}
+{"id": "simple_java_70", "ground_truth": [{"XMLNamespaceBinder.endElement": {"element": ["new QName('http://www.example.com', 'item', 'ex')"], "augs": ["augmentations"]}}]}
+{"id": "simple_java_76", "ground_truth": [{"Intro.step": {"w": [800], "h": [600]}}]}
+{"id": "simple_java_87", "ground_truth": [{"suspendpolicy017.settingVMDeathRequest": {"suspendPolicy": ["EVENT_THREAD"], "property": ["deathEvent001"]}}]}
+{"id": "simple_java_92", "ground_truth": [{"ClassFileFinder.findClassFile": {"name": ["com.example.MyClass"], "classPath": ["/usr/local/classes:/home/user/java/libs"]}}]}
+{"id": "simple_java_96", "ground_truth": [{"InstrumentableProcessor.createCallConverter": {"converterMethod": ["convertValue"], "frameParameterName": ["frameVar"], "returnName": ["returnValueCode"]}}]}
+{"id": "simple_java_98", "ground_truth": [{"LoopConditionProfile.calculateProbability": {"trueCountLocal": [150], "falseCountLocal": [50]}}]}

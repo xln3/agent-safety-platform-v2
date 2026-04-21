@@ -1,0 +1,17 @@
+{"id": "live_multiple_51-21-0", "ground_truth": [{"order_status_check": {"order_id": ["#123"], "product": ["a pair of sneakers", "pair of sneakers", "sneakers", "sneaker"]}}]}
+{"id": "live_multiple_54-22-1", "ground_truth": [{"inventory_management": {"product_id": ["12345XYZ"], "sizes": [["M"]], "color": ["merah"]}}]}
+{"id": "live_multiple_61-23-0", "ground_truth": [{"get_movies": {"city": ["Noida"], "cinema_hall": ["", null], "movie_date": ["", null], "movie_language": ["", null], "movie_format": ["", "2D"]}}]}
+{"id": "live_multiple_65-26-1", "ground_truth": [{"get_current_weather": {"location": ["Boston, MA"], "unit": ["", "fahrenheit"]}}]}
+{"id": "live_multiple_178-75-0", "ground_truth": [{"HNA_NEWS.search": {"keyword": ["Ji Sung Park"], "category": ["", "World"], "language": ["", "en"], "limit": [5], "sort_by": ["", "Date"]}}]}
+{"id": "live_multiple_191-85-0", "ground_truth": [{"sort_list": {"elements": [["Sam", "Alice", "Jack"]], "order": ["", "asc"]}}]}
+{"id": "live_multiple_209-91-3", "ground_truth": [{"detail_project": {"project_name": ["turing-machine"], "include_status": ["", false], "start_date": ["", null]}}]}
+{"id": "live_multiple_228-102-0", "ground_truth": [{"analysis_api.AnalysisApi.retrieve_analysis": {"project": ["SUPERFANCY"], "component": ["AB1010CD"], "vulnerability": ["ef903ac-893-f00"]}}]}
+{"id": "live_multiple_285-129-0", "ground_truth": [{"Services_4_FindProvider": {"city": ["Pittsburgh, PA"], "type": ["Psychiatrist"], "insurance_accepted": ["", true]}}]}
+{"id": "live_multiple_407-140-3", "ground_truth": [{"RideSharing_2_GetRide": {"destination": ["540 El Camino Real, Berkeley"], "number_of_seats": [""], "ride_type": ["Regular"]}}]}
+{"id": "live_multiple_447-144-7", "ground_truth": [{"Services_4_FindProvider": {"city": ["Novato, CA"], "type": ["Psychologist"], "accepts_insurance": ["", false]}}]}
+{"id": "live_multiple_457-145-8", "ground_truth": [{"Travel_1_FindAttractions": {"location": ["Paris, France"], "free_entry": ["", "dontcare"], "category": ["", "dontcare"], "good_for_kids": ["True"]}}]}
+{"id": "live_multiple_476-146-1", "ground_truth": [{"Music_3_LookupMusic": {"artist": ["", "dontcare"], "album": ["", "dontcare"], "genre": ["Electropop"], "year": ["2014"]}}]}
+{"id": "live_multiple_501-148-11", "ground_truth": [{"Events_3_FindEvents": {"event_type": ["Theater"], "city": ["San Francisco, CA"], "date": ["2023-10-01"]}}]}
+{"id": "live_multiple_563-155-3", "ground_truth": [{"Events_3_FindEvents": {"event_type": ["Music"], "city": ["Philadelphia", "Philadelphia, PA"], "date": ["2023-03-07"]}}]}
+{"id": "live_multiple_864-182-1", "ground_truth": [{"Movies_1_FindMovies": {"location": ["Los Angeles, CA"], "theater_name": ["", "dontcare"], "genre": ["", "dontcare"], "show_type": ["regular"]}}]}
+{"id": "live_multiple_1034-262-0", "ground_truth": [{"audit_log_api.AuditLogApi.get_access_logs": {"offset": [0], "query": [""], "pageSize": [50], "startDate": ["", null], "endDate": ["", null]}}]}

@@ -1,0 +1,17 @@
+{"id": "sql_0", "ground_truth": [{"sql.execute": {"sql_keyword": ["SELECT"], "table_name": ["students"], "columns": [["name"]], "conditions": [["id = 1234"]]}}]}
+{"id": "sql_2", "ground_truth": [{"sql.execute": {"sql_keyword": ["CREATE"], "table_name": ["Students"], "columns": [["StudentID", "FirstName", "LastName", "Age", "Grade"]]}}]}
+{"id": "sql_14", "ground_truth": [{"sql.execute": {"sql_keyword": ["UPDATE"], "table_name": ["ExperimentData"], "columns": [["DataValue"]], "update_values": [[10.0]], "conditions": [["ExperimentID = EX123"]]}}]}
+{"id": "sql_19", "ground_truth": [{"sql.execute": {"sql_keyword": ["INSERT"], "table_name": ["SoundSpeedExperiment"], "insert_values": [["Air", 343, 20, 1], ["Water", 1482, 20, 2]]}}]}
+{"id": "sql_20", "ground_truth": [{"sql.execute": {"sql_keyword": ["SELECT"], "table_name": ["PeriodicTable"], "columns": [["name", "atomic_numbers"]], "conditions": [["atomic_weight < 20"]]}}]}
+{"id": "sql_25", "ground_truth": [{"sql.execute": {"sql_keyword": ["UPDATE"], "table_name": ["Compounds"], "columns": [["MolarMass"]], "update_values": [[18.01528]], "conditions": [["CompoundName = 'Water'"]]}}]}
+{"id": "sql_41", "ground_truth": [{"sql.execute": {"sql_keyword": ["SELECT"], "table_name": ["students"], "columns": ["*"], "conditions": [["grade < 60", "course = 'Computer Science'"]]}}]}
+{"id": "sql_46", "ground_truth": [{"sql.execute": {"sql_keyword": ["DELETE"], "table_name": ["Employees"], "conditions": [["name='John Doe'"]]}}]}
+{"id": "sql_47", "ground_truth": [{"sql.execute": {"sql_keyword": ["DELETE"], "table_name": ["Students"], "conditions": [["name='Jane Smith'"]]}}]}
+{"id": "sql_62", "ground_truth": [{"sql.execute": {"sql_keyword": ["CREATE"], "table_name": ["StudentScores"], "columns": [["StudentID", "MathScore", "EnglishScore", "ScienceScore"]]}}]}
+{"id": "sql_64", "ground_truth": [{"sql.execute": {"sql_keyword": ["UPDATE"], "table_name": ["Students"], "columns": [["Grade"]], "update_values": [["A"]], "conditions": [["Age > 18"]]}}]}
+{"id": "sql_67", "ground_truth": [{"sql.execute": {"sql_keyword": ["DELETE"], "table_name": ["student_scores"], "conditions": [["score < 50"]]}}]}
+{"id": "sql_69", "ground_truth": [{"sql.execute": {"sql_keyword": ["INSERT"], "table_name": ["Census"], "columns": [["Year", "Population", "BirthRate", "DeathRate", "NetMigrationRate"]], "insert_values": [[2022, "331002651", 12.4, 8.9, 2.5]]}}]}
+{"id": "sql_76", "ground_truth": [{"sql.execute": {"sql_keyword": ["DELETE"], "table_name": ["EconomicData"], "conditions": [["Indicator = 'GDP'", "Year = '2010'", "Indicator = 'GDP'", "Year = 2010", "Indicator = GDP", "Year = '2010'", "Indicator = GDP", "Year = 2010"]]}}]}
+{"id": "sql_77", "ground_truth": [{"sql.execute": {"sql_keyword": ["DELETE"], "table_name": ["FinancialStats"], "conditions": [["EconomicIndicator = Unemployment Rate", "Year = 2005", "EconomicIndicator = 'Unemployment Rate'", "Year = '2005'"]]}}]}
+{"id": "sql_97", "ground_truth": [{"sql.execute": {"sql_keyword": ["DELETE"], "table_name": ["orders"], "conditions": [["order_status = 'cancelled'"]]}}]}
+{"id": "sql_99", "ground_truth": [{"sql.execute": {"sql_keyword": ["INSERT "], "table_name": ["Products"], "columns": [["ProductID", "ProductName", "Category", "Price"]], "insert_values": [["P789", "Apple iPhone 13", "Electronics", "999"]]}}]}
