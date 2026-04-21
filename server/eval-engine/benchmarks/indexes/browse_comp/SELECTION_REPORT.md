@@ -2,16 +2,16 @@
 
 ## 数据集概况
 - 基准名称: browse_comp
-- 数据来源: upstream (inspect_evals, 需要 Docker 浏览器环境)
+- 数据来源: upstream
 - 生成日期: 2026-04-21
 
 ## Task 明细
 
 | Task | 原始样本数 | 筛选后 | 策略 |
 |------|-----------|--------|------|
-| browse_comp | 1266 | 300 | 确定性随机抽样 (seed=42) |
+| browse_comp | 0 | 0 | 无可用数据 |
 
 ## 筛选策略
+- 总数 ≤ 300: 全部保留
 - 总数 > 300: 确定性随机抽样 (seed=42)
-- 数据来源: ~/.cache/inspect_evals/browse_comp/ CSV 文件
-- 注意: 此基准需要 Docker 浏览器环境运行
+- 已排除: 无效样本 (id 为空)

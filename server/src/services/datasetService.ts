@@ -7,6 +7,7 @@
  */
 
 import fs from 'fs';
+import os from 'os';
 import path from 'path';
 import { execFile } from 'child_process';
 import { promisify } from 'util';
@@ -133,8 +134,8 @@ const DATASET_REGISTRY: DatasetSpec[] = [
   },
   {
     benchmark: 'mind2web_scores',
-    source: 'http',
-    url: 'https://huggingface.co/datasets/osunlp/Mind2Web/resolve/main/scores_all_data.pkl',
+    source: 'inspect_cache',
+    localPath: path.join(os.homedir(), '.cache', 'inspect_evals', 'mind2web'),
   },
   {
     benchmark: 'assistant_bench',
@@ -392,30 +393,66 @@ function dirHasFiles(dirPath: string): boolean {
 function checkDiskForDataset(spec: DatasetSpec): boolean {
   switch (spec.source) {
     case 'hf': {
-      if (!spec.hfRepo || !fs.existsSync(DATASETS_DIR)) return false;
+      if (!spec.hfRepo) return false;
       const [org, name] = spec.hfRepo.split('/');
       const prefix = org.toLowerCase() + '___';
       const nameNorm = name.toLowerCase().replace(/[^a-z0-9]/g, '');
-      try {
-        return fs.readdirSync(DATASETS_DIR).some((entry) => {
-          const entryLower = entry.toLowerCase();
-          if (!entryLower.startsWith(prefix)) return false;
-          const entryNamePart = entryLower.slice(prefix.length).replace(/[^a-z0-9]/g, '');
-          if (entryNamePart !== nameNorm) return false;
-          return dirHasFiles(path.join(DATASETS_DIR, entry));
-        });
-      } catch { return false; }
+
+      // Check datasets/ dir (load_dataset cache format: org___name)
+      if (fs.existsSync(DATASETS_DIR)) {
+        try {
+          const found = fs.readdirSync(DATASETS_DIR).some((entry) => {
+            const entryLower = entry.toLowerCase();
+            if (!entryLower.startsWith(prefix)) return false;
+            const entryNamePart = entryLower.slice(prefix.length).replace(/[^a-z0-9]/g, '');
+            if (entryNamePart !== nameNorm) return false;
+            return dirHasFiles(path.join(DATASETS_DIR, entry));
+          });
+          if (found) return true;
+        } catch { /* continue to hub check */ }
+      }
+
+      // Also check hub/ dir (datasets library blob storage: datasets--org--name)
+      const hubDir = path.join(DATASET_CACHE_DIR, 'hub');
+      if (fs.existsSync(hubDir)) {
+        const hubPrefix = `datasets--${org}--`;
+        try {
+          return fs.readdirSync(hubDir).some((entry) => {
+            if (!entry.startsWith(hubPrefix)) return false;
+            const entryName = entry.slice(hubPrefix.length).toLowerCase().replace(/[^a-z0-9]/g, '');
+            return entryName === nameNorm && dirHasFiles(path.join(hubDir, entry));
+          });
+        } catch { /* fall through */ }
+      }
+      return false;
     }
     case 'github':
     case 'http': {
       if (!spec.url) return false;
       const filename = path.basename(spec.url.split('?')[0]);
       const dest = path.join(GITHUB_DIR, spec.benchmark, filename);
-      try { return fs.statSync(dest).isFile(); } catch { return false; }
+      try {
+        if (fs.statSync(dest).isFile()) return true;
+      } catch { /* fall through */ }
+      // Also check if data is bundled in eval_benchmarks/{benchmark}/data/
+      const localData = path.join(config.evalPocRoot, 'benchmarks', 'eval_benchmarks', spec.benchmark, 'data');
+      return dirHasFiles(localData);
     }
     case 'inspect_cache': {
-      const inspectDir = path.join(DATASET_CACHE_DIR, 'inspect_evals', 'BFCL');
-      return dirHasFiles(inspectDir);
+      // Check for the specific benchmark dir, not just BFCL
+      const benchDir = path.join(DATASET_CACHE_DIR, 'inspect_evals', spec.benchmark);
+      if (dirHasFiles(benchDir)) return true;
+      // Some inspect_cache entries use different dir names (e.g. BFCL, make_me_say)
+      const inspectEvalsDir = path.join(DATASET_CACHE_DIR, 'inspect_evals');
+      if (!fs.existsSync(inspectEvalsDir)) return false;
+      // Try common name variations
+      const variations = [
+        spec.benchmark,
+        spec.benchmark.toUpperCase(),
+        spec.benchmark.replace(/_/g, '-'),
+        spec.localPath ? path.basename(spec.localPath) : '',
+      ].filter(Boolean);
+      return variations.some(v => dirHasFiles(path.join(inspectEvalsDir, v)));
     }
     case 'local':
       return true;

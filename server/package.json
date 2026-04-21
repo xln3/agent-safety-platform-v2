@@ -9,6 +9,8 @@
     "db:sync": "ts-node src/scripts/syncDatabase.ts",
     "setup:venvs": "ts-node scripts/setup-venvs.ts",
     "prepare:datasets": "ts-node scripts/prepare-datasets.ts",
+    "bridge:caches": "ts-node scripts/bridge-caches.ts",
+    "verify:offline": "ts-node scripts/verify-offline.ts",
     "test": "vitest run",
     "test:watch": "vitest"
   },

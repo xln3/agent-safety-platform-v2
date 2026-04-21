@@ -52,13 +52,19 @@ export function expandSampleRanges(samples: string[]): string[] {
       continue;
     }
 
-    // Parse range syntax: "1-10"
+    // Parse range syntax: "1-10" (only small, reasonable ranges)
     const match = s.match(/^(\d+)-(\d+)$/);
     if (match) {
       const start = parseInt(match[1], 10);
       const end = parseInt(match[2], 10);
-      for (let i = start; i <= end; i++) {
-        result.push(String(i));
+      // Only expand if it's a valid ascending range with <= 10000 items
+      // Prevents misinterpreting IDs like "101249559117529-0" as ranges
+      if (start <= end && (end - start) < 10000) {
+        for (let i = start; i <= end; i++) {
+          result.push(String(i));
+        }
+      } else {
+        result.push(s);
       }
     } else {
       result.push(s);
