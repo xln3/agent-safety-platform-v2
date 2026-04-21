@@ -1,0 +1,22 @@
+# mmiu 4-item curated index
+# Generated: 2026-04-21
+# Source: eval results auto-extraction
+# Selection: 全部保留 (共 4 个)
+mode: include
+samples:
+  mmiu_6d270b2f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mmiu_b34e8d20:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mmiu_ca5ff780:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mmiu_df1e544a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1

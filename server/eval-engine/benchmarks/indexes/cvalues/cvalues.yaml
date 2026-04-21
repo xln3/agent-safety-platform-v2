@@ -1,0 +1,1206 @@
+# cvalues 300-item curated index
+# Generated: 2026-04-21
+# Source: eval results auto-extraction
+# Selection: 确定性随机抽样 300 / 1712 (seed=42)
+mode: include
+samples:
+  '1':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1002':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1009':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '101':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1018':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1024':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1032':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1036':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1043':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1046':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1052':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1055':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1056':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1077':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1081':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1084':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1090':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1097':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '110':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1103':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1105':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1109':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1114':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1115':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1119':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1121':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1124':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1125':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1128':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1129':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1136':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1142':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1144':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1155':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1158':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1165':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1168':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '117':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1171':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1176':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1178':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1179':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1183':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1186':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1193':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1199':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '12':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1202':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1203':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1208':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '122':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1227':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1229':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1233':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1240':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1252':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1254':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1256':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1260':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '128':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1284':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1289':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1291':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1292':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1295':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1298':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1299':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1301':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1312':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1326':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1335':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1348':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1350':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1351':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1364':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1368':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1384':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1387':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1388':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '139':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1392':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1394':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '140':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1401':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1403':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1409':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1411':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1417':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1419':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '142':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1421':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1426':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1436':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1439':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1441':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1445':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1449':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1452':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1454':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1456':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1458':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1460':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1482':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1483':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1485':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1486':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '149':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1491':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1495':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1504':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '151':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1510':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1530':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1538':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1539':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1548':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1564':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1572':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1578':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '158':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1595':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1596':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1606':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1618':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1620':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1622':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1624':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1631':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1650':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1652':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '166':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1664':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1665':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1667':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1670':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1680':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1686':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1687':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1696':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1698':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1699':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1700':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '1707':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '187':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '193':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '197':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '2':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '207':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '214':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '230':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '235':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '236':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '237':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '238':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '247':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '251':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '259':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '265':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '274':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '284':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '285':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '29':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '293':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '294':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '302':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '303':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '309':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '31':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '318':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '32':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '329':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '333':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '352':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '353':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '358':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '367':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '378':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '380':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '389':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '393':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '397':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '404':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '410':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '43':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '432':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '435':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '439':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '441':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '446':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '447':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '450':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '451':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '454':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '462':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '470':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '472':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '475':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '478':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '479':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '484':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '492':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '502':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '51':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '52':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '521':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '533':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '535':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '541':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '542':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '543':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '546':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '556':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '557':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '561':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '567':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '570':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '576':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '580':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '598':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '61':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '614':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '616':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '620':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '628':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '629':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '635':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '636':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '637':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '639':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '642':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '649':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '652':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '655':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '66':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '662':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '666':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '672':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '674':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '677':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '691':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '693':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '696':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '7':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '704':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '711':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '714':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '717':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '72':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '726':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '729':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '744':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '750':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '751':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '756':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '762':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '772':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '778':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '781':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '784':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '787':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '789':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '791':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '80':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '801':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '802':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '806':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '815':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '822':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '824':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '830':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '834':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '841':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '847':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '85':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '850':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '857':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '86':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '862':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '863':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '865':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '87':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '874':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '875':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '883':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '889':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '893':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '903':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '918':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '933':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '941':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '943':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '945':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '946':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '947':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '95':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '962':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '973':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '987':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '991':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '996':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1

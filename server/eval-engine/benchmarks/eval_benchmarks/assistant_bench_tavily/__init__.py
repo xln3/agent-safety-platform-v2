@@ -1,0 +1,1 @@
+from .assistant_bench_tavily import assistant_bench_web_browser_tavily

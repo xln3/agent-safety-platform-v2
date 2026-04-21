@@ -1,0 +1,26 @@
+# lab_bench_litqa 5-item curated index
+# Generated: 2026-04-21
+# Source: eval results auto-extraction
+# Selection: 全部保留 (共 5 个)
+mode: include
+samples:
+  0d5cf8a7-a240-4a8f-be4e-c16712f90d79:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  1ccdc348-50e1-4941-9151-5e50411a2b41:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  720e20c2-9ad1-4d98-9f01-8b7fb3782a46:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  86f111e5-402b-4ef5-b101-8be1bf5be7c6:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  f0b6cea0-e005-47bc-be0d-9a10b219cae6:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1

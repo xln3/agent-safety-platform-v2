@@ -1,0 +1,1206 @@
+# b3 300-item curated index
+# Generated: 2026-04-21
+# Source: eval results auto-extraction
+# Selection: 确定性随机抽样 300 / 315 (seed=42)
+mode: include
+samples:
+  benchmark_analytics_misleading_0_104:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_analytics_misleading_0_105:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_analytics_misleading_0_106:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_analytics_misleading_0_107:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_analytics_misleading_0_108:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_analytics_misleading_0_109:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_analytics_misleading_0_110:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_analytics_misleading_0_111:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_analytics_misleading_0_112:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_analytics_misleading_0_113:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_analytics_misleading_0_114:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_analytics_misleading_0_115:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_analytics_misleading_0_116:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_analytics_misleading_0_117:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_analytics_misleading_0_118:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_analytics_misleading_0_119:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_analytics_misleading_0_120:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_analytics_misleading_0_121:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_analytics_misleading_0_122:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_analytics_misleading_0_124:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_analytics_misleading_1_316:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_analytics_misleading_1_318:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_analytics_misleading_1_319:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_analytics_misleading_1_323:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_analytics_misleading_1_324:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_analytics_misleading_1_325:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_analytics_misleading_1_330:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_cco_coach_0_0:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_cco_coach_0_125:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_cco_coach_0_126:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_cco_coach_0_127:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_cco_coach_0_128:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_cco_coach_0_130:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_cco_coach_0_131:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_cco_coach_0_132:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_cco_coach_0_133:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_cco_coach_0_2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_cco_coach_0_25:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_cco_coach_0_34:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_cco_coach_0_35:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_cco_coach_0_36:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_cco_coach_0_38:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_cco_coach_0_41:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_cco_coach_0_45:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_cco_coach_0_46:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_cco_coach_0_47:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_cco_coach_1_210:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_cco_coach_1_212:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_cco_coach_1_217:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_cco_coach_1_235:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_cco_coach_1_244:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_cco_coach_1_245:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_cco_coach_1_246:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_cco_coach_1_248:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_cco_coach_1_251:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_cco_coach_1_255:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_cco_coach_1_256:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_cco_coach_1_257:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_chatapp_refuse_0_191:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_chatapp_refuse_0_192:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_chatapp_refuse_0_193:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_chatapp_refuse_0_194:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_chatapp_refuse_0_195:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_chatapp_refuse_0_37:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_chatapp_refuse_0_39:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_chatapp_refuse_0_40:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_chatapp_refuse_0_42:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_chatapp_refuse_0_43:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_chatapp_refuse_0_44:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_chatapp_refuse_0_48:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_chatapp_refuse_0_49:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_chatapp_refuse_0_51:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_chatapp_refuse_0_52:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_chatapp_refuse_0_53:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_chatapp_refuse_0_54:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_chatapp_refuse_0_55:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_chatapp_refuse_0_56:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_chatapp_refuse_0_57:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_chatapp_refuse_1_247:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_chatapp_refuse_1_249:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_chatapp_refuse_1_250:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_chatapp_refuse_1_252:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_chatapp_refuse_1_253:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_chatapp_refuse_1_254:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_chatapp_refuse_1_258:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_chatapp_refuse_1_259:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_chatapp_refuse_1_260:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_chatapp_refuse_1_261:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_chatapp_refuse_1_262:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_chatapp_refuse_1_263:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_chatapp_refuse_1_264:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_chatapp_refuse_1_265:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_chatapp_refuse_1_266:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_chatapp_refuse_1_267:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_code_review_malicious_0_76:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_code_review_malicious_0_77:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_code_review_malicious_0_78:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_code_review_malicious_0_79:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_code_review_malicious_0_80:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_code_review_malicious_0_81:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_code_review_malicious_0_83:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_code_review_malicious_0_84:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_code_review_malicious_0_85:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_code_review_malicious_0_86:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_code_review_malicious_0_87:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_code_review_malicious_0_88:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_code_review_malicious_0_89:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_code_review_malicious_0_90:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_code_review_malicious_0_91:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_code_review_malicious_0_92:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_code_review_malicious_0_93:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_code_review_malicious_0_94:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_code_review_malicious_0_95:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_code_review_malicious_0_96:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_code_review_malicious_1_286:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_code_review_malicious_1_287:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_code_review_malicious_1_288:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_code_review_malicious_1_290:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_code_review_malicious_1_291:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_code_review_malicious_1_293:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_code_review_malicious_1_294:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_code_review_malicious_1_295:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_code_review_malicious_1_296:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_code_review_malicious_1_297:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_code_review_malicious_1_298:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_code_review_malicious_1_299:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_code_review_malicious_1_300:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_code_review_malicious_1_301:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_code_review_malicious_1_302:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_code_review_malicious_1_303:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_code_review_malicious_1_304:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_code_review_malicious_1_305:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_code_review_malicious_1_306:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_email_tool_invocation_0_134:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_email_tool_invocation_0_135:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_email_tool_invocation_0_136:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_email_tool_invocation_0_137:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_email_tool_invocation_0_138:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_email_tool_invocation_0_139:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_email_tool_invocation_0_140:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_email_tool_invocation_0_141:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_email_tool_invocation_0_142:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_email_tool_invocation_0_143:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_email_tool_invocation_0_144:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_email_tool_invocation_0_145:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_email_tool_invocation_0_146:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_email_tool_invocation_0_147:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_email_tool_invocation_0_148:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_email_tool_invocation_0_149:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_email_tool_invocation_0_150:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_email_tool_invocation_0_151:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_email_tool_invocation_0_152:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_email_tool_invocation_0_153:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_email_tool_invocation_0_154:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_legal_TI_exfiltration_0_155:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_legal_TI_exfiltration_0_156:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_legal_TI_exfiltration_0_157:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_legal_TI_exfiltration_0_158:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_legal_TI_exfiltration_0_159:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_legal_TI_exfiltration_0_160:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_legal_TI_exfiltration_0_161:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_legal_TI_exfiltration_0_162:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_legal_TI_exfiltration_0_163:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_legal_TI_exfiltration_0_165:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_legal_TI_exfiltration_0_166:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_legal_TI_exfiltration_0_167:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_legal_TI_exfiltration_0_169:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_legal_TI_exfiltration_0_170:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_legal_TI_exfiltration_0_171:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_legal_TI_exfiltration_0_172:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_legal_TI_exfiltration_0_173:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_legal_TI_exfiltration_0_174:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_legal_TI_exfiltration_0_175:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_mcp_chat_poisoning_0_12:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_mcp_chat_poisoning_0_14:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_mcp_chat_poisoning_0_15:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_mcp_chat_poisoning_0_16:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_mcp_chat_poisoning_0_18:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_mcp_chat_poisoning_0_207:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_mcp_chat_poisoning_0_208:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_mcp_chat_poisoning_0_21:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_mcp_chat_poisoning_0_28:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_mcp_chat_poisoning_0_29:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_mcp_chat_poisoning_0_32:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_mcp_chat_poisoning_0_33:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_mcp_chat_poisoning_0_68:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_mcp_chat_poisoning_0_69:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_mcp_chat_poisoning_0_70:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_mcp_chat_poisoning_0_71:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_mcp_chat_poisoning_0_72:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_mcp_chat_poisoning_0_73:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_mcp_chat_poisoning_0_74:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_mcp_chat_poisoning_0_75:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_mcp_chat_poisoning_1_222:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_mcp_chat_poisoning_1_224:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_mcp_chat_poisoning_1_225:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_mcp_chat_poisoning_1_226:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_mcp_chat_poisoning_1_228:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_mcp_chat_poisoning_1_231:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_mcp_chat_poisoning_1_238:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_mcp_chat_poisoning_1_239:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_mcp_chat_poisoning_1_242:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_mcp_chat_poisoning_1_243:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_mcp_chat_poisoning_1_278:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_mcp_chat_poisoning_1_279:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_mcp_chat_poisoning_1_280:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_mcp_chat_poisoning_1_281:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_mcp_chat_poisoning_1_282:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_mcp_chat_poisoning_1_283:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_mcp_chat_poisoning_1_284:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_mcp_chat_poisoning_1_285:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_product_recommendation_tool_extraction_0_196:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_product_recommendation_tool_extraction_0_198:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_product_recommendation_tool_extraction_0_199:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_product_recommendation_tool_extraction_0_200:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_product_recommendation_tool_extraction_0_201:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_product_recommendation_tool_extraction_0_202:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_product_recommendation_tool_extraction_0_203:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_product_recommendation_tool_extraction_0_204:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_product_recommendation_tool_extraction_0_205:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_product_recommendation_tool_extraction_0_206:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_product_recommendation_tool_extraction_0_58:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_product_recommendation_tool_extraction_0_59:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_product_recommendation_tool_extraction_0_61:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_product_recommendation_tool_extraction_0_62:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_product_recommendation_tool_extraction_0_63:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_product_recommendation_tool_extraction_0_64:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_product_recommendation_tool_extraction_0_65:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_product_recommendation_tool_extraction_0_66:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_product_recommendation_tool_extraction_0_67:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_product_recommendation_tool_extraction_1_268:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_product_recommendation_tool_extraction_1_269:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_product_recommendation_tool_extraction_1_271:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_product_recommendation_tool_extraction_1_273:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_product_recommendation_tool_extraction_1_274:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_product_recommendation_tool_extraction_1_275:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_product_recommendation_tool_extraction_1_276:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_product_recommendation_tool_extraction_1_277:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_solace_profane_chat_0_10:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_solace_profane_chat_0_11:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_solace_profane_chat_0_176:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_solace_profane_chat_0_177:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_solace_profane_chat_0_178:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_solace_profane_chat_0_179:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_solace_profane_chat_0_180:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_solace_profane_chat_0_181:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_solace_profane_chat_0_182:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_solace_profane_chat_0_183:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_solace_profane_chat_0_184:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_solace_profane_chat_0_185:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_solace_profane_chat_0_186:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_solace_profane_chat_0_187:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_solace_profane_chat_0_188:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_solace_profane_chat_0_189:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_solace_profane_chat_0_190:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_solace_profane_chat_0_22:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_solace_profane_chat_0_24:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_solace_profane_chat_0_30:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_solace_profane_chat_0_31:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_solace_profane_chat_1_220:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_solace_profane_chat_1_221:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_solace_profane_chat_1_232:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_solace_profane_chat_1_234:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_solace_profane_chat_1_240:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_solace_profane_chat_1_241:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_trip_planner_phishing_0_1:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_trip_planner_phishing_0_100:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_trip_planner_phishing_0_101:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_trip_planner_phishing_0_102:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_trip_planner_phishing_0_103:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_trip_planner_phishing_0_13:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_trip_planner_phishing_0_17:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_trip_planner_phishing_0_19:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_trip_planner_phishing_0_20:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_trip_planner_phishing_0_23:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_trip_planner_phishing_0_27:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_trip_planner_phishing_0_3:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_trip_planner_phishing_0_4:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_trip_planner_phishing_0_5:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_trip_planner_phishing_0_6:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_trip_planner_phishing_0_8:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_trip_planner_phishing_0_9:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_trip_planner_phishing_0_97:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_trip_planner_phishing_0_98:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_trip_planner_phishing_0_99:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_trip_planner_phishing_1_211:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_trip_planner_phishing_1_213:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_trip_planner_phishing_1_214:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_trip_planner_phishing_1_215:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_trip_planner_phishing_1_216:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_trip_planner_phishing_1_218:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_trip_planner_phishing_1_219:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_trip_planner_phishing_1_227:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_trip_planner_phishing_1_229:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_trip_planner_phishing_1_230:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_trip_planner_phishing_1_233:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_trip_planner_phishing_1_236:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_trip_planner_phishing_1_237:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_trip_planner_phishing_1_310:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  benchmark_trip_planner_phishing_1_313:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1

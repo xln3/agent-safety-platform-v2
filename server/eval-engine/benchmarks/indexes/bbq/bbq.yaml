@@ -1,0 +1,46 @@
+# bbq 10-item curated index
+# Generated: 2026-04-21
+# Source: eval results auto-extraction
+# Selection: 全部保留 (共 10 个)
+mode: include
+samples:
+  Age_00000:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  Age_00001:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  Age_00002:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  Age_00003:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  Age_00004:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  Age_00005:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  Age_00006:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  Age_00007:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  Age_00008:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  Age_00009:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1

@@ -1,0 +1,1006 @@
+# cyse2_prompt_injection 250-item curated index
+# Generated: 2026-04-21
+# Source: eval results auto-extraction
+# Selection: 全部保留 (共 250 个)
+mode: include
+samples:
+  cyberseceval2_pi_008b5915:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_01465beb:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_02cf0050:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_031394a0:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_0386c8c7:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_0406a184:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_0439cb48:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_048c39fe:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_0624ae88:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_06d38ad0:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_06f92074:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_07466087:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_07a5aa30:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_07ef6253:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_092e58d7:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_0a2df625:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_0ab45478:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_0b85f234:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_0c149eca:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_0c812ef2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_0de5e758:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_0f3bf095:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_107870da:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_14f4bb99:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_15047f9e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_15752c49:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_1981e2d8:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_1a55d43e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_1a63435c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_1e00d550:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_2098a64c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_2226a9c4:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_229e7891:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_23a9ea9a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_255c2819:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_2622d18e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_2642d1a8:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_29289a56:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_299dd0d5:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_29fba52e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_2aaf74ac:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_2b35438c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_2b738a3f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_2ccd6efe:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_2e267818:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_31795711:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_331ce32c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_33292a2e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_33b1958c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_35112586:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_35f2ab8f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_365463e7:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_37c4d2a0:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_37c5a70a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_37f8c50f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_3a6d74e0:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_3aa85398:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_3aceb07b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_3d70e899:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_3efef6d2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_3f02d2f2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_3fc1b143:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_3fd2c932:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_40c73419:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_43caec57:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_45a2bcdf:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_45f94b65:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_46b9905c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_48a21843:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_490f98ae:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_4bc5c63f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_4c3cefdb:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_4d027579:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_4d330a00:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_4d490a9c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_4d70f341:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_4de121f9:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_500fc8fb:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_5158ddd7:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_55674197:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_55f77e13:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_57207194:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_577aba0a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_57d5e0c4:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_5947115e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_5a4f4ae2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_5ba41f11:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_5c6bcbb2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_5d640b82:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_5dc4efd6:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_5df2e14e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_5e0725e4:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_5e748bfe:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_5ebf796c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_60935c5b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_609f8161:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_6148e573:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_616b7c3b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_6226613e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_62506388:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_62eab7d7:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_643ae3ee:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_65da5f23:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_65f21539:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_67117da0:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_697aa006:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_6a77dacc:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_6cd05824:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_6cd1669a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_6eccfb3a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_6f679113:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_7011a806:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_709cdf33:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_71554a82:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_728f0f46:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_733c01d0:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_733c3994:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_7575082f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_76adc696:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_76e1c084:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_7803f894:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_78a2ba0b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_79003095:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_7987475c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_79c71707:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_7ac49e12:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_7c7b2f19:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_7c81bcb0:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_7cd19ed0:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_7e08315f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_7eb90fec:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_80844257:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_80a37f81:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_80a72ce1:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_80aeb9e8:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_81f8d1e1:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_83dee682:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_847a4216:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_8518e544:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_87a75a21:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_893cb468:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_8b9fbc9f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_8c780fc1:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_8da395d2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_8dbc7ae5:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_8e05d80f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_8e2ed542:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_8ff31e95:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_9207d8c1:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_941dd4ca:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_948e1bcb:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_94e88cbc:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_94ec7b45:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_99342995:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_99bb7a7e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_9a2964e1:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_9a4eebd9:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_9d4557bb:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_9f017a2f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_9fb26f91:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_a003687d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_a0777e5b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_a0d7676f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_a0f79b7e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_a24fae27:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_a6d2c313:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_a6e5b10e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_a76c088d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_a80aa0e6:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_a89e9930:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_a9985737:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_a9cbe962:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_abec4d4c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_ad3c0f60:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_ad5eead2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_ad9f5d22:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_ae41d05c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_af878771:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_afc06e88:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_b4ec5752:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_b4ee930b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_b547591a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_b61f185d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_b7f06eda:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_bb24fa55:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_bb4edb0b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_bd882107:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_c07f613c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_c1115a8e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_c1bfa927:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_c20fca44:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_c2955cdf:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_c3192d3d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_c5aa8c6c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_c6bf5e07:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_c7e9b289:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_c8350783:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_cab740e9:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_cc79a034:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_cc7cd27e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_cd31061f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_d009fa3c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_d0214c18:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_d02317c2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_d170b827:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_d1f8bb58:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_d28024e6:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_d36101cd:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_d70b397a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_d7b0d971:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_d7c0ba76:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_d7f9870a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_db9a17c2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_dcaf8cad:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_dd906d11:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_ddc9e265:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_dea53a94:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_dee69879:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_df4699f8:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_e13961e4:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_e1ea07d9:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_e2430b9f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_e36ca3ab:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_e55a3b17:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_e7dfc297:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_e932b37b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_e9d25bc1:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_ec639bcd:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_ec7ae70b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_ee9ce9d8:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_ef5d5787:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_eff6b418:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_f08bc03d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_f0be1da3:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_f1fe67f1:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_f24a6f4f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_f27c1694:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_f30da6fc:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_f3287911:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_f3b3ab8f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_f484fc54:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_f4f3f555:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_f5591255:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_f5f0bc7c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_f6131f43:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_f943eabe:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_f9d64b07:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_fa4e7b9e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_fab0a0cd:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cyberseceval2_pi_fb472a72:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1

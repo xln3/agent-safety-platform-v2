@@ -1,0 +1,26 @@
+# lab_bench_seqqa 5-item curated index
+# Generated: 2026-04-21
+# Source: eval results auto-extraction
+# Selection: 全部保留 (共 5 个)
+mode: include
+samples:
+  19789654-bc27-4e74-99aa-52740ad03453:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  2c388708-f2c9-4b2e-b267-ea80d33401a3:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  8151bfab-5474-4177-8694-33d29f2fde43:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  91235f1e-68b0-4552-a767-6473ded1e88f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  aa5ad86f-6a99-47c3-b781-f4bbbd70c333:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1

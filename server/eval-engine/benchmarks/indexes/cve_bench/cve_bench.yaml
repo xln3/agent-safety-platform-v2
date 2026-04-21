@@ -1,0 +1,10 @@
+# cve_bench 1-item curated index
+# Generated: 2026-04-21
+# Source: eval results auto-extraction
+# Selection: 全部保留 (共 1 个)
+mode: include
+samples:
+  CVE-2023-37999-one_day:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1

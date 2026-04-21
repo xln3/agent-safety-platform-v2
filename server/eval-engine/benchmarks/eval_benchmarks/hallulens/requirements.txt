@@ -1,0 +1,15 @@
+tqdm
+pandas
+numpy
+requests
+openai
+transformers
+sentence-transformers
+scikit-learn
+jsonlines
+segtok
+ratelimit
+retry
+datasets
+gdown
+certifi

@@ -1,0 +1,1206 @@
+# healthbench_consensus 300-item curated index
+# Generated: 2026-04-21
+# Source: eval results auto-extraction
+# Selection: 确定性随机抽样 300 / 500 (seed=42)
+mode: include
+samples:
+  00d34549-134c-48e2-b4bb-b54946da70cc:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  023531eb-d80e-4ba9-b2ed-d9902e175d31:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  02a60789-fdea-4306-8f3c-a39453e12a0e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  0590cdae-1eb0-471e-bf14-c164788005bc:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  06e00392-e01c-49a3-ba54-4f4facff301d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  06fb659f-a4aa-4a97-a831-ed2cd2aa7e69:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  07cca549-dce4-4fe6-9190-72bf7107bab6:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  0829e573-450b-46b8-a375-e9ee086d4689:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  085a9e8a-856e-4044-95c9-0e5a8bdcd16e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  086f6cb9-1ee5-4d5c-ad63-9285d3b714e5:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  0c262faa-ecec-48d6-98f1-d1d7364d1c15:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  0e073591-b3e7-4dc8-94d0-dc5aa93ca35c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  0e819a9c-851d-4a7a-9263-62cfc8ce1b48:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  0eb6fd6d-eaaa-46db-ab16-02e610f238a9:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  0fe4ea94-633d-4f73-985b-cbcd9f5a0270:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  1093ad0e-c4dd-4fc8-a200-ecc963285b77:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  10b15767-6e2a-4c38-bb7c-6db3994c2e5a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  1132a8b3-a5e0-4535-aede-101d78ea87ad:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  116b4c96-aff2-47e1-8071-3c65f25e4d23:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  126236de-9e7a-4814-b5d7-98cbe89b33b2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  129057dd-4bf4-472d-a8cf-a063dbed60ad:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  12a7c84f-3707-4f01-a7fd-37f2ca907574:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  12a9a33a-47a2-446b-9689-7a49c5667d1b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  1337255b-ccdf-4d00-a4cc-17cf8816d0ff:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  155066e0-fde9-4b1b-92fc-8a1432e5beb4:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  1956b7b9-0b75-43a4-8ef6-e4f726bf5f98:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  19ec4833-86e9-4166-8b82-d1da09f31fd7:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  1aaa5da1-fb7d-451d-a4f9-d1f9b9f3f479:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  1b23c1a2-16a7-41af-bd07-0af5636d54d1:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  1b8f338a-2e98-4a42-ba80-cba266f4b9fa:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  1beb76c7-b568-4c52-8d33-1a3f48f4cd28:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  1d786666-4dbb-4dec-ad2c-1b7302fe6a02:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  1dc0b953-ef66-4a78-9989-7cf1053b5b41:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  1f490cf4-6213-4ff8-9ef0-47ad5dc9af7b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  1fb6ab91-a999-437d-8c93-c5937c0a89a3:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  20aa23ce-e49c-4390-a948-4ad08954e3f6:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  20cdebb7-9189-4f09-ad21-bfc8e8b75680:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  22fe3eec-03b0-4cdf-a06a-87e71d236082:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  23809964-caaa-4fac-9210-40d64d1dea58:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  239f42dc-056c-404d-a057-9c6b431390a5:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  247995c1-b5b9-4d1e-accf-b2fef35bfcba:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  247f41b1-f863-405c-b5fb-779a78e6d8d1:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  267bda16-fd4b-4a9e-b3ac-5602c2532eed:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  269074dc-9495-484b-b2f9-0f0943c0f816:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  26d8298b-361d-4108-90cc-646c093f354b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  2b77c86d-bb8a-477b-a5e8-2ecb1c1ef361:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  2b8b2ca7-16b1-4cdc-87dd-6af419c5f647:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  2be58c05-b9d4-4fd8-90c8-05e2e4576ec8:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  2c27329a-84db-4465-8dbd-f0625e05a54a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  2cdfafc6-aeb6-46cc-bb11-cd8fc754bef4:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  2d878243-5d98-489a-b8f2-8809f813b6cf:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  2f687985-6e40-43d4-901b-de1345c8e7ca:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  30861aea-7677-42d4-ae1c-f297943cf4fd:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  326fd9ea-1a56-4108-99ea-8000de6499bb:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  347361d3-6a94-484c-9c07-71715b446eae:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  34a8864c-a908-47c3-9b1d-f6de36963a67:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  3852d050-c009-4e33-b953-fd734a5b5e73:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  3a896889-9029-4ef8-8684-ca378da4702b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  3aa41883-540e-4795-9038-9eea8dd6366c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  3ad10fae-a726-45c5-a6b8-c85fc12dd4b6:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  3aeeb628-4434-42eb-aee5-da6a00e360bb:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  3b79284e-1143-46b4-b6a0-78e5448ff773:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  3b9140da-0643-40b9-a610-fe7657942509:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  3bb4a735-ace7-4342-b7a5-0bae083e6f82:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  3bcc3abf-5e76-4d3d-b0bb-c74cd0e5f4d8:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  3be71fd1-1ba2-4724-9f4f-d7ab1f37cda3:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  3c1754d0-9c66-4338-a7b1-4b77ed52387e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  3c29425b-bc32-4b3f-bced-8a2f4ad1ca4a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  3ce83d54-a931-4f0c-825d-6c866ffce8d5:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  3cf35bfe-d881-4881-a268-b5fa0607bf89:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  3dc41419-2565-428e-b9b9-02e3fd93c470:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  3dedee6e-51c1-4429-a803-943519f5b2c3:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  3fd511ca-3930-46d4-a30c-4544c1d4750a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  4011c586-082a-4a81-95f3-0835aea18c24:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  4029e833-f7a4-4c92-b916-09a7b4c16508:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  405bfc27-da98-4cb9-8cdf-f36a5db197d3:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  42465540-8af1-423b-9b35-a31de1e1d49e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  429810f7-41d4-46a1-8ced-0c853a2783f6:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  439da3c5-4751-459f-a049-fe555a9ca8e7:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  43d658a8-dca4-421c-b030-5f6395ce46e1:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  452a9534-b4fc-4483-94e0-d34b06b8e299:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  48c89cd1-0ecf-4738-8fcc-392269585bd3:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  4911fc22-f32f-4386-8b3d-ff86143683ba:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  4a063bb4-5995-459c-b6c9-5cb40f08c73b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  4a2ee46a-97f3-4259-8733-2f95d7603074:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  4a45869b-bdbb-4b9a-a2b8-aa3ae2113ac0:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  4d55a02e-a7c1-491a-aef4-504453844045:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  4fc7b71f-9591-4ae1-bfca-2929c7225182:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  51d9c72b-ba60-47c5-9cc9-3ed6212a3982:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  5370debb-39c1-495d-b4d3-7467eb6c6ac4:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  53a4a116-d9a7-478b-ac51-27c61108870a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  54349c88-e80a-4728-b181-305f97905d59:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  55fe56a3-8dcc-4ef1-8396-b6871ac2766f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  5a6e4a41-3ea6-4050-a971-93433fe34877:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  5c1cf475-6fff-42e2-8508-7e1a14ea9f65:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  5caa2d1f-3ab9-4e25-97a2-af29c2dbbcfb:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  5f45aff9-bed0-425f-aa8b-345524f13986:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  5fb6812f-9816-4d5d-b7e0-4ec3e9df5dc1:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  608770a0-440d-4349-9a1c-863e9f4d3e24:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  614dba16-a638-4cb1-bb27-46f14f4da0fe:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  620b9bf1-f0f3-4d68-aa74-1560fb406a68:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  6290bcd1-4c91-464f-b7e6-9c5392583968:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  629dd583-d3b9-41a2-9d83-8cea610f2576:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  62a3701a-7c6f-4cc3-8cd3-df1709af23da:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  62e65488-555b-4ac5-867e-e84dff1d25af:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  66b448bf-2e49-488d-9d0b-f9912ab3f0f8:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  66d5076a-a571-44bd-af4a-fb5608056458:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  67e76447-f16a-4a65-aba7-fc7166fd9b63:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  682fa9cd-46a4-45b0-9da2-8a8793986c9e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  6a2c3cb2-9c23-445e-b384-5cd83feece02:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  6a97773b-c33c-4f2e-9ac3-fdd53de0f175:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  6c3c1095-a69b-44d3-a40a-ff6871577245:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  6c568ea6-86bd-4286-94ba-e3ccc8b67b21:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  6d4cc501-7e76-40a8-ba73-d0d53e2225b1:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  6d705f80-8259-4ca1-8645-163f42c85a3c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  6f7a2ee9-e9c6-42d8-b79f-22dea966b8d2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  6faacc75-9126-4757-bf69-1c18dd22c824:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  706ac3da-4136-4cdb-b12a-12fa94f7bd81:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  7074bb7a-a595-434d-883e-95ef6f5f6667:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  70afd1ac-85ea-4455-a5a2-15b35378e10a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  75515604-d194-450d-a16a-b4ffc2f46382:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  762d9eca-4835-4447-a649-f91740c74bd0:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  76e9f4e6-698b-44b6-a37d-d5bbf93c2264:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  77569de3-0645-4a67-8507-18b9b4651fa4:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  776cf500-bb91-44ae-a5ed-124eccf151ff:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  77837307-e6e1-4816-9c21-c82250c09d93:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  779b5d14-1a6f-4d0a-8763-e0a25961a811:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  77dff7ec-2e02-4b93-86d6-5d7765b8dd3d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  78510411-e03b-4f93-a369-c7e72d2e4908:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  7a283823-00ee-489d-8dbc-356e2857526f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  7b2e5181-9a86-4bf4-8973-b18e51f0b5e8:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  7ca4f17b-6e40-4b9b-b8be-94393f10f5df:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  7d035864-a798-4789-9f2e-5ad441ead8b5:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  7ec70df9-e06a-44ca-87d0-a8955641ab20:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  7f1a3436-5a3d-4615-aeba-e35637daaff8:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  8007766d-0b6c-406a-8cae-a9fc2da4499f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  8300568f-b41e-4f77-a3fa-2ff59cffae72:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  83cf8f2d-2857-4f01-a283-9595d8f4ae8e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  8433c101-4334-4538-b576-70a7b28cf5c8:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  85408180-238e-4c1b-92c1-55d8ce6c3717:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  865cff48-bbc7-4efd-ab2e-7a988686c798:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  8733c51f-2c74-4122-a786-bb7638d98329:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  87ff241a-9fa9-4362-bd87-91d4229869f2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  89b38224-b322-4244-98ea-30c03c680f6b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  8c342edc-619b-4079-a28c-b7129f3670a6:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  8c919104-090a-4f77-8af2-5222cd1ad4ba:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  8cba5bc7-d127-473b-884d-39024b3609f6:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  8e2e36c2-d10f-48ed-a6af-1f0295077067:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  8e447490-23cd-4d64-9e3a-b8ad46c76573:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  8e88f21a-24c4-4f9c-b848-faf5e10e31b9:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  8ff101a6-e438-4166-bdac-be1d55d57c99:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  905949d2-7a0a-4461-8f4b-257de6be6eed:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  90789a49-ab1f-4229-bd89-e1c56ea8be3a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  91ef0a57-d5b6-4054-9e25-019867372aa8:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  92cff02d-ff7e-4e85-b431-80e99527ad3d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  92ea478e-6bf8-4ffb-b88a-f57ccf5f2346:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  92ef0376-d033-4143-aa3a-e068a7f21fa3:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  92fb3dc3-1027-4b0f-94ea-13c07e83a3d9:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  9385d26b-bf44-4ff7-9410-e181413540dd:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  93f55f97-cc98-4148-8ff6-75962f0685a3:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  947edfe6-5af0-4b54-9aa9-36dd274ac770:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  95505985-5886-48d5-8845-fbfb003fa361:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  9789edc6-1ea3-422d-90af-cc189e373b0f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  97bec88b-6ef7-4f24-84d6-a2bcc592548b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  980ec02b-fb75-413d-9583-986921cd3142:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  99b22b39-30d5-40dc-82d9-c1cd3c793a44:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  9a91098e-f8d3-4614-a665-71687c446dd3:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  9b689a03-f0e2-407e-9eb9-ba9fd85e353b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  9bb31d40-c155-4213-868d-103fa0cc7c56:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  9c62a2de-9043-4069-aedc-4b4c18ac903a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  9cb679e7-57f3-4722-86a5-55d1e41cc011:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  9e559142-a503-4a7c-bb40-afb142334b2e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  9e77e9f9-58ba-42e9-8a46-06f960d4f347:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  9f59e28b-17f0-43e4-b57c-f78ac4abae46:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  9f7b555a-fc30-40c3-88d3-f2ece06454a2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  a079d928-7b78-4a85-a72b-4274d7fc2914:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  a0f7ae75-d21d-4bc6-94f7-eb7018936e2a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  a131d5e7-2a27-426f-90f0-25eae3c4b490:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  a1a08e1d-1353-4d6f-94ce-f90872074c7c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  a1a8ce0d-9ccb-4960-8506-f7d750c98e74:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  a20cbbf3-330b-46d9-a35b-92e89a022282:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  a2c68b9b-11f1-446d-8b28-4cb4bc9e4d16:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  a31f116d-d33f-4690-9d88-e13d7e444328:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  a57a4b5e-0f12-4103-8852-72bd2b7dba24:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  a6204079-9e72-42ad-8f39-a65552fa2e68:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  a7204562-70e2-4187-9e01-b44158fa3bb9:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  a86134d7-aeed-476f-948f-458a75003713:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  a94aad40-387e-4a37-b92f-61badd57388b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  aa7a760a-5173-4a39-af83-48d6ae2230f0:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  aacdd9a2-d042-4f4c-a4cc-50b6ba3a1a8e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  ac36b71d-6767-4b85-8b35-8c7d37aad278:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  ad91a9ff-c9f1-4198-9709-3fbf07072d2a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  adc7c8da-6f41-45a7-9907-3e1b4f76d1c2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  ae6ec2ce-5c23-4e65-802f-cef9f1624d71:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  aecc446a-2433-4225-94d7-e67028886567:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  aed8663e-1f42-4794-aa97-15ee43af1ca1:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  afbfc79d-6455-40b8-b475-1bcde4ef0cc9:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  b00e7c9f-d069-4736-9789-21fe4316a2e2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  b054429a-5017-4400-b65c-2a8d44ce9880:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  b12d2453-fd3b-462c-b9cc-554ff16bfd3f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  b160df9f-be98-4a4d-9cc8-11a612ffaf87:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  b267896f-cfc0-4bbe-9fda-fdfa287d1f43:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  b2748397-1cb1-4877-b13c-3cf517a89823:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  b333c0f0-7f5f-4a0a-95b1-3bc41afdad5c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  b436a19a-32dc-45df-bc9c-2a9dd17e722b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  b57dbc1e-4ed7-49ed-9a33-610269d72b25:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  b5b6d817-c524-4bef-badc-f93876657ea2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  b6eb69cb-b911-4c81-a7a1-357d21d27109:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  b7a82324-73ee-4996-8f71-8f455f789e90:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  b7bb2b11-571a-4406-a938-5e00f59fcf1b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  b7ddde65-702e-4255-b1d7-09d01248e76d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  b85f5742-9d49-4dca-89f1-53e472282386:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  b864d002-d711-48ca-a0eb-d901bfa46327:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  b8f6123b-e31e-4fe2-84d7-c4cd03d6b58e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  b947fc6f-1d50-4e3f-b679-8484529b787b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  b955be0f-268a-4120-809f-a6a1a4968535:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  bba20aa3-c5cd-4298-a4c4-2dd92230f977:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  bbd759b4-8e4d-4db7-bc36-f2e069396c1c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  bc2c5b71-8bbf-4156-bc6f-5a5db00f97fb:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  bdce40d3-7f9e-49b6-9b30-23218637c681:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  be6150a5-8060-4434-9724-afede307d495:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  be70739f-234a-4a0f-9b14-d15b8800577b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  bf7718f2-bceb-4702-8d74-a7fc1bd7fb78:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  bfa3518c-f5de-42ff-ba9c-09a14a0782c4:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  c04d571d-47e3-4bdb-8c11-759a0314a703:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  c0d80b93-b2d5-4129-b998-b1312f98e2a8:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  c0dc053b-157b-4d13-9956-213b67ff6a36:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  c14135dd-131d-4577-b11c-8191fe97d268:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  c15a0c60-99cd-4a5d-9136-c70d9d7594b3:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  c1708ebb-914c-4362-bbf3-3497eb1aa364:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  c29c95d1-5b5e-4f53-9ec5-83e1f72b5aa5:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  c3eeecfc-de96-480f-929d-ac4a5e5a541c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  c5bf7fc3-dfb0-4b47-9bbe-222e87b952e2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  c7fa385e-5a6b-4cae-8fbf-b9a470aa9172:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  c80a2a84-281d-41cc-a10b-32ee48c584f6:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  c9024880-46e9-49e0-b59e-aa083604c69c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cb5286fd-8dc3-4188-9031-406826f78961:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cbb0ca6e-aa5e-4683-b107-d7dfa4cb60ce:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cd3dbc9f-a39c-4d13-af60-cba7dbc3baad:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cd53e21a-e5ed-4d9b-a258-42a23e9715bb:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  ce1fb8c1-4ef5-4729-9c9b-6ce7aac9b318:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  ce49e310-06bb-4c34-aaf4-135bfc7915ac:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cef62b7c-af1b-4efb-ad00-46b23ebc2ae2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cf09b209-5434-4317-aa2a-7b07537b475e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cf8040e2-39e3-4200-ab7f-b9b532310ac3:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cf91ebed-85dd-49dd-80b9-248b617cb4a6:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  d0fcfaf0-7c6d-4ead-915b-6d9d9130e747:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  d2f266cf-da4b-45db-8407-e73bf0383ea5:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  d310baaf-1334-41cc-a952-ba7d925d6685:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  d475913b-0b18-47e9-90b2-28449e1d6541:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  d86ee090-3a2e-44d0-abed-6f0f40a38c08:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  d900e97c-a151-4443-916f-e554da5cec8e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  d984a2a8-1209-42bb-8f59-001421c96f8f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  da05b57a-d776-45b6-96af-1750e0254eec:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  da7d7d30-36ad-4b28-a091-6d6b8a50d7f4:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  dc752625-3053-45f2-bc0b-2b12acb8052e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  dca8cea8-e569-4baa-87ad-cc950754990e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  de69c66d-268f-4799-993c-7b944936f256:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  e0d1b955-1150-457e-96d7-91a9481999cd:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  e0eba742-1b38-4033-baf5-28bb67bde814:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  e1fe1cb1-5e14-43d1-a254-b8b9f7991cc2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  e2395d41-7488-458a-bf54-672f6459cc7e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  e2527e9d-d9eb-4dda-8f72-8a3c6ea44e45:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  e2987863-4feb-4d81-a7ca-285f32782cc9:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  e3b8a30b-3594-4919-a266-0dffcaa05287:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  e48fa8c0-3080-4789-813a-f0fcd0d8eed9:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  e6866a00-ab62-4e5d-9953-f0178ea3e570:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  e8991792-c875-4f40-99a0-54c902d42a52:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  e89e00c9-29e9-420c-813d-e06ddc39d585:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  e8e17de2-9b5f-4f20-a18e-fdd14a8b7192:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  e9b00212-c264-4f61-aed2-18ecc46197b6:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  ea7d4f01-9495-4f9d-961d-77104e692d8a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  eb97bae4-430e-45cd-a065-2df3ab5c600e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  ec71bf97-585e-4920-9fbb-1dd843e8cf55:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  ec8495c0-f25b-43bd-a520-4c96e716b274:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  ed6258a3-5a25-46ca-9273-fb0c5247f761:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  ef446d15-d019-4c5a-a052-ae8cc3ea3b81:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  ef4dc833-fc48-40b5-99e0-d3adea2e8f73:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  f1444286-c15a-4c56-ab40-8f7978496fdf:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  f1e5b7d1-bdd7-49c2-984b-b3f213232150:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  f1f5985a-015a-49b0-9b26-50d48156c42a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  f24935ac-0530-4063-b2f1-ac45cd265037:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  f2abd098-0453-4375-9113-31b95b4e6166:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  f3729e05-61ef-4306-9491-6f5659d4eef9:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  f49b5a0c-3c0f-4aff-9630-f23cdfa13af4:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  f601dfcc-5594-4432-8cc2-9947c820b854:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  f6095a25-f5f8-45ec-8536-9d679787f51c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  f6928262-c5c9-4ce9-862c-870ce7d120e0:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  f712eb09-82af-4fe8-800d-bc3af772a9ba:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  f86134dd-31dd-4392-9056-7393ed8a1e0e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  faa496a8-d5a4-4e49-ac70-8b18649d5e0a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  fc53ede5-3364-4042-8cbe-aeda1bb688db:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  fccb74b0-ef67-4104-be5a-df1228ffb908:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  fd2998f6-f1e1-4115-b9ed-f93062c69a51:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  fd9226c9-a7d4-4e34-8c6f-20893c48c7ae:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  fe8e328b-55cc-4f37-9785-2b4d0704b9ae:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  ff514fc4-bd34-4a3f-be3f-840b0e1f8091:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  ff634950-c3f8-4ff5-988f-f77ae59160cd:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  ffe00b21-0aff-4b92-b25c-b006b4103d11:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  ffffb756-23d4-44b7-b29d-b7d58620f83d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1

@@ -1,0 +1,42 @@
+# gdm_classifier_evasion 9-item curated index
+# Generated: 2026-04-21
+# Source: eval results auto-extraction
+# Selection: 全部保留 (共 9 个)
+mode: include
+samples:
+  content_rater_topic_api_key_difficulty_feedback_in_system_num_failures_allowed_2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  content_rater_topic_codes_difficulty_feedback_in_system_num_failures_allowed_2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  content_rater_topic_ntk_biorisk_difficulty_feedback_in_system_num_failures_allowed_2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  content_rater_topic_ntk_chips_difficulty_feedback_in_system_num_failures_allowed_2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  content_rater_topic_ntk_earnings_difficulty_feedback_in_system_num_failures_allowed_2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  content_rater_topic_password_difficulty_feedback_in_system_num_failures_allowed_2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  content_rater_topic_spoilers_escape_room_difficulty_feedback_in_system_num_failures_allowed_2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  content_rater_topic_spoilers_sports_match_difficulty_feedback_in_system_num_failures_allowed_2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  content_rater_topic_spoilers_tv_show_difficulty_feedback_in_system_num_failures_allowed_2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1

@@ -1,0 +1,26 @@
+# lab_bench_figqa 5-item curated index
+# Generated: 2026-04-21
+# Source: eval results auto-extraction
+# Selection: 全部保留 (共 5 个)
+mode: include
+samples:
+  19ea478b-0c9c-477c-a1f7-5069f92b4388:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  44bddaeb-04f5-415e-a61b-efe15a0d8751:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  93551a52-6b22-4141-8ec9-c45db17d3e07:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  d2c21e2e-da78-499b-b377-097a67baac1c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  de091807-4838-48bb-8659-543799058701:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1

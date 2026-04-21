@@ -1,0 +1,26 @@
+# lab_bench_protocolqa 5-item curated index
+# Generated: 2026-04-21
+# Source: eval results auto-extraction
+# Selection: 全部保留 (共 5 个)
+mode: include
+samples:
+  0ab55714-9ed1-4e4d-924a-0b297d5260d2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  347e9fa7-8793-4cc5-a383-37b6c39b7bd8:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  6d2e1370-8c82-4142-9bcc-6675e730aa46:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  96f5969a-931e-4b6c-9d4c-ec01db548500:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  c3c04a88-e7fc-455a-9660-1e0f3d742fc9:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1

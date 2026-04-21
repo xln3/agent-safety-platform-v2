@@ -1,0 +1,126 @@
+# makemesay 30-item curated index
+# Generated: 2026-04-21
+# Source: eval results auto-extraction
+# Selection: 全部保留 (共 30 个)
+mode: include
+samples:
+  amicable:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  applaud:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  bronze:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  clock:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  craft:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  cycle:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  dialogue:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  echidna:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  emerald:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  fabric:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  male:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  moon:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  nomination:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  pencil:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  present:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  preservation:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  rest:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  ring:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  rinse:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  sack:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  salmon:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  shall:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  swan:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  term:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  tether:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  toffee:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  van:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  venus:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  void:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  wave:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1

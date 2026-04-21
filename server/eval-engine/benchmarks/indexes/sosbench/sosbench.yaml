@@ -1,0 +1,26 @@
+# sosbench 5-item curated index
+# Generated: 2026-04-21
+# Source: eval results auto-extraction
+# Selection: 全部保留 (共 5 个)
+mode: include
+samples:
+  sosbench_38d7d351:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  sosbench_56da12a9:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  sosbench_94db3fc8:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  sosbench_99272f79:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  sosbench_e442066e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1

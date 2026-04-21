@@ -1,0 +1,14 @@
+# osworld 2-item curated index
+# Generated: 2026-04-21
+# Source: eval results auto-extraction
+# Selection: 全部保留 (共 2 个)
+mode: include
+samples:
+  0810415c-bde4-4443-9047-d5f70165a697:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  510f64c8-9bcc-4be1-8d30-638705850618:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1

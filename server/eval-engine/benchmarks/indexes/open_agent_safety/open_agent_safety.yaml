@@ -1,0 +1,1206 @@
+# open_agent_safety 300-item curated index
+# Generated: 2026-04-21
+# Source: eval results auto-extraction
+# Selection: 确定性随机抽样 300 / 355 (seed=42)
+mode: include
+samples:
+  oas-dataloss-001:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-002:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-003:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-004:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-005:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-006:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-007:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-008:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-009:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-010:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-012:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-013:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-014:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-015:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-016:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-017:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-018:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-019:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-020:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-021:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-022:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-023:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-024:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-025:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-028:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-029:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-030:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-031:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-032:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-033:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-034:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-035:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-036:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-037:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-038:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-040:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-041:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-042:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-043:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-044:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-045:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-046:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-048:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-049:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-050:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-051:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-052:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-053:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-dataloss-055:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-financial-001:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-financial-002:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-financial-003:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-financial-004:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-financial-005:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-financial-006:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-financial-007:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-financial-008:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-financial-009:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-financial-010:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-financial-013:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-financial-014:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-financial-015:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-financial-016:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-financial-017:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-financial-019:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-financial-021:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-financial-022:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-financial-023:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-financial-024:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-financial-025:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-financial-027:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-financial-028:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-financial-029:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-financial-030:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-financial-032:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-financial-033:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-002:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-003:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-004:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-005:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-006:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-008:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-009:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-010:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-011:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-012:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-013:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-014:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-016:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-017:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-018:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-019:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-020:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-021:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-022:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-023:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-024:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-025:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-026:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-027:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-028:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-030:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-031:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-032:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-033:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-034:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-035:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-036:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-037:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-038:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-039:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-040:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-041:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-042:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-043:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-044:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-045:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-046:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-047:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-048:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-049:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-050:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-051:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-052:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-053:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-054:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-055:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-056:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-058:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-059:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-060:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-061:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-062:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-063:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-064:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-065:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-066:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-067:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-068:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-069:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-070:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-071:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-072:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-074:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-harmful-decision-075:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-legal-001:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-legal-002:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-legal-004:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-legal-005:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-legal-006:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-legal-007:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-legal-008:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-legal-009:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-legal-010:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-legal-011:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-legal-013:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-legal-016:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-legal-018:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-legal-019:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-legal-020:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-legal-021:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-001:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-002:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-003:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-004:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-005:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-006:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-007:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-008:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-009:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-010:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-011:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-012:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-013:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-014:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-015:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-016:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-017:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-018:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-019:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-020:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-021:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-023:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-025:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-028:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-029:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-030:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-034:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-035:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-037:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-038:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-040:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-042:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-043:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-045:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-046:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-047:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-048:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-049:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-050:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-051:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-052:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-053:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-054:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-055:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-056:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-057:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-058:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-malicious-content-059:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-privacy-001:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-privacy-002:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-privacy-003:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-privacy-004:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-privacy-005:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-privacy-007:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-privacy-008:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-privacy-010:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-privacy-011:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-privacy-012:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-privacy-013:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-privacy-015:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-privacy-016:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-privacy-018:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-privacy-020:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-privacy-021:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-privacy-022:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-sec-001:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-sec-002:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-sec-003:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-sec-005:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-sec-006:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-sec-007:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-sec-008:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-sec-009:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-sec-010:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-sec-011:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-sec-012:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-sec-014:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-sec-015:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-sec-016:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-sec-017:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-sec-020:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-sec-021:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-sec-022:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-sec-023:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-sec-024:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-sec-025:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-sec-026:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-sec-027:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-sec-028:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-001:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-002:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-003:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-004:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-006:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-007:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-008:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-009:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-010:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-011:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-012:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-013:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-014:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-015:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-017:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-019:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-020:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-021:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-022:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-023:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-024:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-025:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-026:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-027:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-030:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-031:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-032:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-033:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-034:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-036:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-037:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-038:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-039:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-040:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-041:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-042:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-043:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-044:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-045:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-046:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-047:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-050:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-051:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-052:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-053:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-054:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-055:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-056:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-057:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  oas-unsafe-code-058:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1

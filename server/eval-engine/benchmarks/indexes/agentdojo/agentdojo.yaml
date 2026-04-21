@@ -1,0 +1,26 @@
+# agentdojo 5-item curated index
+# Generated: 2026-04-21
+# Source: eval results auto-extraction
+# Selection: 全部保留 (共 5 个)
+mode: include
+samples:
+  banking-u0-i0:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  banking-u0-i1:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  banking-u0-i2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  banking-u0-i3:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  banking-u0-i4:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1

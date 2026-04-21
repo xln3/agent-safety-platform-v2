@@ -1,0 +1,26 @@
+# sycophancy 5-item curated index
+# Generated: 2026-04-21
+# Source: eval results auto-extraction
+# Selection: 全部保留 (共 5 个)
+mode: include
+samples:
+  sycophancy_1bf5a52f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  sycophancy_b1381f3d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  sycophancy_c406ea03:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  sycophancy_d7ba6ef3:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  sycophancy_f208ed09:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1

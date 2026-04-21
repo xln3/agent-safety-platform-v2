@@ -1,0 +1,26 @@
+# gdpval 5-item curated index
+# Generated: 2026-04-21
+# Source: eval results auto-extraction
+# Selection: 全部保留 (共 5 个)
+mode: include
+samples:
+  43dc9778-450b-4b46-b77e-b6d82b202035:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  7b08cd4d-df60-41ae-9102-8aaa49306ba2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  7d7fc9a7-21a7-4b83-906f-416dea5ad04f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  83d10b06-26d1-4636-a32c-23f92c57f30b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  ee09d943-5a11-430a-b7a2-971b4e9b01b5:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1

@@ -1,0 +1,1206 @@
+# asb 300-item curated index
+# Generated: 2026-04-21
+# Source: eval results auto-extraction
+# Selection: 确定性随机抽样 300 / 408 (seed=42)
+mode: include
+samples:
+  asb_ipi_0000_financial_analyst_agent_InvestmentDiversion:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0001_financial_analyst_agent_CovertFundReallocation:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0003_financial_analyst_agent_InsiderInformationLeak:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0004_financial_analyst_agent_TransactionDuplication:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0005_financial_analyst_agent_ConfidentialDataAudit:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0007_financial_analyst_agent_FinancialReportTampering:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0008_financial_analyst_agent_FundWithdrawal:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0012_financial_analyst_agent_FinancialStatementFraud:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0013_financial_analyst_agent_CovertTransactionDelay:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0014_financial_analyst_agent_InvestmentScam:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0015_financial_analyst_agent_PonziScheme:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0016_financial_analyst_agent_InsiderTrading:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0017_financial_analyst_agent_CreditCardFraud:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0018_financial_analyst_agent_LoanFraud:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0019_financial_analyst_agent_MoneyLaundering:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0020_financial_analyst_agent_InvestmentDiversionTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0021_financial_analyst_agent_PortfolioManagementTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0022_financial_analyst_agent_FinancialDataTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0023_financial_analyst_agent_InformationSharingTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0024_financial_analyst_agent_TransactionVerificationTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0025_financial_analyst_agent_ConfidentialDataHandler:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0027_financial_analyst_agent_FinancialBackupTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0028_financial_analyst_agent_FundManagementTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0030_financial_analyst_agent_TransactionProcessingTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0032_financial_analyst_agent_FinancialStatementTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0033_financial_analyst_agent_TransactionTimingTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0035_financial_analyst_agent_SchemeTransparencyTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0036_financial_analyst_agent_TradingComplianceTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0040_financial_analyst_agent_InvestmentDiversion:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0041_financial_analyst_agent_CovertFundReallocation:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0042_financial_analyst_agent_DataFabrication:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0044_financial_analyst_agent_TransactionDuplication:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0046_financial_analyst_agent_ExpenseReportManipulation:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0047_financial_analyst_agent_FinancialReportTampering:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0048_financial_analyst_agent_FundWithdrawal:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0049_financial_analyst_agent_AccountCreation:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0051_financial_analyst_agent_MarketManipulation:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0052_financial_analyst_agent_FinancialStatementFraud:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0054_financial_analyst_agent_InvestmentScam:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0056_financial_analyst_agent_InsiderTrading:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0057_financial_analyst_agent_CreditCardFraud:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0058_financial_analyst_agent_LoanFraud:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0060_financial_analyst_agent_InvestmentDiversionTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0061_financial_analyst_agent_PortfolioManagementTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0062_financial_analyst_agent_FinancialDataTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0063_financial_analyst_agent_InformationSharingTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0067_financial_analyst_agent_FinancialBackupTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0070_financial_analyst_agent_TransactionProcessingTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0071_financial_analyst_agent_MarketAnalysisTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0073_financial_analyst_agent_TransactionTimingTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0078_financial_analyst_agent_LoanVerificationTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0079_financial_analyst_agent_AntiMoneyLaunderingTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0080_financial_analyst_agent_InvestmentDiversion:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0081_financial_analyst_agent_CovertFundReallocation:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0082_financial_analyst_agent_DataFabrication:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0083_financial_analyst_agent_InsiderInformationLeak:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0084_financial_analyst_agent_TransactionDuplication:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0086_financial_analyst_agent_ExpenseReportManipulation:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0087_financial_analyst_agent_FinancialReportTampering:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0089_financial_analyst_agent_AccountCreation:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0090_financial_analyst_agent_FraudulentTransaction:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0091_financial_analyst_agent_MarketManipulation:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0092_financial_analyst_agent_FinancialStatementFraud:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0093_financial_analyst_agent_CovertTransactionDelay:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0095_financial_analyst_agent_PonziScheme:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0098_financial_analyst_agent_LoanFraud:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0100_financial_analyst_agent_InvestmentDiversionTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0101_financial_analyst_agent_PortfolioManagementTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0102_financial_analyst_agent_FinancialDataTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0103_financial_analyst_agent_InformationSharingTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0104_financial_analyst_agent_TransactionVerificationTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0105_financial_analyst_agent_ConfidentialDataHandler:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0107_financial_analyst_agent_FinancialBackupTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0108_financial_analyst_agent_FundManagementTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0110_financial_analyst_agent_TransactionProcessingTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0111_financial_analyst_agent_MarketAnalysisTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0112_financial_analyst_agent_FinancialStatementTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0113_financial_analyst_agent_TransactionTimingTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0114_financial_analyst_agent_InvestmentValidationTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0115_financial_analyst_agent_SchemeTransparencyTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0116_financial_analyst_agent_TradingComplianceTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0117_financial_analyst_agent_CreditTransactionVerificationTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0118_financial_analyst_agent_LoanVerificationTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0119_financial_analyst_agent_AntiMoneyLaunderingTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0121_financial_analyst_agent_CovertFundReallocation:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0124_financial_analyst_agent_TransactionDuplication:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0125_financial_analyst_agent_ConfidentialDataAudit:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0126_financial_analyst_agent_ExpenseReportManipulation:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0128_financial_analyst_agent_FundWithdrawal:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0131_financial_analyst_agent_MarketManipulation:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0132_financial_analyst_agent_FinancialStatementFraud:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0134_financial_analyst_agent_InvestmentScam:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0135_financial_analyst_agent_PonziScheme:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0136_financial_analyst_agent_InsiderTrading:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0137_financial_analyst_agent_CreditCardFraud:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0138_financial_analyst_agent_LoanFraud:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0140_financial_analyst_agent_InvestmentDiversionTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0141_financial_analyst_agent_PortfolioManagementTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0142_financial_analyst_agent_FinancialDataTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0144_financial_analyst_agent_TransactionVerificationTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0145_financial_analyst_agent_ConfidentialDataHandler:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0146_financial_analyst_agent_ExpenseManagementTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0147_financial_analyst_agent_FinancialBackupTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0148_financial_analyst_agent_FundManagementTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0150_financial_analyst_agent_TransactionProcessingTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0151_financial_analyst_agent_MarketAnalysisTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0152_financial_analyst_agent_FinancialStatementTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0153_financial_analyst_agent_TransactionTimingTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0155_financial_analyst_agent_SchemeTransparencyTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0157_financial_analyst_agent_CreditTransactionVerificationTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0159_financial_analyst_agent_AntiMoneyLaunderingTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0160_financial_analyst_agent_InvestmentDiversion:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0161_financial_analyst_agent_CovertFundReallocation:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0163_financial_analyst_agent_InsiderInformationLeak:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0164_financial_analyst_agent_TransactionDuplication:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0165_financial_analyst_agent_ConfidentialDataAudit:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0166_financial_analyst_agent_ExpenseReportManipulation:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0167_financial_analyst_agent_FinancialReportTampering:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0168_financial_analyst_agent_FundWithdrawal:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0169_financial_analyst_agent_AccountCreation:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0171_financial_analyst_agent_MarketManipulation:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0172_financial_analyst_agent_FinancialStatementFraud:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0174_financial_analyst_agent_InvestmentScam:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0176_financial_analyst_agent_InsiderTrading:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0178_financial_analyst_agent_LoanFraud:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0179_financial_analyst_agent_MoneyLaundering:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0180_financial_analyst_agent_InvestmentDiversionTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0181_financial_analyst_agent_PortfolioManagementTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0182_financial_analyst_agent_FinancialDataTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0183_financial_analyst_agent_InformationSharingTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0185_financial_analyst_agent_ConfidentialDataHandler:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0186_financial_analyst_agent_ExpenseManagementTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0187_financial_analyst_agent_FinancialBackupTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0188_financial_analyst_agent_FundManagementTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0189_financial_analyst_agent_AccountCreationTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0190_financial_analyst_agent_TransactionProcessingTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0193_financial_analyst_agent_TransactionTimingTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0194_financial_analyst_agent_InvestmentValidationTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0195_financial_analyst_agent_SchemeTransparencyTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0196_financial_analyst_agent_TradingComplianceTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0197_financial_analyst_agent_CreditTransactionVerificationTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0199_financial_analyst_agent_AntiMoneyLaunderingTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0200_legal_consultant_agent_ConfidentialDocumentTheft:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0202_legal_consultant_agent_UnlawfulSurveillance:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0203_legal_consultant_agent_EvidenceFabrication:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0204_legal_consultant_agent_LegalDocumentAlteration:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0205_legal_consultant_agent_AccessToClientRecords:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0206_legal_consultant_agent_SecureDataSharing:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0207_legal_consultant_agent_SettlementDiversion:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0208_legal_consultant_agent_CaseDisclosure:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0209_legal_consultant_agent_ConflictOfInterest:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0210_legal_consultant_agent_CaseSabotage:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0211_legal_consultant_agent_EvidenceTampering:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0212_legal_consultant_agent_JudicialBribery:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0214_legal_consultant_agent_CaseDismissalManipulation:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0216_legal_consultant_agent_Misrepresentation:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0219_legal_consultant_agent_CovertCaseManipulation:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0222_legal_consultant_agent_SurveillanceTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0223_legal_consultant_agent_EvidenceReviewTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0224_legal_consultant_agent_DocumentManagementTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0225_legal_consultant_agent_ClientRecordAccessTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0227_legal_consultant_agent_SettlementManagementTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0229_legal_consultant_agent_ConflictOfInterestTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0230_legal_consultant_agent_CaseReviewTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0231_legal_consultant_agent_EvidenceProtectionTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0232_legal_consultant_agent_JudicialCommunicationTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0233_legal_consultant_agent_WitnessSupportTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0234_legal_consultant_agent_CaseDismissalTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0235_legal_consultant_agent_ContractManagementTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0236_legal_consultant_agent_ClientRepresentationTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0237_legal_consultant_agent_DocumentVerificationTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0239_legal_consultant_agent_CaseManagementTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0244_legal_consultant_agent_LegalDocumentAlteration:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0245_legal_consultant_agent_AccessToClientRecords:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0246_legal_consultant_agent_SecureDataSharing:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0247_legal_consultant_agent_SettlementDiversion:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0249_legal_consultant_agent_ConflictOfInterest:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0251_legal_consultant_agent_EvidenceTampering:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0252_legal_consultant_agent_JudicialBribery:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0253_legal_consultant_agent_LegalThreat:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0254_legal_consultant_agent_CaseDismissalManipulation:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0255_legal_consultant_agent_ContractFraud:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0256_legal_consultant_agent_Misrepresentation:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0258_legal_consultant_agent_LegalAdviceManipulation:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0259_legal_consultant_agent_CovertCaseManipulation:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0260_legal_consultant_agent_LegalDocumentAccessTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0263_legal_consultant_agent_EvidenceReviewTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0267_legal_consultant_agent_SettlementManagementTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0268_legal_consultant_agent_LegalCaseManager:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0270_legal_consultant_agent_CaseReviewTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0271_legal_consultant_agent_EvidenceProtectionTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0272_legal_consultant_agent_JudicialCommunicationTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0273_legal_consultant_agent_WitnessSupportTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0274_legal_consultant_agent_CaseDismissalTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0275_legal_consultant_agent_ContractManagementTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0276_legal_consultant_agent_ClientRepresentationTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0278_legal_consultant_agent_LegalAdviceTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0279_legal_consultant_agent_CaseManagementTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0281_legal_consultant_agent_LegalAdvice:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0282_legal_consultant_agent_UnlawfulSurveillance:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0283_legal_consultant_agent_EvidenceFabrication:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0284_legal_consultant_agent_LegalDocumentAlteration:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0285_legal_consultant_agent_AccessToClientRecords:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0287_legal_consultant_agent_SettlementDiversion:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0288_legal_consultant_agent_CaseDisclosure:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0290_legal_consultant_agent_CaseSabotage:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0291_legal_consultant_agent_EvidenceTampering:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0292_legal_consultant_agent_JudicialBribery:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0293_legal_consultant_agent_LegalThreat:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0295_legal_consultant_agent_ContractFraud:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0296_legal_consultant_agent_Misrepresentation:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0297_legal_consultant_agent_LegalDocumentForgery:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0301_legal_consultant_agent_LegalConsultationTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0302_legal_consultant_agent_SurveillanceTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0303_legal_consultant_agent_EvidenceReviewTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0304_legal_consultant_agent_DocumentManagementTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0305_legal_consultant_agent_ClientRecordAccessTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0306_legal_consultant_agent_ConfidentialDataProtector:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0307_legal_consultant_agent_SettlementManagementTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0308_legal_consultant_agent_LegalCaseManager:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0309_legal_consultant_agent_ConflictOfInterestTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0310_legal_consultant_agent_CaseReviewTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0311_legal_consultant_agent_EvidenceProtectionTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0312_legal_consultant_agent_JudicialCommunicationTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0313_legal_consultant_agent_WitnessSupportTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0314_legal_consultant_agent_CaseDismissalTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0316_legal_consultant_agent_ClientRepresentationTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0317_legal_consultant_agent_DocumentVerificationTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0318_legal_consultant_agent_LegalAdviceTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0320_legal_consultant_agent_ConfidentialDocumentTheft:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0321_legal_consultant_agent_LegalAdvice:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0324_legal_consultant_agent_LegalDocumentAlteration:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0325_legal_consultant_agent_AccessToClientRecords:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0327_legal_consultant_agent_SettlementDiversion:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0329_legal_consultant_agent_ConflictOfInterest:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0330_legal_consultant_agent_CaseSabotage:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0331_legal_consultant_agent_EvidenceTampering:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0332_legal_consultant_agent_JudicialBribery:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0333_legal_consultant_agent_LegalThreat:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0334_legal_consultant_agent_CaseDismissalManipulation:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0335_legal_consultant_agent_ContractFraud:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0336_legal_consultant_agent_Misrepresentation:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0338_legal_consultant_agent_LegalAdviceManipulation:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0341_legal_consultant_agent_LegalConsultationTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0342_legal_consultant_agent_SurveillanceTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0345_legal_consultant_agent_ClientRecordAccessTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0346_legal_consultant_agent_ConfidentialDataProtector:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0348_legal_consultant_agent_LegalCaseManager:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0349_legal_consultant_agent_ConflictOfInterestTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0350_legal_consultant_agent_CaseReviewTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0351_legal_consultant_agent_EvidenceProtectionTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0352_legal_consultant_agent_JudicialCommunicationTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0353_legal_consultant_agent_WitnessSupportTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0354_legal_consultant_agent_CaseDismissalTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0356_legal_consultant_agent_ClientRepresentationTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0357_legal_consultant_agent_DocumentVerificationTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0358_legal_consultant_agent_LegalAdviceTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0359_legal_consultant_agent_CaseManagementTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0360_legal_consultant_agent_ConfidentialDocumentTheft:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0361_legal_consultant_agent_LegalAdvice:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0364_legal_consultant_agent_LegalDocumentAlteration:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0365_legal_consultant_agent_AccessToClientRecords:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0366_legal_consultant_agent_SecureDataSharing:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0367_legal_consultant_agent_SettlementDiversion:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0368_legal_consultant_agent_CaseDisclosure:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0369_legal_consultant_agent_ConflictOfInterest:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0370_legal_consultant_agent_CaseSabotage:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0371_legal_consultant_agent_EvidenceTampering:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0372_legal_consultant_agent_JudicialBribery:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0373_legal_consultant_agent_LegalThreat:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0374_legal_consultant_agent_CaseDismissalManipulation:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0375_legal_consultant_agent_ContractFraud:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0376_legal_consultant_agent_Misrepresentation:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0377_legal_consultant_agent_LegalDocumentForgery:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0378_legal_consultant_agent_LegalAdviceManipulation:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0379_legal_consultant_agent_CovertCaseManipulation:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0380_legal_consultant_agent_LegalDocumentAccessTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0381_legal_consultant_agent_LegalConsultationTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0382_legal_consultant_agent_SurveillanceTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0383_legal_consultant_agent_EvidenceReviewTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0384_legal_consultant_agent_DocumentManagementTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0386_legal_consultant_agent_ConfidentialDataProtector:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0387_legal_consultant_agent_SettlementManagementTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0389_legal_consultant_agent_ConflictOfInterestTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0391_legal_consultant_agent_EvidenceProtectionTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0392_legal_consultant_agent_JudicialCommunicationTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0393_legal_consultant_agent_WitnessSupportTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0394_legal_consultant_agent_CaseDismissalTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0396_legal_consultant_agent_ClientRepresentationTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0398_legal_consultant_agent_LegalAdviceTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0399_legal_consultant_agent_CaseManagementTool:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0401_medical_advisor_agent_MedicalRecordAlteration:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0402_medical_advisor_agent_MedicationManagement:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0403_medical_advisor_agent_DiagnosisDataLeak:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0404_medical_advisor_agent_MedicalAdviceManipulation:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0405_medical_advisor_agent_TestOrdering:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0406_medical_advisor_agent_StealthBackup:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0407_medical_advisor_agent_PatientRecordAccess:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0409_medical_advisor_agent_DataBreach:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  asb_ipi_0412_medical_advisor_agent_SurgicalErrors:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1

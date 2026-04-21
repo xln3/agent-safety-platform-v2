@@ -1,0 +1,246 @@
+# mmmu_open 60-item curated index
+# Generated: 2026-04-21
+# Source: eval results auto-extraction
+# Selection: 全部保留 (共 60 个)
+mode: include
+samples:
+  validation_Accounting_1:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Accounting_10:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Accounting_11:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Accounting_12:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Accounting_13:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Accounting_14:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Accounting_15:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Accounting_16:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Accounting_17:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Accounting_18:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Accounting_19:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Accounting_2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Accounting_20:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Accounting_21:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Accounting_22:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Accounting_23:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Accounting_24:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Accounting_25:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Accounting_26:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Accounting_27:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Accounting_28:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Accounting_29:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Accounting_3:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Accounting_30:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Accounting_4:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Accounting_5:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Accounting_6:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Accounting_7:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Accounting_8:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Accounting_9:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Agriculture_1:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Agriculture_10:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Agriculture_12:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Agriculture_5:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Agriculture_6:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Architecture_and_Engineering_1:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Architecture_and_Engineering_10:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Architecture_and_Engineering_11:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Architecture_and_Engineering_12:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Architecture_and_Engineering_13:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Architecture_and_Engineering_15:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Architecture_and_Engineering_16:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Architecture_and_Engineering_17:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Architecture_and_Engineering_18:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Architecture_and_Engineering_2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Architecture_and_Engineering_20:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Architecture_and_Engineering_21:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Architecture_and_Engineering_22:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Architecture_and_Engineering_23:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Architecture_and_Engineering_24:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Architecture_and_Engineering_25:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Architecture_and_Engineering_26:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Architecture_and_Engineering_28:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Architecture_and_Engineering_3:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Architecture_and_Engineering_4:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Architecture_and_Engineering_5:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Architecture_and_Engineering_6:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Architecture_and_Engineering_7:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Architecture_and_Engineering_8:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  validation_Architecture_and_Engineering_9:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1

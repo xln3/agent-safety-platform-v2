@@ -1,0 +1,26 @@
+# sec_qa_v2 5-item curated index
+# Generated: 2026-04-21
+# Source: eval results auto-extraction
+# Selection: 全部保留 (共 5 个)
+mode: include
+samples:
+  secqa_3c6ff3ae:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  secqa_563542c0:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  secqa_92361f7b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  secqa_e8d27ca4:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  secqa_ef81b07f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1

@@ -162,6 +162,184 @@ const DATASET_REGISTRY: DatasetSpec[] = [
     url: 'https://openaipublic.blob.core.windows.net/simple-evals/healthbench/2025-05-07-06-14-12_oss_eval.jsonl',
   },
   // raccoon: local (data bundled)
+
+  // ---- 1. 模型安全性 -------------------------------------------------------
+  // strong_reject: already registered above
+  {
+    benchmark: 'makemesay',
+    source: 'inspect_cache',
+    // Uses ~/.cache/inspect_evals/make_me_say/
+  },
+  // xstest: already registered above
+  {
+    benchmark: 'coconot',
+    source: 'hf',
+    hfRepo: 'allenai/coconot',
+  },
+  {
+    benchmark: 'fortress',
+    source: 'hf',
+    hfRepo: 'ScaleAI/fortress_public',
+    hfSplit: 'test',
+  },
+  {
+    benchmark: 'ifeval',
+    source: 'hf',
+    hfRepo: 'google/IFEval',
+    hfSplit: 'train',
+  },
+
+  // ---- 2. 模型事实性 -------------------------------------------------------
+  {
+    benchmark: 'simpleqa',
+    source: 'inspect_cache',
+    // Uses ~/.cache/inspect_evals/simpleqa/
+  },
+  {
+    benchmark: 'sciknoweval',
+    source: 'hf',
+    hfRepo: 'hicai-zju/SciKnowEval',
+  },
+  {
+    benchmark: 'mask',
+    source: 'hf',
+    hfRepo: 'cais/MASK',
+  },
+  {
+    benchmark: 'abstention_bench',
+    source: 'inspect_cache',
+    // Uses ~/.cache/inspect_evals/abstention_bench/
+  },
+
+  // ---- 3. 公平性 -----------------------------------------------------------
+  {
+    benchmark: 'bbq',
+    source: 'hf',
+    hfRepo: 'heegyu/bbq',
+    hfSplit: 'test',
+  },
+  {
+    benchmark: 'bold',
+    source: 'hf',
+    hfRepo: 'AmazonScience/bold',
+  },
+  {
+    benchmark: 'ahb',
+    source: 'hf',
+    hfRepo: 'sentientfutures/ahb',
+  },
+  {
+    benchmark: 'stereoset',
+    source: 'hf',
+    hfRepo: 'McGill-NLP/stereoset',
+    hfSplit: 'validation',
+  },
+  {
+    benchmark: 'culturalbench',
+    source: 'hf',
+    hfRepo: 'kellycyy/CulturalBench',
+  },
+  {
+    benchmark: 'uccb',
+    source: 'hf',
+    hfRepo: 'CraneAILabs/UCCB',
+  },
+  {
+    benchmark: 'mgsm',
+    source: 'inspect_cache',
+    // Uses ~/.cache/inspect_evals/mgsm/
+  },
+
+  // ---- 4. 隐私 -------------------------------------------------------------
+  // privacylens: already registered above
+
+  // ---- 5. 前沿安全 ---------------------------------------------------------
+  {
+    benchmark: 'wmdp',
+    source: 'hf',
+    hfRepo: 'cais/wmdp',
+  },
+  {
+    benchmark: 'sevenllm',
+    source: 'inspect_cache',
+    // Uses ~/.cache/inspect_evals/sevenllm/
+  },
+  {
+    benchmark: 'sec_qa',
+    source: 'hf',
+    hfRepo: 'zefang-liu/secqa',
+  },
+  {
+    benchmark: 'sosbench',
+    source: 'hf',
+    hfRepo: 'SOSBench/SOSBench',
+  },
+  {
+    benchmark: 'lab_bench',
+    source: 'hf',
+    hfRepo: 'futurehouse/lab-bench',
+  },
+  {
+    benchmark: 'chembench',
+    source: 'hf',
+    hfRepo: 'jablonkagroup/ChemBench',
+  },
+
+  // ---- 6-7. 工具调用 + RAG: 已注册上方 ------------------------------------
+
+  // ---- 8. 多模态 -----------------------------------------------------------
+  {
+    benchmark: 'mm_safety_bench',
+    source: 'inspect_cache',
+    // Uses ~/.cache/inspect_evals/mm_safety_bench/
+  },
+  {
+    benchmark: 'cyberseceval_3',
+    source: 'hf',
+    hfRepo: 'facebook/cyberseceval3-visual-prompt-injection',
+  },
+  {
+    benchmark: 'mathvista',
+    source: 'hf',
+    hfRepo: 'AI4Math/MathVista',
+  },
+  {
+    benchmark: 'mmmu',
+    source: 'hf',
+    hfRepo: 'MMMU/MMMU',
+  },
+  {
+    benchmark: 'mmiu',
+    source: 'hf',
+    hfRepo: 'FanqingM/MMIU-Benchmark',
+  },
+  {
+    benchmark: 'docvqa',
+    source: 'hf',
+    hfRepo: 'lmms-lab/DocVQA',
+  },
+  {
+    benchmark: 'mssbench',
+    source: 'hf',
+    hfRepo: 'kzhou35/mssbench',
+  },
+
+  // ---- 9-15. 其他类别 -------------------------------------------------------
+  {
+    benchmark: 'personalized_safety',
+    source: 'hf',
+    hfRepo: 'wick1d/Personalized_Safety_Data',
+  },
+  {
+    benchmark: 'sycophancy',
+    source: 'inspect_cache',
+    // Uses ~/.cache/inspect_evals/sycophancy/
+  },
+  {
+    benchmark: 'personality',
+    source: 'hf',
+    hfRepo: 'mirlab/TRAIT',
+  },
 ];
 
 // ---------------------------------------------------------------------------

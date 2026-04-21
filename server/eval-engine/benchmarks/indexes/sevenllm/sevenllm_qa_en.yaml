@@ -1,0 +1,26 @@
+# sevenllm_qa_en 5-item curated index
+# Generated: 2026-04-21
+# Source: eval results auto-extraction
+# Selection: 全部保留 (共 5 个)
+mode: include
+samples:
+  sevenllm_a87ff679:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  sevenllm_c4ca4238:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  sevenllm_c81e728d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  sevenllm_e4da3b7f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  sevenllm_eccbc87e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1

@@ -1,0 +1,1206 @@
+# strong_reject 300-item curated index
+# Generated: 2026-04-21
+# Source: eval results auto-extraction
+# Selection: 确定性随机抽样 300 / 313 (seed=42)
+mode: include
+samples:
+  strong_reject_00f726e5:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_00f961c1:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_01416a8a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_022b4122:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_027b0e2f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_02d6cee1:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_0349d28c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_035d3763:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_041e82b2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_0569b97b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_063bbc21:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_0707e4ec:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_08f0f7b2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_094d3fa7:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_0c35160d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_0c9d6967:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_0d50697b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_0dff473a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_0ec438a9:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_0ecc6860:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_0ef850ac:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_0f5aa897:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_0f9c862b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_0fc3ffce:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_1073d82f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_1170affb:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_12a8037e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_12d9e8e6:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_134c9be3:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_1410192a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_16ad96e5:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_18af753b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_193d0754:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_19bb1b04:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_19eddc54:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_1c6735b5:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_1cee5cdc:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_1d618bd1:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_1dd93a3c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_1e9de43c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_1efa874e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_1f659c44:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_2049f295:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_211857b2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_2141f47d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_232302f2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_23fae838:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_2499dbfb:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_24addfed:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_24d5d21b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_256f630b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_264fa47d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_27047de6:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_2716fbfb:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_29444168:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_29b5b7ee:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_2a4c2d63:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_2a7add4a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_2b2c7f0a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_2b7f3ce4:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_2c0239e3:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_2c870f83:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_3037c447:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_30f2b9a9:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_3186b2d5:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_3269033c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_33bdf5c9:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_3415a819:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_3416dcaf:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_34a2a2d0:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_34d2cda9:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_3532d221:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_35a51075:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_36f3705f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_36fe8613:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_375c9e57:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_38123081:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_38cc4aa7:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_39235259:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_392903be:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_39a47465:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_39b89d00:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_3a7dc675:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_3b531a09:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_3c6d6b1a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_3e6f9426:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_3fc74f4e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_3fff7456:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_409eed2f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_41267895:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_42277361:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_428407a3:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_42936e98:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_429838d1:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_43e941c6:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_48b4045a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_48c6fc54:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_4a779d6e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_4b8daae1:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_4e1e833a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_4eddb26c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_4f72595d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_4f930cbf:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_500a90ae:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_50917901:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_50e318fd:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_53269745:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_53412bef:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_53e914cf:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_554acd93:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_55ae5c78:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_55f4958d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_5694e7ce:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_56c3532b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_5958609d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_5a2b86ba:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_5a7e8ff7:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_5be24b68:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_5cc8c388:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_5cdbcc54:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_5e83f527:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_607d39f7:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_61578faf:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_61a38ef2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_621a1d50:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_62cd0382:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_63ab24d3:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_649f9540:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_654eea16:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_65ba5065:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_65eb2110:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_666f889d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_668c9e79:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_66ff6d1b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_677faa61:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_67b7fdc0:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_68f0ab97:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_6b3dbfaa:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_6b5c1314:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_6baafe99:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_6c56bb66:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_6cffb5b7:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_6d05390d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_6eb9a46d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_6f21521f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_7051ee0a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_7076f402:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_70964895:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_70a73a5e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_7192a8d7:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_72903c61:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_744a78bf:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_76372c54:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_772dde72:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_7773a5d4:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_798a5f24:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_799d115a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_79bc5395:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_79da776f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_7b88ef34:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_7bc83bf8:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_7cb580b5:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_7cbfda4b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_7eb422d9:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_7f0b58f4:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_7fd3c9ff:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_7fe268e9:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_808e45fb:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_80c39450:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_80dcd0d4:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_814e83e3:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_8174fcf3:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_81acbce9:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_8356d858:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_84060f88:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_875e362e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_879a03dc:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_883cf84e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_88ace7f4:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_8aa65e63:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_8ae9d000:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_8cc55483:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_8ddb83a3:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_8e150189:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_8e63f536:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_900958f3:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_912ad609:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_9156a470:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_92ca96b9:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_9348cf36:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_940121ec:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_950a36f9:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_95a37842:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_95b4876a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_966910c3:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_96b7e8d8:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_99c4d689:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_9aa0eb21:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_9b190b81:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_9cd5d47b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_9ce60c3e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_9d488427:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_9e1baed8:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_9e849521:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_9ed25919:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_9eee87f4:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_9f06378c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_9fee7577:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_9ffed59c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_a0524b33:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_a20aa669:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_a21191fc:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_a2b2135e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_a2b75da8:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_a458a35b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_a61ac824:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_ab1cab67:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_abe69dd9:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_acd2bff3:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_adb71f8b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_adba520e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_adcd6d2e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_ae2c24b3:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_af29a952:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_b06e06ad:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_b082b4dc:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_b21a0f78:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_b25a4e12:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_b30b0b8d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_b31e90f9:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_b42d5299:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_b54ba234:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_b569dec6:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_b8d501ef:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_b92204c0:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_b9434720:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_b9bc66a4:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_ba4620b0:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_bb1edcdd:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_bb70114e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_bbd85f57:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_bcb40200:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_bccf31c2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_bdd65616:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_bdeb673d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_be3a476d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_c7bf63b5:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_c874e12a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_c87b8655:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_ca1bdc3d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_ca297fe9:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_ca9cd53e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_cad7cbf1:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_cc1d7ff3:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_d10672b0:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_d1a19b9c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_d29031d5:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_d2b9b58c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_d32bb21c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_d5071e62:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_d5dc9aa4:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_d5fd3d39:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_d6bc0ca0:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_d71cb8a2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_d8057fd4:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_d9579a2d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_d9e86707:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_db6a2d9e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_dd6a50a7:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_dd6b61d5:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_dfebc10f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_e04e96cc:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_e13143d2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_e1de7f8b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_e410291c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_e43e28aa:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_e513114c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_e5c781af:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_e6a44e71:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_e6eeb471:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_e8f00b95:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_e972e95c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_e986ce8b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_ea0936fe:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_ea6c24be:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_ea9a8a0d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_eaa5ee9b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_eac1e08d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_ead2ea84:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_ebe2bd2c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_ed08fb28:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_eda9d981:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_f03717e0:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_f185563f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_f264e059:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_f3f6558d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_f9e5100a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_fad15216:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_fc666b76:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  strong_reject_ff3a8dc9:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1

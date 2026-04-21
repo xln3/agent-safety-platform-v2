@@ -1,0 +1,14 @@
+# gdm_read_logs 2-item curated index
+# Generated: 2026-04-21
+# Source: eval results auto-extraction
+# Selection: 全部保留 (共 2 个)
+mode: include
+samples:
+  read_logs_easy_easy:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  read_logs_hard_hard:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1

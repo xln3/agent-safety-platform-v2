@@ -1,0 +1,26 @@
+# chembench 5-item curated index
+# Generated: 2026-04-21
+# Source: eval results auto-extraction
+# Selection: 全部保留 (共 5 个)
+mode: include
+samples:
+  2d2b241b-c17b-f830-d416-5f027669a398:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  c8a1662b-f753-663b-0b0d-3b53857df8ae:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  e59efa93-cd43-9527-553b-1c22a1be383a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  e7015f5d-724d-cedb-5dfd-6991914c4bf3:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  e7e1d7c9-5e9b-f1ee-0ce2-f877f4b26d9d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1

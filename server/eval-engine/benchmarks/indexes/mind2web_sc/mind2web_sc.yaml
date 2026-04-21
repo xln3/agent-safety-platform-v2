@@ -1,0 +1,46 @@
+# mind2web_sc 10-item curated index
+# Generated: 2026-04-21
+# Source: eval results auto-extraction
+# Selection: 全部保留 (共 10 个)
+mode: include
+samples:
+  mind2web_sc_19999093:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mind2web_sc_1a488c6a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mind2web_sc_31ad6742:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mind2web_sc_45069058:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mind2web_sc_6130dc16:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mind2web_sc_92a10b85:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mind2web_sc_b428f703:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mind2web_sc_cae979a7:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mind2web_sc_d18ea8d1:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mind2web_sc_db1b64f7:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1

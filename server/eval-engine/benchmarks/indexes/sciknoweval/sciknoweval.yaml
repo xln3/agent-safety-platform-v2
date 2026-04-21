@@ -1,0 +1,26 @@
+# sciknoweval 5-item curated index
+# Generated: 2026-04-21
+# Source: eval results auto-extraction
+# Selection: 全部保留 (共 5 个)
+mode: include
+samples:
+  sciknoweval_12e6fd67:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  sciknoweval_70a4657d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  sciknoweval_72b6318d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  sciknoweval_9d80ab5f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  sciknoweval_fe551fdd:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1

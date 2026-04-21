@@ -1,0 +1,1206 @@
+# mask 300-item curated index
+# Generated: 2026-04-21
+# Source: eval results auto-extraction
+# Selection: 全部保留 (共 300 个)
+mode: include
+samples:
+  mask_001d389f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_002773fc:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_008dce03:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_01a65664:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_0255627a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_033b6c1e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_03460a1a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_0430acbb:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_04c3584c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_05ce5dad:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_062d0bee:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_0641e3c7:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_07cc5aa0:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_08726056:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_088297ef:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_08f82e96:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_0a28bf72:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_0a92cae8:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_0b201edd:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_0c47445f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_0ddb5641:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_0f59f285:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_101f2aea:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_105d617f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_14b8a989:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_153ea612:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_1561cfc6:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_15bece5c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_164f199a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_16b6fe81:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_17bb5d1f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_17f76ac5:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_19803989:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_1b5229af:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_1d581ebb:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_1e4697b6:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_1ef6e256:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_1f386858:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_1f551880:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_21013fe4:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_211f3ad3:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_218d7781:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_21df58d9:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_221ec3e1:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_222d0e4e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_22b7c2b8:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_22ef7bab:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_23a05eb5:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_268d5203:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_26cc74d5:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_290213b3:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_293444ee:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_29b95229:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_2b0d4ed7:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_2b9e28b6:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_2c409529:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_2d03ccfb:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_2d5a1713:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_2f6f0a7d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_30d05a5f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_31354717:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_31399863:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_3146ff80:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_33162f41:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_331f8132:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_33513dbc:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_3440058b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_370391b6:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_37f9dd52:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_38afa23f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_39348af5:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_3a3a94e3:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_3a954660:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_3ace4688:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_3afc23ac:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_3bc7004f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_3c07c184:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_3d5fd6bb:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_3e702bb1:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_3ed0d942:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_3eeb303c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_3f2a853d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_3f6cef18:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_3fa2b104:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_3fb23940:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_41007571:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_42135593:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_42436b46:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_433ffdf7:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_437be25d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_4420f0b3:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_443dc347:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_452d4564:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_4766aef4:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_482477f7:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_4856099b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_492dd19f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_49cbcf27:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_49e1c34e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_4a52d9aa:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_4a707056:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_4a8a10af:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_4c228722:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_4c546cdd:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_4cf64445:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_4d50b6bd:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_4dee81a2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_4ff4e316:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_51ee226d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_5217e0c6:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_5417fee0:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_544b01ab:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_55c96c45:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_560c1947:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_567375be:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_56c83c74:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_56fcce88:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_57b2abd1:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_57f92b78:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_5980b1b8:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_59f2ac03:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_5a8a4098:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_5ad3fd1b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_5c5ce26b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_5cb2b4dd:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_5cbf5039:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_5cfaa2a0:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_5d45bd6d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_5f816579:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_5f8f5228:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_6063c6bc:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_622f216c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_626009d7:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_626188b2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_631e3dcb:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_633c8c8a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_64c237c0:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_64cfa6c6:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_65190196:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_65561d85:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_673c091e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_68089ab0:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_6a16cb17:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_6ac0c37c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_6b2a05e1:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_6c2aab81:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_6c6cc305:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_6c7e2abd:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_6ccbd2a4:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_6dfad244:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_6e3eb906:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_7045758c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_70bc3857:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_70ea95ae:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_73817d38:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_74225b5c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_74e982fa:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_7504bc11:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_79d4e2ea:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_7a2db65c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_7a3dd6c2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_7a7a4714:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_7ad1192b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_7b9ef220:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_7d5b0ea3:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_7eb10d66:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_8037d0eb:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_80cd0aa4:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_81436f2a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_81810107:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_8280aa76:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_82a52f3e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_833abd76:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_835b9b0c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_84396d3f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_84438717:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_85415f51:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_87106d4a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_8750bb7d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_87ea37a5:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_88af1f76:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_88ef30c0:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_893caf1a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_8aaabda4:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_8b524778:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_8cabaae9:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_8cff54ed:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_8dd77098:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_8dde1067:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_8e1bc79e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_908a8df1:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_92b675b0:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_95b6bd7b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_9659ca97:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_9706fe6f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_980764ca:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_990bd954:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_9b34cf9c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_9b55cd7a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_9c0b33f8:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_9ec3528a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_9f8ec813:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_9f9c87bd:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_a133953f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_a2592dc6:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_a3270812:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_a5b5ccfc:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_a6636762:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_a69f467c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_a7971a80:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_a82a6353:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_a85f740f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_a9468bc7:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_a9ca646e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_a9f9e72d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_aab5c53b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_abf4ae83:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_ac854335:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_acdffd7a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_aff3945a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_b12f7137:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_b21d9ee7:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_b2632f6f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_b40d5ed0:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_b63e9d82:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_b6a770c7:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_b86e4c6f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_bb363bec:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_bb69a6d8:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_bb965ec3:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_bc199e21:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_bd64345b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_bdf9f4ba:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_bdfb9d45:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_becdaf16:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_bee47bb7:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_bf5e9e99:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_bf809682:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_bf95a5b6:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_c05e32ec:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_c0652483:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_c2eb8c69:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_c3475541:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_c5bb3e55:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_c5d78b59:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_c81040c3:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_ca12d626:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_ca6e3163:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_cb194195:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_cc075f49:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_ccb38b28:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_cdaaeb3a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_ce710ab7:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_cea0be03:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_ceffbafa:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_d24325f7:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_d29b1af9:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_d2dab419:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_d5e75431:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_d6d01662:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_d6e88348:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_d72515ca:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_d74a086d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_d7fa357c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_d95596fe:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_daf4dd47:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_db6f618e:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_dc90f63b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_dc992e96:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_de70c42c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_debf5dee:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_e13481c2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_e1d77463:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_e26f0f45:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_e32545b8:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_e4a129a4:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_e5763ca2:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_e5c5dd39:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_e71f1fd8:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_e8089901:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_e8637dbf:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_e912e897:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_ea685865:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_eb6018b0:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_eb7f5056:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_ebb43fef:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_ebd9251c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_edb17d0b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_f05d31bd:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_f377fd2c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_f380a327:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_f401b997:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_f5ef5de1:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_f6192b96:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_f76a591b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_f9f9169c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_fa789a1a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_fc3f1b9f:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_feb96254:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  mask_fedc841c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1

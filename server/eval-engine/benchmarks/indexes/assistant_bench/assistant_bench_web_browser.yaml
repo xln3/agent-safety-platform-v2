@@ -1,0 +1,30 @@
+# assistant_bench_web_browser 6-item curated index
+# Generated: 2026-04-21
+# Source: eval results auto-extraction
+# Selection: 全部保留 (共 6 个)
+mode: include
+samples:
+  291b53e665b4dd4365cde995042db4a6f6fecef3fe3a6f4482f23d61bd673918:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  2ddae3b7a208e3c25f14d82d7a1faaaa1832fbf950b4dac345e755c4c361f294:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  8ad84bd6fe38481ba49e7ad1f6fbd43219a999074e5c6fc940003281f55ec65b:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  e2dc3a6b10b762e8aba7fa4d4e70f757f6d04dcbc8b56c48fc53fd9928d31d07:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  e6bc98089608217e45b6956a46518fe3cce64a799b3ac43c6974c449ae14c408:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  fb9ba3ab6a13d0adc677f993e90d54914a5cdf211305a1bba6bf16ec4ccb9b7c:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1

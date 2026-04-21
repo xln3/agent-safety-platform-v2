@@ -1,0 +1,1206 @@
+# uccb 300-item curated index
+# Generated: 2026-04-21
+# Source: eval results auto-extraction
+# Selection: 确定性随机抽样 300 / 618 (seed=42)
+mode: include
+samples:
+  '20331':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20332':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20340':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20347':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20349':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20353':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20358':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20359':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20374':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20417':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20429':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20434':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20435':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20442':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20443':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20450':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20457':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20464':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20472':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20479':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20484':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20500':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20511':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20520':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20524':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20526':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20528':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20555':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20559':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20564':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20565':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20572':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20580':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20581':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20584':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20604':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20613':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20642':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20647':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20654':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20656':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20663':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20665':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20669':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20671':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20680':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20683':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20686':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20690':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20693':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20694':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20709':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20711':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20712':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20714':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20731':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20736':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20744':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20750':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20751':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20753':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20771':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20772':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20774':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20776':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20783':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20786':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20791':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20814':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20815':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20816':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20841':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20844':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20869':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20887':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20908':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20920':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20926':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20933':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20948':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20952':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20959':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20963':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '20968':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21000':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21005':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21008':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21033':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21044':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21076':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21088':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21096':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21098':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21100':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21103':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21113':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21114':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21115':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21116':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21120':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21131':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21170':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21175':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21178':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21196':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21202':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21205':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21206':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21208':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21227':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21234':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21235':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21238':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21239':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21243':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21256':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21269':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21276':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21279':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21295':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21305':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21319':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21335':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21343':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21354':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21390':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21404':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21421':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21426':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21450':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21451':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21456':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21470':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21474':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21483':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21486':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21499':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21511':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21515':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21573':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21577':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21614':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21616':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21633':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21634':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21684':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21703':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21724':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21731':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21782':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21788':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21789':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21796':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21798':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21800':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21804':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21805':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21807':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21812':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21819':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21821':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21823':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21830':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21831':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21837':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21838':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21839':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21849':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21852':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21853':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21855':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21858':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21862':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21865':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21866':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21868':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21873':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21874':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21875':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21879':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21886':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21890':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21892':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21895':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21897':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21898':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21899':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21900':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21901':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21902':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21907':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21909':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21985':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21989':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21992':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21995':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '21998':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22002':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22004':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22009':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22011':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22018':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22024':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22034':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22036':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22037':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22040':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22041':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22046':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22048':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22049':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22050':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22056':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22057':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22137':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22141':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22143':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22152':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22160':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22163':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22170':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22182':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22183':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22188':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22190':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22195':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22197':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22200':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22206':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22357':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22361':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22368':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22372':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22373':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22379':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22383':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22388':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22393':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22394':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22395':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22401':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22403':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22404':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22405':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22412':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22419':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22421':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22424':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22427':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22429':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22530':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22531':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22532':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22539':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22542':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22543':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22544':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22549':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22550':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22554':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22555':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22556':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22557':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22563':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22588':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22589':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22639':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22641':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22642':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22644':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22653':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22656':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '22663':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '24125':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '24128':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '24214':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '24221':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '24224':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '24225':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '24227':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '24229':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '24230':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '24231':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '24238':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '24240':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '24247':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '24253':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '24256':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '24257':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '24259':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '24265':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '24266':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '24267':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '400002':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '400005':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '400009':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '400013':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '400020':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '400021':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  '400024':
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1

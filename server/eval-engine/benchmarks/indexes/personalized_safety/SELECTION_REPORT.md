@@ -1,0 +1,21 @@
+# personalized_safety 样本筛选报告
+
+## 数据集概况
+- 基准名称: personalized_safety
+- 数据来源: local
+- 生成日期: 2026-04-21
+
+## Task 明细
+
+| Task | 原始样本数 | 筛选后 | 策略 |
+|------|-----------|--------|------|
+| personalized_safety_context_free | 809 | 300 | 确定性随机抽样 300 / 809 (seed=42) |
+| personalized_safety_context_rich | 5 | 5 | 全部保留 (共 5 个) |
+| personalized_safety_youth | 524 | 300 | 确定性随机抽样 300 / 524 (seed=42) |
+| personalized_safety_elderly | 449 | 300 | 确定性随机抽样 300 / 449 (seed=42) |
+| personalized_safety_healthcare | 621 | 300 | 确定性随机抽样 300 / 621 (seed=42) |
+
+## 筛选策略
+- 总数 ≤ 300: 全部保留
+- 总数 > 300: 确定性随机抽样 (seed=42)
+- 已排除: 无效样本 (id 为空)

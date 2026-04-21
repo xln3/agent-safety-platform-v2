@@ -1,0 +1,26 @@
+# lab_bench_dbqa 5-item curated index
+# Generated: 2026-04-21
+# Source: eval results auto-extraction
+# Selection: 全部保留 (共 5 个)
+mode: include
+samples:
+  2e81c82f-82b0-4791-8a63-ae4e430df3e1:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  6e503f8c-328d-493d-a4d9-7876574be6ad:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  b106a538-f330-4877-9c38-e21e5620253a:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  b36b062d-92b7-43f3-895b-bb8fd54c8a0d:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
+  ff5dde2f-4f83-482a-91cc-e49691e12d18:
+    added: '2026-04-21'
+    sources:
+    - auto_curation_v1
