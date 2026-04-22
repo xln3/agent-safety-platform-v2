@@ -8,17 +8,20 @@ server/eval-engine/.venvs/
 server/eval-engine/results/
 server/eval-engine/datasets-cache/*
 !server/eval-engine/datasets-cache/.gitkeep
-screenshots/
 __pycache__/
 *.pyc
 *.egg-info/
-e2e/
+e2e/*
+!e2e/README.md
+!e2e/*.spec.*
+!e2e/report/
 e2e-demo.ts
-screenshots-fresh/
 server/tsconfig.tsbuildinfo
 
-# Analysis artifacts
-*-analysis/
+# Work records (non-deliverable)
+_worklog/02-analysis/
+_worklog/04-screenshots/
+_worklog/05-test-artifacts/
 
 # Build
 tsconfig.tsbuildinfo
