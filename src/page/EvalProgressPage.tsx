@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Card, Button, Space, Typography, Tag, Popconfirm, message } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Card, Button, Space, Typography, Tag, Popconfirm, message, Spin } from 'antd';
 import {
   ArrowLeftOutlined,
   EyeOutlined,
@@ -9,6 +9,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { evalService } from '../services/evalService';
 import type { EvalJob } from '../services/evalService';
 import EvalJobProgress from '../components/EvalJobProgress';
+import AgentEvalProgress from '../components/AgentEvalProgress';
 import dayjs from 'dayjs';
 
 const { Title, Text } = Typography;
@@ -17,11 +18,25 @@ const EvalProgressPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [job, setJob] = useState<EvalJob | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const jobId = id ? parseInt(id, 10) : 0;
 
-  const handleJobUpdate = (updatedJob: EvalJob) => {
-    setJob(updatedJob);
+  // Fetch job once to determine type
+  useEffect(() => {
+    if (!jobId) return;
+    evalService.getJob(jobId).then((data) => {
+      setJob(data as EvalJob);
+      setLoading(false);
+    }).catch(() => {
+      setLoading(false);
+    });
+  }, [jobId]);
+
+  const isDifyAgent = job?.agent?.agentType === 'dify_chat' || job?.agent?.agentType === 'dify_workflow';
+
+  const handleJobUpdate = (updatedJob: any) => {
+    setJob((prev) => prev ? { ...prev, ...updatedJob } : updatedJob);
   };
 
   const handleCancel = async () => {
@@ -34,26 +49,32 @@ const EvalProgressPage: React.FC = () => {
     }
   };
 
-  if (!jobId) {
-    return null;
+  if (!jobId) return null;
+
+  if (loading) {
+    return (
+      <div className="flex-center" style={{ padding: 80 }}>
+        <Spin size="large" />
+      </div>
+    );
   }
+
+  const jobStatus = job?.status || 'pending';
+  const isTerminal = jobStatus === 'completed' || jobStatus === 'failed';
 
   return (
     <div>
       <div className="page-header">
         <Space>
-          <Button
-            icon={<ArrowLeftOutlined />}
-            onClick={() => navigate('/eval')}
-          >
+          <Button icon={<ArrowLeftOutlined />} onClick={() => navigate('/eval')}>
             返回
           </Button>
           <Title level={4} style={{ margin: 0 }}>
-            评估进度
+            {isDifyAgent ? '智能体测试进度' : '评估进度'}
           </Title>
         </Space>
         <Space>
-          {job && (job.status === 'pending' || job.status === 'running') && (
+          {job && !isTerminal && (
             <Popconfirm
               title="确认取消此评估任务？"
               onConfirm={handleCancel}
@@ -65,7 +86,7 @@ const EvalProgressPage: React.FC = () => {
               </Button>
             </Popconfirm>
           )}
-          {job && job.status === 'completed' && (
+          {job && jobStatus === 'completed' && (
             <Button
               type="primary"
               icon={<EyeOutlined />}
@@ -77,20 +98,16 @@ const EvalProgressPage: React.FC = () => {
         </Space>
       </div>
 
-      {job && (
+      {job && !isDifyAgent && (
         <Card size="small" style={{ marginBottom: 16 }}>
           <Space size="large" wrap>
             {job.modelId && (
-              <Text type="secondary">
-                模型：<Text strong>{job.modelId}</Text>
-              </Text>
+              <Text type="secondary">模型：<Text strong>{job.modelId}</Text></Text>
             )}
             <Text type="secondary">
               基准测试：
               {(job.benchmarks || []).map((b) => (
-                <Tag key={b} style={{ marginLeft: 4 }}>
-                  {b}
-                </Tag>
+                <Tag key={b} style={{ marginLeft: 4 }}>{b}</Tag>
               ))}
             </Text>
             <Text type="secondary">
@@ -105,7 +122,11 @@ const EvalProgressPage: React.FC = () => {
         </Card>
       )}
 
-      <EvalJobProgress jobId={jobId} onJobUpdate={handleJobUpdate} />
+      {isDifyAgent ? (
+        <AgentEvalProgress jobId={jobId} onJobUpdate={handleJobUpdate} />
+      ) : (
+        <EvalJobProgress jobId={jobId} onJobUpdate={handleJobUpdate} />
+      )}
     </div>
   );
 };

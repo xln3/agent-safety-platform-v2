@@ -1,8 +1,11 @@
 import api from './api';
 
+export type AgentType = 'model' | 'dify_chat' | 'dify_workflow';
+
 export interface Agent {
   id: number;
   name: string;
+  agentType?: AgentType;
   description?: string;
   apiBase: string;
   apiKey?: string;
@@ -18,6 +21,7 @@ export interface Agent {
 
 export interface AgentForm {
   name: string;
+  agentType?: AgentType;
   description?: string;
   apiBase: string;
   apiKey?: string;

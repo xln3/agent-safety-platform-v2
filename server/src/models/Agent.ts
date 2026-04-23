@@ -4,10 +4,11 @@ import sequelize from '../config/database';
 export interface AgentAttributes {
   id: number;
   name: string;
+  agentType: string;
   description: string | null;
   apiBase: string;
   apiKey: string;
-  modelId: string;
+  modelId: string | null;
   systemPrompt: string | null;
   toolsEnabled: boolean;
   enabledTools: string[] | null;
@@ -20,15 +21,16 @@ export interface AgentAttributes {
 }
 
 export interface AgentCreationAttributes
-  extends Optional<AgentAttributes, 'id' | 'description' | 'systemPrompt' | 'toolsEnabled' | 'enabledTools' | 'ragEnabled' | 'ragConfig' | 'features' | 'status' | 'createdAt' | 'updatedAt'> {}
+  extends Optional<AgentAttributes, 'id' | 'agentType' | 'description' | 'modelId' | 'systemPrompt' | 'toolsEnabled' | 'enabledTools' | 'ragEnabled' | 'ragConfig' | 'features' | 'status' | 'createdAt' | 'updatedAt'> {}
 
 class Agent extends Model<AgentAttributes, AgentCreationAttributes> implements AgentAttributes {
   public id!: number;
   public name!: string;
+  public agentType!: string;
   public description!: string | null;
   public apiBase!: string;
   public apiKey!: string;
-  public modelId!: string;
+  public modelId!: string | null;
   public systemPrompt!: string | null;
   public toolsEnabled!: boolean;
   public enabledTools!: string[] | null;
@@ -52,6 +54,11 @@ Agent.init(
       allowNull: false,
       unique: true,
     },
+    agentType: {
+      type: DataTypes.STRING(32),
+      allowNull: false,
+      defaultValue: 'model',
+    },
     description: {
       type: DataTypes.TEXT,
       allowNull: true,
@@ -66,7 +73,7 @@ Agent.init(
     },
     modelId: {
       type: DataTypes.STRING(256),
-      allowNull: false,
+      allowNull: true,
     },
     systemPrompt: {
       type: DataTypes.TEXT,

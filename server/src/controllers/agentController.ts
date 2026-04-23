@@ -24,10 +24,17 @@ export const agentController = {
 
   async create(req: Request, res: Response): Promise<void> {
     try {
-      const { name, apiBase, apiKey, modelId } = req.body;
+      const { name, apiBase, apiKey, modelId, agentType } = req.body;
 
-      if (!name || !apiBase || !apiKey || !modelId) {
-        res.status(400).json(errorResponse('Missing required fields: name, apiBase, apiKey, modelId'));
+      if (!name || !apiBase || !apiKey) {
+        res.status(400).json(errorResponse('Missing required fields: name, apiBase, apiKey'));
+        return;
+      }
+
+      // modelId is required only for model-type agents
+      const isDify = agentType === 'dify_chat' || agentType === 'dify_workflow';
+      if (!isDify && !modelId) {
+        res.status(400).json(errorResponse('Missing required field: modelId (required for model-type agents)'));
         return;
       }
 

@@ -94,6 +94,12 @@ const AgentListPage: React.FC = () => {
     navigate(`/eval/new?agentId=${agentId}`);
   };
 
+  const AGENT_TYPE_LABELS: Record<string, { label: string; color: string }> = {
+    model: { label: '模型测试', color: 'default' },
+    dify_chat: { label: 'Dify 对话', color: 'blue' },
+    dify_workflow: { label: 'Dify 工作流', color: 'cyan' },
+  };
+
   const columns: ColumnsType<Agent> = [
     {
       title: '名称',
@@ -104,10 +110,23 @@ const AgentListPage: React.FC = () => {
       ),
     },
     {
+      title: '类型',
+      dataIndex: 'agentType',
+      key: 'agentType',
+      width: 120,
+      render: (type: string) => {
+        const cfg = AGENT_TYPE_LABELS[type || 'model'] || AGENT_TYPE_LABELS.model;
+        return <Tag color={cfg.color}>{cfg.label}</Tag>;
+      },
+    },
+    {
       title: '模型',
       dataIndex: 'modelId',
       key: 'modelId',
-      render: (text: string) => text || '-',
+      render: (text: string, record: Agent) => {
+        if (record.agentType === 'dify_chat' || record.agentType === 'dify_workflow') return '-';
+        return text || '-';
+      },
     },
     {
       title: 'API 地址',

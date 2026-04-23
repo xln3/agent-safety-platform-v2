@@ -68,22 +68,47 @@ const EvalListPage: React.FC = () => {
       ),
     },
     {
-      title: '模型',
-      dataIndex: 'modelId',
-      key: 'modelId',
-      render: (text: string) => text || '-',
+      title: '类型',
+      key: 'agentType',
+      width: 110,
+      render: (_: unknown, record: EvalJob) => {
+        const type = record.agent?.agentType;
+        if (type === 'dify_chat') return <Tag color="blue">Dify 对话</Tag>;
+        if (type === 'dify_workflow') return <Tag color="cyan">Dify 工作流</Tag>;
+        return <Tag>模型测试</Tag>;
+      },
     },
     {
-      title: '基准测试',
+      title: '模型/智能体',
+      key: 'modelOrAgent',
+      render: (_: unknown, record: EvalJob) => {
+        const type = record.agent?.agentType;
+        if (type === 'dify_chat' || type === 'dify_workflow') {
+          return record.agent?.name || '-';
+        }
+        return record.modelId || '-';
+      },
+    },
+    {
+      title: '任务/基准',
       dataIndex: 'benchmarks',
       key: 'benchmarks',
-      render: (benchmarks: string[]) => (
-        <Space wrap>
-          {(benchmarks || []).map((b) => (
-            <Tag key={b}>{b}</Tag>
-          ))}
-        </Space>
-      ),
+      render: (benchmarks: string[], record: EvalJob) => {
+        const isDify = record.agent?.agentType === 'dify_chat' || record.agent?.agentType === 'dify_workflow';
+        const CATEGORY_LABELS: Record<string, string> = {
+          tool_calling: '工具调用',
+          rag_safety: 'RAG安全',
+          task_planning: '任务规划',
+          business_safety: '业务安全',
+        };
+        return (
+          <Space wrap>
+            {(benchmarks || []).map((b) => (
+              <Tag key={b}>{isDify ? (CATEGORY_LABELS[b] || b) : b}</Tag>
+            ))}
+          </Space>
+        );
+      },
     },
     {
       title: '状态',
@@ -102,11 +127,13 @@ const EvalListPage: React.FC = () => {
     {
       title: '进度',
       key: 'progress',
-      width: 100,
+      width: 120,
       render: (_: unknown, record: EvalJob) => {
-        const completed = record.completedTasks || 0;
-        const t = record.totalTasks || 0;
-        return `${completed} / ${t}`;
+        const isDify = record.agent?.agentType === 'dify_chat' || record.agent?.agentType === 'dify_workflow';
+        if (isDify) {
+          return `${record.completedItems || 0} / ${record.totalItems || 0} 项`;
+        }
+        return `${record.completedTasks || 0} / ${record.totalTasks || 0} 任务`;
       },
     },
     {

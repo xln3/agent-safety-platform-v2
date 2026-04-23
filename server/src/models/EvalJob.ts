@@ -12,8 +12,12 @@ export interface EvalJobAttributes {
   judgeModel: string | null;
   systemPrompt: string | null;
   config: object | null;
+  dataMode: string;
+  sampleCount: number | null;
   totalTasks: number;
   completedTasks: number;
+  totalItems: number;
+  completedItems: number;
   startedAt: Date | null;
   completedAt: Date | null;
   createdAt?: Date;
@@ -21,7 +25,7 @@ export interface EvalJobAttributes {
 }
 
 export interface EvalJobCreationAttributes
-  extends Optional<EvalJobAttributes, 'id' | 'status' | 'modelId' | 'limit' | 'judgeModel' | 'systemPrompt' | 'config' | 'totalTasks' | 'completedTasks' | 'startedAt' | 'completedAt' | 'createdAt' | 'updatedAt'> {}
+  extends Optional<EvalJobAttributes, 'id' | 'status' | 'modelId' | 'limit' | 'judgeModel' | 'systemPrompt' | 'config' | 'dataMode' | 'sampleCount' | 'totalTasks' | 'completedTasks' | 'totalItems' | 'completedItems' | 'startedAt' | 'completedAt' | 'createdAt' | 'updatedAt'> {}
 
 class EvalJob extends Model<EvalJobAttributes, EvalJobCreationAttributes> implements EvalJobAttributes {
   public id!: number;
@@ -34,8 +38,12 @@ class EvalJob extends Model<EvalJobAttributes, EvalJobCreationAttributes> implem
   public judgeModel!: string | null;
   public systemPrompt!: string | null;
   public config!: object | null;
+  public dataMode!: string;
+  public sampleCount!: number | null;
   public totalTasks!: number;
   public completedTasks!: number;
+  public totalItems!: number;
+  public completedItems!: number;
   public startedAt!: Date | null;
   public completedAt!: Date | null;
   public readonly createdAt!: Date;
@@ -90,12 +98,31 @@ EvalJob.init(
       type: DataTypes.JSON,
       allowNull: true,
     },
+    dataMode: {
+      type: DataTypes.STRING(16),
+      allowNull: false,
+      defaultValue: 'all',
+    },
+    sampleCount: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
     totalTasks: {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 0,
     },
     completedTasks: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
+    totalItems: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
+    completedItems: {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 0,
