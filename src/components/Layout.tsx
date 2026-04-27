@@ -5,6 +5,7 @@ import {
   SafetyCertificateOutlined,
   FileTextOutlined,
   SafetyOutlined,
+  AuditOutlined,
 } from '@ant-design/icons';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import type { MenuProps } from 'antd';
@@ -27,6 +28,11 @@ const MENU_ITEMS: MenuProps['items'] = [
     ],
   },
   {
+    key: '/judge-models',
+    icon: <AuditOutlined />,
+    label: '裁判模型',
+  },
+  {
     key: '/reports',
     icon: <FileTextOutlined />,
     label: '评估报告',
@@ -40,6 +46,7 @@ const AppLayout: React.FC = () => {
   const selectedKey = React.useMemo(() => {
     const path = location.pathname;
     if (path.startsWith('/reports')) return '/reports';
+    if (path.startsWith('/judge-models')) return '/judge-models';
     if (path.startsWith('/eval/new')) return '/eval/new';
     if (path.startsWith('/eval')) return '/eval';
     if (path.startsWith('/agents')) return '/agents';
