@@ -29,6 +29,14 @@ export interface CommandBuildOptions {
   extraArgs?: string[];
   /** Models dict from catalog.yaml for resolving short names */
   catalogModels?: Record<string, any>;
+  /**
+   * Custom solver path (e.g. "/abs/path/to/ts_bridge_solver.py@ts_bridge").
+   * When set, inspect_ai delegates per-sample solving to that callable
+   * instead of generating with --model.
+   */
+  solverPath?: string;
+  /** Args forwarded to the solver via -S key=value. */
+  solverArgs?: Record<string, string | number>;
 }
 
 // ---------------------------------------------------------------------------
@@ -79,9 +87,21 @@ export function buildInspectCommand(options: CommandBuildOptions): string[] {
     reasoningTokens,
     extraArgs,
     catalogModels,
+    solverPath,
+    solverArgs,
   } = options;
 
   const cmd: string[] = [inspectPath, 'eval', taskSpec, '--model', modelForInspect];
+
+  // Custom solver — pushed early so it precedes other --solver-arg flags
+  if (solverPath) {
+    cmd.push('--solver', solverPath);
+    if (solverArgs) {
+      for (const [k, v] of Object.entries(solverArgs)) {
+        cmd.push('-S', `${k}=${v}`);
+      }
+    }
+  }
 
   // Model base URL
   if (apiBase) {

@@ -14,6 +14,19 @@ import logger from '../utils/logger';
 // Types
 // ---------------------------------------------------------------------------
 
+export interface JudgeModelOverride {
+  modelId: string;
+  apiBase?: string | null;
+  apiKey?: string | null;
+}
+
+export interface TsBridgeOptions {
+  callbackUrl: string;
+  authToken?: string;
+  jobId?: number | null;
+  timeoutSec?: number;
+}
+
 export interface EnvBuildOptions {
   benchmarkName: string;
   model: string;
@@ -22,6 +35,10 @@ export interface EnvBuildOptions {
   judgeModel?: string | null;
   benchmarkConfig: Record<string, any>;
   catalogModels?: Record<string, any>;
+  /** When provided, takes precedence over catalog/string lookup for judge. */
+  judgeModelOverride?: JudgeModelOverride | null;
+  /** Inject TS_BRIDGE_* env so the ts_bridge solver can callback to the TS backend. */
+  tsBridge?: TsBridgeOptions | null;
 }
 
 export interface EnvBuildResult {
@@ -105,6 +122,8 @@ export function buildEnvironment(options: EnvBuildOptions): EnvBuildResult {
     judgeModel,
     benchmarkConfig,
     catalogModels = {},
+    judgeModelOverride,
+    tsBridge,
   } = options;
 
   // Start with current process env
@@ -152,16 +171,33 @@ export function buildEnvironment(options: EnvBuildOptions): EnvBuildResult {
   // inspect_evals cache (scores.pkl, BFCL data, etc.) — keep inside project
   env.INSPECT_EVALS_CACHE_PATH = path.join(datasetsCacheDir, 'inspect_evals');
 
-  // Resolve judge model
-  const judgeResult = resolveJudgeModel(judgeModel, benchmarkConfig, catalogModels);
-  Object.assign(env, judgeResult.env);
+  // Resolve judge model — override (DB JudgeModel) > legacy string > catalog default
+  let effectiveJudge: string | null;
+  if (judgeModelOverride && judgeModelOverride.modelId) {
+    effectiveJudge = normalizeModelName(judgeModelOverride.modelId);
+    if (judgeModelOverride.apiBase) env.JUDGE_BASE_URL = judgeModelOverride.apiBase;
+    if (judgeModelOverride.apiKey) env.JUDGE_API_KEY = judgeModelOverride.apiKey;
+    env.JUDGE_MODEL_NAME = judgeModelOverride.modelId;
+  } else {
+    const judgeResult = resolveJudgeModel(judgeModel, benchmarkConfig, catalogModels);
+    Object.assign(env, judgeResult.env);
+    effectiveJudge = judgeResult.effectiveJudge;
+  }
 
   // API key / base URL overrides
   if (apiKey) env.OPENAI_API_KEY = apiKey;
   if (apiBase) env.OPENAI_BASE_URL = apiBase;
 
+  // TS bridge env — read by ts_bridge_solver.py
+  if (tsBridge) {
+    env.TS_BRIDGE_CALLBACK_URL = tsBridge.callbackUrl;
+    if (tsBridge.authToken) env.TS_BRIDGE_AUTH_TOKEN = tsBridge.authToken;
+    if (tsBridge.jobId != null) env.TS_BRIDGE_JOB_ID = String(tsBridge.jobId);
+    if (tsBridge.timeoutSec) env.TS_BRIDGE_TIMEOUT_SEC = String(tsBridge.timeoutSec);
+  }
+
   return {
     env,
-    effectiveJudge: judgeResult.effectiveJudge,
+    effectiveJudge,
   };
 }

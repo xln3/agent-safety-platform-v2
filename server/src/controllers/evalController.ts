@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Agent, EvalJob, EvalTask } from '../models';
+import { Agent, EvalJob, EvalTask, JudgeModel } from '../models';
 import { runJob, cancelJob } from '../services/evalRunner';
 import { catalogService } from '../services/catalogService';
 import { EVAL_STATUS, EVAL_CATEGORIES, CATEGORY_BENCHMARK_MAP } from '../constants';
@@ -10,11 +10,26 @@ export const evalController = {
   /**
    * POST /api/eval/jobs — Create a new evaluation job.
    *
-   * Body: { agentId, benchmarks: string[], limit?, judgeModel?, systemPrompt? }
+   * Body: {
+   *   agentId, benchmarks: string[],
+   *   judgeModelId?, judgeModel? (legacy string),
+   *   limit?, systemPrompt?,
+   *   concurrency? (1-10, default 5),
+   *   samplingMode? ('all'|'random', default 'all'),
+   * }
    */
   async createJob(req: Request, res: Response): Promise<void> {
     try {
-      const { agentId, benchmarks, limit, judgeModel, systemPrompt } = req.body;
+      const {
+        agentId,
+        benchmarks,
+        limit,
+        judgeModel,
+        judgeModelId,
+        systemPrompt,
+        concurrency,
+        samplingMode,
+      } = req.body;
 
       if (!agentId) {
         res.status(400).json(errorResponse('Missing required field: agentId'));
@@ -49,12 +64,46 @@ export const evalController = {
         }
       }
 
-      // Validate judgeModel if provided
+      // Validate judgeModelId if provided — must reference an existing JudgeModel
+      let resolvedJudgeName: string | null = null;
+      if (judgeModelId !== undefined && judgeModelId !== null) {
+        const jid = Number(judgeModelId);
+        if (!Number.isInteger(jid) || jid <= 0) {
+          res.status(400).json(errorResponse('judgeModelId must be a positive integer'));
+          return;
+        }
+        const judgeRec = await JudgeModel.findByPk(jid);
+        if (!judgeRec) {
+          res.status(404).json(errorResponse(`JudgeModel not found: ${jid}`));
+          return;
+        }
+        resolvedJudgeName = judgeRec.modelId;
+      }
+
+      // Validate legacy judgeModel string fallback
       if (judgeModel !== undefined && judgeModel !== null) {
         if (typeof judgeModel !== 'string' || judgeModel.trim().length === 0) {
           res.status(400).json(errorResponse('judgeModel must be a non-empty string'));
           return;
         }
+      }
+
+      // Validate concurrency
+      let concurrencyValue = 5;
+      if (concurrency !== undefined && concurrency !== null) {
+        const c = Number(concurrency);
+        if (!Number.isInteger(c) || c < 1 || c > 10) {
+          res.status(400).json(errorResponse('concurrency must be an integer in [1, 10]'));
+          return;
+        }
+        concurrencyValue = c;
+      }
+
+      // Validate samplingMode
+      const samplingModeValue = samplingMode || 'all';
+      if (!['all', 'random'].includes(samplingModeValue)) {
+        res.status(400).json(errorResponse('samplingMode must be "all" or "random"'));
+        return;
       }
 
       // Resolve tasks from catalog
@@ -81,22 +130,39 @@ export const evalController = {
         return;
       }
 
-      let modelId = agent.modelId || '';
-      if (modelId && !modelId.includes('/')) {
-        modelId = `openai/${modelId}`;
+      // modelId for inspect_ai's --model flag.
+      // For openai_compat agents this is the real model. For other forms, the
+      // ts_bridge solver intercepts every sample so the value is just a label
+      // used for result file paths — synthesize one tied to the agent.
+      let modelId: string;
+      if (agent.agentType === 'openai_compat') {
+        modelId = agent.modelId || '';
+        if (modelId && !modelId.includes('/')) {
+          modelId = `openai/${modelId}`;
+        }
+        if (!modelId) {
+          res.status(400).json(errorResponse('openai_compat agent missing modelId'));
+          return;
+        }
+      } else {
+        modelId = `openai/bridge-${agent.agentType}-${agent.id}`;
       }
 
       const jobName = `eval-${agent.name}-${Date.now()}`;
 
       const job = await EvalJob.create({
         agentId,
+        judgeModelId: resolvedJudgeName ? Number(judgeModelId) : null,
         name: jobName,
         benchmarks: benchmarks as string[],
         modelId,
         limit: limit ?? null,
-        judgeModel: judgeModel ?? null,
+        // Persist resolved judge name when JudgeModel was used; fall back to legacy string.
+        judgeModel: resolvedJudgeName || judgeModel || null,
         systemPrompt: systemPrompt ?? null,
         config: null,
+        concurrency: concurrencyValue,
+        samplingMode: samplingModeValue,
         totalTasks: tasksToCreate.length,
         completedTasks: 0,
       });

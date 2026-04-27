@@ -14,14 +14,14 @@ import path from 'path';
 import fs from 'fs';
 import AdmZip from 'adm-zip';
 import { Op } from 'sequelize';
-import { Agent, EvalJob, EvalTask } from '../models';
+import { Agent, EvalJob, EvalTask, JudgeModel } from '../models';
 import { EVAL_STATUS, TASK_STATUS } from '../constants';
 import { config } from '../config';
 import logger from '../utils/logger';
 import { computeTaskScore } from './scoreService';
 import catalogService from './catalogService';
 import * as venvService from './venvService';
-import { buildEnvironment } from './environmentBuilder';
+import { buildEnvironment, JudgeModelOverride } from './environmentBuilder';
 import { buildInspectCommand, normalizeModelName } from './commandBuilder';
 import { resolveIndexSampleIds } from './indexService';
 import { dockerPreCleanup, cleanupDockerNetworks, ensureThorServer } from './dockerService';
@@ -45,8 +45,11 @@ type ErrorType =
 // Constants
 // ---------------------------------------------------------------------------
 
-/** Maximum number of tasks processed in parallel per job. */
-const DEFAULT_MAX_CONCURRENCY = 2;
+/**
+ * Tasks within a job run serially (one benchmark/task at a time).
+ * Sample-level parallelism is handled by inspect_ai via --max-samples = job.concurrency.
+ */
+const TASK_CONCURRENCY = 1;
 
 /** Maximum retry attempts for retryable errors. */
 const MAX_RETRIES = 2;
@@ -319,31 +322,58 @@ async function spawnTaskProcess(
     // task-level model_roles would be in catalog but we pass taskArgs via -T
   }
 
-  // 4. Build environment variables
+  // 4. Resolve judge model override (DB JudgeModel takes precedence over legacy string)
+  let judgeModelOverride: JudgeModelOverride | null = null;
+  if (job.judgeModelId) {
+    const judgeRecord = await JudgeModel.findByPk(job.judgeModelId);
+    if (judgeRecord) {
+      judgeModelOverride = {
+        modelId: judgeRecord.modelId,
+        apiBase: judgeRecord.apiBase,
+        apiKey: judgeRecord.apiKey,
+      };
+    } else {
+      logger.warn(`Job ${job.id} references missing JudgeModel ${job.judgeModelId}`);
+    }
+  }
+
+  // 5. Build environment variables
   const { env, effectiveJudge } = buildEnvironment({
     benchmarkName: task.benchmark,
     model: job.modelId,
+    // For non-openai_compat agents the solver intercepts the call; pass dummy creds
+    // so inspect_ai's openai provider initialization doesn't trip up.
     apiBase: agent.apiBase ?? undefined,
-    apiKey: agent.apiKey ?? undefined,
+    apiKey: agent.apiKey ?? 'sk-bridge-placeholder-not-used',
     judgeModel: job.judgeModel,
     benchmarkConfig: {
       judge_model: benchmarkConfig.judgeModel,
       judge_param: benchmarkConfig.judgeParam,
     },
     catalogModels,
+    judgeModelOverride,
+    tsBridge: {
+      callbackUrl: process.env.TS_BRIDGE_CALLBACK_URL || `http://localhost:${config.server.port}`,
+      authToken: config.apiToken || undefined,
+      jobId: job.id,
+      timeoutSec: 180,
+    },
   });
 
   // Ensure results directory exists
   const resultsDir = env.INSPECT_LOG_DIR;
   fs.mkdirSync(resultsDir, { recursive: true });
 
-  // 5. Resolve index/sampling
+  // 6. Resolve index/sampling
   const indexResult = resolveIndexSampleIds({
     benchmarkName: task.benchmark,
     taskName: task.taskName,
   });
 
-  // 6. Build inspect eval command
+  // 7. Resolve solver path (bundled at server/eval-engine/ts_bridge_solver.py)
+  const solverPath = path.join(config.evalPocRoot, 'ts_bridge_solver.py') + '@ts_bridge';
+
+  // 8. Build inspect eval command
   const inspectPath = venvService.getInspectPath(task.benchmark);
   const cmd = buildInspectCommand({
     inspectPath,
@@ -358,8 +388,11 @@ async function spawnTaskProcess(
     sampleIds: indexResult?.sampleIds,
     indexMode: indexResult?.mode,
     maxConnections: DEFAULT_MAX_CONNECTIONS,
+    maxSamples: job.concurrency || 5,
     systemMessage: job.systemPrompt || undefined,
     catalogModels,
+    solverPath,
+    solverArgs: { agent_id: agent.id },
   });
 
   // 7. Docker lifecycle
@@ -646,7 +679,7 @@ export async function runJob(jobId: number): Promise<void> {
   const jobIdStr = String(jobId);
   runningProcesses.set(jobIdStr, []);
 
-  const sem = new Semaphore(DEFAULT_MAX_CONCURRENCY);
+  const sem = new Semaphore(TASK_CONCURRENCY);
   let hasFailure = false;
 
   /**
@@ -908,7 +941,7 @@ export async function recoverJobs(): Promise<void> {
 
       const jobIdStr = String(job.id);
       runningProcesses.set(jobIdStr, []);
-      const sem = new Semaphore(DEFAULT_MAX_CONCURRENCY);
+      const sem = new Semaphore(TASK_CONCURRENCY);
 
       const runPending = async (task: EvalTask) => {
         await sem.acquire();
