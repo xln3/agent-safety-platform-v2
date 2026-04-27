@@ -9,7 +9,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { evalService } from '../services/evalService';
 import type { EvalJob } from '../services/evalService';
 import EvalJobProgress from '../components/EvalJobProgress';
-import AgentEvalProgress from '../components/AgentEvalProgress';
 import dayjs from 'dayjs';
 
 const { Title, Text } = Typography;
@@ -22,7 +21,6 @@ const EvalProgressPage: React.FC = () => {
 
   const jobId = id ? parseInt(id, 10) : 0;
 
-  // Fetch job once to determine type
   useEffect(() => {
     if (!jobId) return;
     evalService.getJob(jobId).then((data) => {
@@ -32,8 +30,6 @@ const EvalProgressPage: React.FC = () => {
       setLoading(false);
     });
   }, [jobId]);
-
-  const isDifyAgent = job?.agent?.agentType === 'dify_chat' || job?.agent?.agentType === 'dify_workflow';
 
   const handleJobUpdate = (updatedJob: any) => {
     setJob((prev) => prev ? { ...prev, ...updatedJob } : updatedJob);
@@ -69,9 +65,7 @@ const EvalProgressPage: React.FC = () => {
           <Button icon={<ArrowLeftOutlined />} onClick={() => navigate('/eval')}>
             返回
           </Button>
-          <Title level={4} style={{ margin: 0 }}>
-            {isDifyAgent ? '智能体测试进度' : '评估进度'}
-          </Title>
+          <Title level={4} style={{ margin: 0 }}>评估进度</Title>
         </Space>
         <Space>
           {job && !isTerminal && (
@@ -98,7 +92,7 @@ const EvalProgressPage: React.FC = () => {
         </Space>
       </div>
 
-      {job && !isDifyAgent && (
+      {job && (
         <Card size="small" style={{ marginBottom: 16 }}>
           <Space size="large" wrap>
             {job.modelId && (
@@ -122,11 +116,7 @@ const EvalProgressPage: React.FC = () => {
         </Card>
       )}
 
-      {isDifyAgent ? (
-        <AgentEvalProgress jobId={jobId} onJobUpdate={handleJobUpdate} />
-      ) : (
-        <EvalJobProgress jobId={jobId} onJobUpdate={handleJobUpdate} />
-      )}
+      <EvalJobProgress jobId={jobId} onJobUpdate={handleJobUpdate} />
     </div>
   );
 };

@@ -17,7 +17,6 @@ import {
   Checkbox,
   Badge,
   Typography,
-  Radio,
 } from 'antd';
 import {
   SafetyOutlined,
@@ -99,13 +98,7 @@ const EvalNewPage: React.FC = () => {
   const [selectedAgentId, setSelectedAgentId] = useState<number | undefined>(
     preselectedAgentId ? parseInt(preselectedAgentId, 10) : undefined,
   );
-  // For model agents: benchmark selection
   const [selectedBenchmarks, setSelectedBenchmarks] = useState<Set<string>>(new Set());
-  // For Dify agents: task type (category) selection
-  const [selectedTaskTypes, setSelectedTaskTypes] = useState<Set<string>>(new Set());
-  const [dataMode, setDataMode] = useState<'all' | 'random'>('all');
-  const [sampleCount, setSampleCount] = useState<number | null>(null);
-
   const [limit, setLimit] = useState<number | null>(null);
   const [judgeModel, setJudgeModel] = useState('');
   const [systemPrompt, setSystemPrompt] = useState('');
@@ -146,7 +139,7 @@ const EvalNewPage: React.FC = () => {
     fetchInitialData();
   }, [fetchInitialData]);
 
-  /* ---- benchmark helpers (for model agents) ---- */
+  /* ---- benchmark helpers ---- */
   const benchmarkLabel = useCallback(
     (name: string): string => taskMeta[name]?.name || name,
     [taskMeta],
@@ -197,16 +190,7 @@ const EvalNewPage: React.FC = () => {
     return bms.filter((b) => selectedBenchmarks.has(b.name)).length;
   };
 
-  /* ---- task type helpers (for Dify agents) ---- */
-  const toggleTaskType = (key: string) => {
-    setSelectedTaskTypes((prev) => {
-      const next = new Set(prev);
-      next.has(key) ? next.delete(key) : next.add(key);
-      return next;
-    });
-  };
-
-  /* ---- Collapse items for benchmark hierarchy (model agents) ---- */
+  /* ---- Collapse items for benchmark hierarchy ---- */
   const benchmarkCollapseItems = useMemo(() => {
     return CATEGORIES.map((cat) => {
       const benchmarks = benchmarksByCategory[cat.key] || [];
@@ -300,9 +284,7 @@ const EvalNewPage: React.FC = () => {
       case 0:
         return !!selectedAgentId;
       case 1:
-        return isDifyAgent
-          ? selectedTaskTypes.size > 0
-          : selectedBenchmarks.size > 0;
+        return selectedBenchmarks.size > 0;
       case 2:
         return true;
       default:
@@ -312,45 +294,22 @@ const EvalNewPage: React.FC = () => {
 
   /* ---- submit ---- */
   const handleSubmit = async () => {
-    if (!selectedAgentId) {
-      message.warning('请选择智能体');
+    if (!selectedAgentId || selectedBenchmarks.size === 0) {
+      message.warning('请选择智能体和基准测试');
       return;
     }
 
     setSubmitting(true);
     try {
-      if (isDifyAgent) {
-        // Agent eval job
-        if (selectedTaskTypes.size === 0) {
-          message.warning('请至少选择一个任务类型');
-          return;
-        }
-
-        const job = await evalService.createJob({
-          agentId: selectedAgentId,
-          taskTypes: Array.from(selectedTaskTypes),
-          dataMode,
-          ...(dataMode === 'random' && sampleCount ? { sampleCount } : {}),
-        });
-        message.success('智能体评估任务已创建');
-        navigate(`/eval/progress/${job.id}`);
-      } else {
-        // Benchmark eval job
-        if (selectedBenchmarks.size === 0) {
-          message.warning('请至少选择一个基准测试');
-          return;
-        }
-
-        const job = await evalService.createJob({
-          agentId: selectedAgentId,
-          benchmarks: Array.from(selectedBenchmarks),
-          ...(limit ? { limit } : {}),
-          ...(judgeModel.trim() ? { judgeModel: judgeModel.trim() } : {}),
-          ...(systemPrompt.trim() ? { systemPrompt: systemPrompt.trim() } : {}),
-        });
-        message.success('评估任务已创建');
-        navigate(`/eval/progress/${job.id}`);
-      }
+      const job = await evalService.createJob({
+        agentId: selectedAgentId,
+        benchmarks: Array.from(selectedBenchmarks),
+        ...(limit ? { limit } : {}),
+        ...(judgeModel.trim() ? { judgeModel: judgeModel.trim() } : {}),
+        ...(systemPrompt.trim() ? { systemPrompt: systemPrompt.trim() } : {}),
+      });
+      message.success('评估任务已创建');
+      navigate(`/eval/progress/${job.id}`);
     } catch {
       // Handled by interceptor
     } finally {
@@ -359,9 +318,11 @@ const EvalNewPage: React.FC = () => {
   };
 
   /* ---- steps ---- */
-  const steps = isDifyAgent
-    ? [{ title: '选择智能体' }, { title: '选择任务类型' }, { title: '测试数据设置' }]
-    : [{ title: '选择智能体' }, { title: '选择基准测试' }, { title: '可选配置' }];
+  const steps = [
+    { title: '选择智能体' },
+    { title: '选择基准测试' },
+    { title: '可选配置' },
+  ];
 
   /* ---- loading ---- */
   if (loading) {
@@ -391,9 +352,7 @@ const EvalNewPage: React.FC = () => {
                   value={selectedAgentId}
                   onChange={(value) => {
                     setSelectedAgentId(value);
-                    // Reset step 2 selections when agent changes
                     setSelectedBenchmarks(new Set());
-                    setSelectedTaskTypes(new Set());
                   }}
                   options={agents.map((a) => ({
                     label: `${a.name} (${AGENT_TYPE_LABELS[a.agentType || 'model'] || a.agentType})${a.modelId ? ` - ${a.modelId}` : ''}`,
@@ -429,43 +388,8 @@ const EvalNewPage: React.FC = () => {
           </div>
         )}
 
-        {/* ============ Step 2: Select Task Types / Benchmarks ============ */}
-        {currentStep === 1 && isDifyAgent && (
-          <div>
-            <div style={{ marginBottom: 16 }}>
-              <span>已选择 <strong>{selectedTaskTypes.size}</strong> 个任务类型</span>
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 12 }}>
-              {CATEGORIES.map((cat) => {
-                const checked = selectedTaskTypes.has(cat.key);
-                return (
-                  <Card
-                    key={cat.key}
-                    hoverable
-                    onClick={() => toggleTaskType(cat.key)}
-                    style={{
-                      cursor: 'pointer',
-                      border: checked ? '2px solid #1677ff' : '1px solid #f0f0f0',
-                      background: checked ? '#f0f5ff' : '#fff',
-                    }}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                      <Checkbox checked={checked} onClick={(e) => e.stopPropagation()} onChange={() => toggleTaskType(cat.key)} />
-                      <span style={{ fontSize: 20, color: '#1677ff' }}>{cat.icon}</span>
-                      <div>
-                        <div style={{ fontWeight: 600 }}>{cat.name}</div>
-                        <div style={{ fontSize: 12, color: '#999' }}>{cat.description}</div>
-                      </div>
-                    </div>
-                  </Card>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {currentStep === 1 && !isDifyAgent && (
+        {/* ============ Step 2: Select Benchmarks ============ */}
+        {currentStep === 1 && (
           <div>
             <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <span>已选择 <strong>{selectedBenchmarks.size}</strong> 个基准测试</span>
@@ -487,65 +411,8 @@ const EvalNewPage: React.FC = () => {
           </div>
         )}
 
-        {/* ============ Step 3: Config ============ */}
-        {currentStep === 2 && isDifyAgent && (
-          <div>
-            <Form layout="vertical" style={{ maxWidth: 560 }}>
-              <Form.Item label="测试数据类型" required>
-                <Radio.Group value={dataMode} onChange={(e) => setDataMode(e.target.value)}>
-                  <Radio.Button value="all">全部数据</Radio.Button>
-                  <Radio.Button value="random">随机抽取</Radio.Button>
-                </Radio.Group>
-              </Form.Item>
-
-              {dataMode === 'random' && (
-                <Form.Item
-                  label="抽取数量"
-                  help={
-                    selectedTaskTypes.size > 0
-                      ? `每个任务类型约 ${Math.ceil((sampleCount || 0) / selectedTaskTypes.size)} 条`
-                      : '请先选择任务类型'
-                  }
-                >
-                  <InputNumber
-                    min={1}
-                    max={1000}
-                    placeholder="输入总抽取数量"
-                    value={sampleCount}
-                    onChange={(v) => setSampleCount(v)}
-                    style={{ width: '100%' }}
-                  />
-                </Form.Item>
-              )}
-            </Form>
-
-            {/* Summary */}
-            <Card size="small" title="提交摘要" style={{ marginTop: 16, maxWidth: 560 }}>
-              <Descriptions column={1} size="small">
-                <Descriptions.Item label="智能体">
-                  {selectedAgent?.name || '-'}
-                  <Tag color="blue" style={{ marginLeft: 8 }}>
-                    {AGENT_TYPE_LABELS[selectedAgent?.agentType || 'model']}
-                  </Tag>
-                </Descriptions.Item>
-                <Descriptions.Item label="入口 URL">{selectedAgent?.apiBase}</Descriptions.Item>
-                <Descriptions.Item label="任务类型">
-                  <Space wrap>
-                    {Array.from(selectedTaskTypes).map((key) => {
-                      const cat = CATEGORIES.find((c) => c.key === key);
-                      return <Tag key={key}>{cat?.name || key}</Tag>;
-                    })}
-                  </Space>
-                </Descriptions.Item>
-                <Descriptions.Item label="测试数据">
-                  {dataMode === 'all' ? '全部数据' : `随机抽取 ${sampleCount || 0} 条`}
-                </Descriptions.Item>
-              </Descriptions>
-            </Card>
-          </div>
-        )}
-
-        {currentStep === 2 && !isDifyAgent && (
+        {/* ============ Step 3: Optional Config ============ */}
+        {currentStep === 2 && (
           <div>
             <Form layout="vertical" style={{ maxWidth: 560 }}>
               <Form.Item label="样本数限制" help="限制每个任务的样本数量（留空表示不限制），适合快速测试">
@@ -565,7 +432,12 @@ const EvalNewPage: React.FC = () => {
 
             <Card size="small" title="提交摘要" style={{ marginTop: 16, maxWidth: 560 }}>
               <Descriptions column={1} size="small">
-                <Descriptions.Item label="智能体">{selectedAgent?.name || '-'}</Descriptions.Item>
+                <Descriptions.Item label="智能体">
+                  {selectedAgent?.name || '-'}
+                  <Tag color={isDifyAgent ? 'blue' : 'default'} style={{ marginLeft: 8 }}>
+                    {AGENT_TYPE_LABELS[selectedAgent?.agentType || 'model']}
+                  </Tag>
+                </Descriptions.Item>
                 <Descriptions.Item label="基准测试">
                   <Space wrap>
                     {Array.from(selectedBenchmarks).map((name) => (
@@ -595,11 +467,7 @@ const EvalNewPage: React.FC = () => {
           <Button
             type="primary"
             loading={submitting}
-            disabled={
-              !selectedAgentId ||
-              (isDifyAgent ? selectedTaskTypes.size === 0 : selectedBenchmarks.size === 0) ||
-              (isDifyAgent && dataMode === 'random' && (!sampleCount || sampleCount <= 0))
-            }
+            disabled={!selectedAgentId || selectedBenchmarks.size === 0}
             onClick={handleSubmit}
           >
             开始评估

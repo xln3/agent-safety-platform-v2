@@ -134,29 +134,10 @@ export interface EvalCategory {
 
 export interface CreateJobPayload {
   agentId: number;
-  benchmarks?: string[];
-  taskTypes?: string[];
-  dataMode?: 'all' | 'random';
-  sampleCount?: number;
+  benchmarks: string[];
   limit?: number;
   judgeModel?: string;
   systemPrompt?: string;
-}
-
-export interface EvalItemData {
-  id: number;
-  taskId: number;
-  jobId: number;
-  itemIndex: number;
-  input: string;
-  expectedOutput?: string | null;
-  actualOutput: string | null;
-  status: string;
-  errorMessage?: string | null;
-  latencyMs: number | null;
-  startedAt?: string | null;
-  completedAt?: string | null;
-  task?: { id: number; benchmark: string; taskName: string };
 }
 
 /* ------------------------------------------------------------------ */
@@ -205,8 +186,4 @@ export const evalService = {
   getCategories: () =>
     api.get<unknown, EvalCategory[]>('/api/eval/categories'),
 
-  /* ---------- Agent eval item APIs ---------- */
-
-  getJobItems: (jobId: number, params?: { page?: number; pageSize?: number; taskId?: number }) =>
-    api.get<unknown, PaginatedResult<EvalItemData>>(`/api/eval/jobs/${jobId}/items`, { params }),
 };

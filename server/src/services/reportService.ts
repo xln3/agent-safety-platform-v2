@@ -413,7 +413,7 @@ function buildReportHtml(
       <h1 class="report-title">智能体安全评估报告</h1>
       <p class="report-subtitle">
         <span>智能体：${escapeHtml(agent.name)}</span>
-        <span>模型：${escapeHtml(agent.modelId)}</span>
+        <span>模型：${escapeHtml(agent.modelId || '—')}</span>
         <span>评估任务：${escapeHtml(job.name)}</span>
         <span>生成时间：${now}</span>
       </p>

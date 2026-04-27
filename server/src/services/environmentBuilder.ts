@@ -157,12 +157,8 @@ export function buildEnvironment(options: EnvBuildOptions): EnvBuildResult {
   Object.assign(env, judgeResult.env);
 
   // API key / base URL overrides
-  if (apiKey) {
-    env.OPENAI_API_KEY = apiKey;
-  }
-  if (apiBase) {
-    env.OPENAI_BASE_URL = apiBase;
-  }
+  if (apiKey) env.OPENAI_API_KEY = apiKey;
+  if (apiBase) env.OPENAI_BASE_URL = apiBase;
 
   return {
     env,
