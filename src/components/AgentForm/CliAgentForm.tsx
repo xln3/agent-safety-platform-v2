@@ -13,7 +13,12 @@ const CliAgentForm: React.FC = () => (
       description={
         <span>
           通过 shell 命令启动一个本地进程作为智能体，进程的 stdout 即作为输出。
-          输入注入方式：<code>placeholder</code>（命令模板里用 <code>{'{INPUT}'}</code> 占位）或 <code>stdin</code>（通过标准输入传入）。
+          <br />
+          <b>placeholder 模式</b>：命令模板里用 <code>{'{INPUT}'}</code> 占位，运行时会被自动单引号包裹后注入——
+          <b>请不要再额外加引号</b>，例如 <code>python my_agent.py {'{INPUT}'}</code> 是对的，
+          <code>python my_agent.py "{'{INPUT}'}"</code> 会破坏转义。
+          <br />
+          <b>stdin 模式</b>：通过标准输入传入；命令模板里不需要 <code>{'{INPUT}'}</code>。
         </span>
       }
     />
@@ -23,7 +28,7 @@ const CliAgentForm: React.FC = () => (
       label="命令模板"
       rules={[{ required: true, message: '请输入命令模板' }]}
     >
-      <Input placeholder='例如 python my_agent.py "{INPUT}" 或 my-cli-tool' />
+      <Input placeholder='例如 python my_agent.py {INPUT} 或 my-cli-tool' />
     </Form.Item>
 
     <Form.Item

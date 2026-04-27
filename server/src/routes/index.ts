@@ -5,6 +5,7 @@ import resultRoutes from './resultRoutes';
 import reportRoutes from './reportRoutes';
 import benchmarkRoutes from './benchmarkRoutes';
 import judgeModelRoutes from './judgeModelRoutes';
+import internalAgentRunnerRoutes from './internalAgentRunnerRoutes';
 
 const router = Router();
 
@@ -14,5 +15,6 @@ router.use('/results', resultRoutes);
 router.use('/reports', reportRoutes);
 router.use('/benchmarks', benchmarkRoutes);
 router.use('/judge-models', judgeModelRoutes);
+router.use('/internal/agent-runner', internalAgentRunnerRoutes);
 
 export default router;
