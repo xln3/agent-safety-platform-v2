@@ -323,8 +323,8 @@ async function spawnTaskProcess(
   const { env, effectiveJudge } = buildEnvironment({
     benchmarkName: task.benchmark,
     model: job.modelId,
-    apiBase: agent.apiBase,
-    apiKey: agent.apiKey,
+    apiBase: agent.apiBase ?? undefined,
+    apiKey: agent.apiKey ?? undefined,
     judgeModel: job.judgeModel,
     benchmarkConfig: {
       judge_model: benchmarkConfig.judgeModel,
@@ -349,7 +349,7 @@ async function spawnTaskProcess(
     inspectPath,
     taskSpec,
     modelForInspect: normalizeModelName(job.modelId),
-    apiBase: agent.apiBase,
+    apiBase: agent.apiBase ?? undefined,
     limit: job.limit || undefined,
     effectiveJudge,
     judgeParam: benchmarkConfig.judgeParam,

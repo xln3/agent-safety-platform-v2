@@ -1,13 +1,29 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../config/database';
 
+export type AgentType = 'openai_compat' | 'dify_chat' | 'dify_workflow' | 'cli';
+
+/** Per-agent-type config payload — stored in `config` JSON column. */
+export type AgentConfig =
+  | { apiBase: string; apiKey: string; modelId: string; systemPrompt?: string | null } // openai_compat
+  | { apiBase: string; apiKey: string; systemPrompt?: string | null }                   // dify_chat
+  | { apiBase: string; apiKey: string; inputVariableMapping: Record<string, string> }   // dify_workflow
+  | {
+      commandTemplate: string;
+      inputMode: 'placeholder' | 'stdin';
+      timeoutSec?: number;
+      env?: Record<string, string>;
+    };                                                                                  // cli
+
 export interface AgentAttributes {
   id: number;
   name: string;
   agentType: string;
   description: string | null;
-  apiBase: string;
-  apiKey: string;
+  config: AgentConfig | null;
+  // Legacy fields (pre-v2) — retained for backward compatibility while older rows exist.
+  apiBase: string | null;
+  apiKey: string | null;
   modelId: string | null;
   systemPrompt: string | null;
   toolsEnabled: boolean;
@@ -21,15 +37,34 @@ export interface AgentAttributes {
 }
 
 export interface AgentCreationAttributes
-  extends Optional<AgentAttributes, 'id' | 'agentType' | 'description' | 'modelId' | 'systemPrompt' | 'toolsEnabled' | 'enabledTools' | 'ragEnabled' | 'ragConfig' | 'features' | 'status' | 'createdAt' | 'updatedAt'> {}
+  extends Optional<
+    AgentAttributes,
+    | 'id'
+    | 'agentType'
+    | 'description'
+    | 'config'
+    | 'apiBase'
+    | 'apiKey'
+    | 'modelId'
+    | 'systemPrompt'
+    | 'toolsEnabled'
+    | 'enabledTools'
+    | 'ragEnabled'
+    | 'ragConfig'
+    | 'features'
+    | 'status'
+    | 'createdAt'
+    | 'updatedAt'
+  > {}
 
 class Agent extends Model<AgentAttributes, AgentCreationAttributes> implements AgentAttributes {
   public id!: number;
   public name!: string;
   public agentType!: string;
   public description!: string | null;
-  public apiBase!: string;
-  public apiKey!: string;
+  public config!: AgentConfig | null;
+  public apiBase!: string | null;
+  public apiKey!: string | null;
   public modelId!: string | null;
   public systemPrompt!: string | null;
   public toolsEnabled!: boolean;
@@ -57,19 +92,23 @@ Agent.init(
     agentType: {
       type: DataTypes.STRING(32),
       allowNull: false,
-      defaultValue: 'model',
+      defaultValue: 'openai_compat',
     },
     description: {
       type: DataTypes.TEXT,
       allowNull: true,
     },
+    config: {
+      type: DataTypes.JSON,
+      allowNull: true,
+    },
     apiBase: {
       type: DataTypes.STRING(512),
-      allowNull: false,
+      allowNull: true,
     },
     apiKey: {
       type: DataTypes.STRING(512),
-      allowNull: false,
+      allowNull: true,
     },
     modelId: {
       type: DataTypes.STRING(256),
@@ -111,7 +150,7 @@ Agent.init(
     sequelize,
     tableName: 'agents',
     modelName: 'Agent',
-  }
+  },
 );
 
 export default Agent;

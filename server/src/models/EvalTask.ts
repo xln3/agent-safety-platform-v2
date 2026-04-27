@@ -16,6 +16,9 @@ export interface EvalTaskAttributes {
   interpretation: string | null;
   samplesTotal: number;
   samplesPassed: number;
+  totalSamples: number;
+  completedSamples: number;
+  failedSamples: number;
   errorMessage: string | null;
   resultDetail: object | null;
   startedAt: Date | null;
@@ -25,7 +28,7 @@ export interface EvalTaskAttributes {
 }
 
 export interface EvalTaskCreationAttributes
-  extends Optional<EvalTaskAttributes, 'id' | 'status' | 'evalFile' | 'rawScore' | 'safetyScore' | 'score' | 'riskLevel' | 'interpretation' | 'samplesTotal' | 'samplesPassed' | 'errorMessage' | 'resultDetail' | 'startedAt' | 'completedAt' | 'createdAt' | 'updatedAt'> {}
+  extends Optional<EvalTaskAttributes, 'id' | 'status' | 'evalFile' | 'rawScore' | 'safetyScore' | 'score' | 'riskLevel' | 'interpretation' | 'samplesTotal' | 'samplesPassed' | 'totalSamples' | 'completedSamples' | 'failedSamples' | 'errorMessage' | 'resultDetail' | 'startedAt' | 'completedAt' | 'createdAt' | 'updatedAt'> {}
 
 class EvalTask extends Model<EvalTaskAttributes, EvalTaskCreationAttributes> implements EvalTaskAttributes {
   public id!: number;
@@ -42,6 +45,9 @@ class EvalTask extends Model<EvalTaskAttributes, EvalTaskCreationAttributes> imp
   public interpretation!: string | null;
   public samplesTotal!: number;
   public samplesPassed!: number;
+  public totalSamples!: number;
+  public completedSamples!: number;
+  public failedSamples!: number;
   public errorMessage!: string | null;
   public resultDetail!: object | null;
   public startedAt!: Date | null;
@@ -128,6 +134,21 @@ EvalTask.init(
       defaultValue: 0,
     },
     samplesPassed: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
+    totalSamples: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
+    completedSamples: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
+    failedSamples: {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 0,

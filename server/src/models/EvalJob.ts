@@ -4,6 +4,7 @@ import sequelize from '../config/database';
 export interface EvalJobAttributes {
   id: number;
   agentId: number;
+  judgeModelId: number | null;
   name: string;
   status: string;
   benchmarks: string[];
@@ -12,6 +13,9 @@ export interface EvalJobAttributes {
   judgeModel: string | null;
   systemPrompt: string | null;
   config: object | null;
+  concurrency: number;
+  samplingMode: string;
+  totalSamples: number;
   dataMode: string;
   sampleCount: number | null;
   totalTasks: number;
@@ -25,11 +29,35 @@ export interface EvalJobAttributes {
 }
 
 export interface EvalJobCreationAttributes
-  extends Optional<EvalJobAttributes, 'id' | 'status' | 'modelId' | 'limit' | 'judgeModel' | 'systemPrompt' | 'config' | 'dataMode' | 'sampleCount' | 'totalTasks' | 'completedTasks' | 'totalItems' | 'completedItems' | 'startedAt' | 'completedAt' | 'createdAt' | 'updatedAt'> {}
+  extends Optional<
+    EvalJobAttributes,
+    | 'id'
+    | 'judgeModelId'
+    | 'status'
+    | 'modelId'
+    | 'limit'
+    | 'judgeModel'
+    | 'systemPrompt'
+    | 'config'
+    | 'concurrency'
+    | 'samplingMode'
+    | 'totalSamples'
+    | 'dataMode'
+    | 'sampleCount'
+    | 'totalTasks'
+    | 'completedTasks'
+    | 'totalItems'
+    | 'completedItems'
+    | 'startedAt'
+    | 'completedAt'
+    | 'createdAt'
+    | 'updatedAt'
+  > {}
 
 class EvalJob extends Model<EvalJobAttributes, EvalJobCreationAttributes> implements EvalJobAttributes {
   public id!: number;
   public agentId!: number;
+  public judgeModelId!: number | null;
   public name!: string;
   public status!: string;
   public benchmarks!: string[];
@@ -38,6 +66,9 @@ class EvalJob extends Model<EvalJobAttributes, EvalJobCreationAttributes> implem
   public judgeModel!: string | null;
   public systemPrompt!: string | null;
   public config!: object | null;
+  public concurrency!: number;
+  public samplingMode!: string;
+  public totalSamples!: number;
   public dataMode!: string;
   public sampleCount!: number | null;
   public totalTasks!: number;
@@ -62,6 +93,14 @@ EvalJob.init(
       allowNull: false,
       references: {
         model: 'agents',
+        key: 'id',
+      },
+    },
+    judgeModelId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'judge_models',
         key: 'id',
       },
     },
@@ -97,6 +136,21 @@ EvalJob.init(
     config: {
       type: DataTypes.JSON,
       allowNull: true,
+    },
+    concurrency: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 5,
+    },
+    samplingMode: {
+      type: DataTypes.STRING(16),
+      allowNull: false,
+      defaultValue: 'all',
+    },
+    totalSamples: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
     },
     dataMode: {
       type: DataTypes.STRING(16),
@@ -142,6 +196,7 @@ EvalJob.init(
     modelName: 'EvalJob',
     indexes: [
       { fields: ['agent_id'] },
+      { fields: ['judge_model_id'] },
     ],
   }
 );
