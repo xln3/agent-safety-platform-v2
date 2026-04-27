@@ -1,14 +1,17 @@
 import React, { useEffect } from 'react';
-import { Modal, Form, Input, Switch, Select, message } from 'antd';
+import { Modal, Form, Input, Select, message } from 'antd';
 import type { Agent, AgentForm, AgentType } from '../services/agentService';
+import { AGENT_TYPE_LABELS } from '../services/agentService';
+import OpenAIAgentForm from './AgentForm/OpenAIAgentForm';
+import DifyChatAgentForm from './AgentForm/DifyChatAgentForm';
+import DifyWorkflowAgentForm from './AgentForm/DifyWorkflowAgentForm';
+import CliAgentForm from './AgentForm/CliAgentForm';
 
 const { TextArea } = Input;
 
-const AGENT_TYPE_OPTIONS: { label: string; value: AgentType }[] = [
-  { label: '模型测试', value: 'model' },
-  { label: 'Dify 对话智能体', value: 'dify_chat' },
-  { label: 'Dify 工作流智能体', value: 'dify_workflow' },
-];
+const AGENT_TYPE_OPTIONS: { label: string; value: AgentType }[] = (
+  ['openai_compat', 'dify_chat', 'dify_workflow', 'cli'] as const
+).map((v) => ({ label: AGENT_TYPE_LABELS[v], value: v }));
 
 interface AgentFormModalProps {
   open: boolean;
@@ -17,37 +20,130 @@ interface AgentFormModalProps {
   onOk: (values: AgentForm) => Promise<void>;
 }
 
-const AgentFormModal: React.FC<AgentFormModalProps> = ({
-  open,
-  agent,
-  onCancel,
-  onOk,
-}) => {
-  const [form] = Form.useForm<AgentForm>();
+/** Convert form values into the canonical AgentForm payload. */
+function buildSubmitPayload(values: any): AgentForm {
+  const { agentType, name, description, config = {} } = values;
+
+  const out: any = { name, description, agentType, config: {} };
+
+  if (agentType === 'openai_compat') {
+    out.config = {
+      apiBase: config.apiBase,
+      apiKey: config.apiKey,
+      modelId: config.modelId,
+      systemPrompt: config.systemPrompt || null,
+    };
+  } else if (agentType === 'dify_chat') {
+    out.config = {
+      apiBase: config.apiBase,
+      apiKey: config.apiKey,
+      systemPrompt: config.systemPrompt || null,
+    };
+  } else if (agentType === 'dify_workflow') {
+    const list = (config.inputVariableMappingList || []) as Array<{
+      workflowVar: string;
+      sampleField: string;
+    }>;
+    const mapping: Record<string, string> = {};
+    for (const item of list) {
+      if (item?.workflowVar) mapping[item.workflowVar] = item.sampleField;
+    }
+    out.config = {
+      apiBase: config.apiBase,
+      apiKey: config.apiKey,
+      inputVariableMapping: mapping,
+    };
+  } else if (agentType === 'cli') {
+    const env: Record<string, string> = {};
+    const envText = (config.envText || '').trim();
+    if (envText) {
+      for (const line of envText.split('\n')) {
+        const trimmed = line.trim();
+        if (!trimmed || trimmed.startsWith('#')) continue;
+        const eqIdx = trimmed.indexOf('=');
+        if (eqIdx > 0) {
+          env[trimmed.slice(0, eqIdx).trim()] = trimmed.slice(eqIdx + 1).trim();
+        }
+      }
+    }
+    out.config = {
+      commandTemplate: config.commandTemplate,
+      inputMode: config.inputMode || 'placeholder',
+      ...(config.timeoutSec ? { timeoutSec: Number(config.timeoutSec) } : {}),
+      ...(Object.keys(env).length ? { env } : {}),
+    };
+  }
+
+  return out as AgentForm;
+}
+
+/** Convert agent record into form initial values. */
+function buildInitialValues(agent: Agent | null | undefined): Record<string, any> {
+  if (!agent) {
+    return {
+      agentType: 'openai_compat',
+      config: { inputMode: 'placeholder', timeoutSec: 120 },
+    };
+  }
+
+  const cfg = (agent.config as any) || {};
+  const base: Record<string, any> = {
+    name: agent.name,
+    agentType: agent.agentType,
+    description: agent.description || '',
+    config: {} as Record<string, any>,
+  };
+
+  if (agent.agentType === 'openai_compat') {
+    base.config = {
+      apiBase: cfg.apiBase ?? agent.apiBase ?? '',
+      modelId: cfg.modelId ?? agent.modelId ?? '',
+      systemPrompt: cfg.systemPrompt ?? agent.systemPrompt ?? '',
+      apiKey: '',
+    };
+  } else if (agent.agentType === 'dify_chat') {
+    base.config = {
+      apiBase: cfg.apiBase ?? agent.apiBase ?? '',
+      systemPrompt: cfg.systemPrompt ?? agent.systemPrompt ?? '',
+      apiKey: '',
+    };
+  } else if (agent.agentType === 'dify_workflow') {
+    const mapping = cfg.inputVariableMapping || {};
+    base.config = {
+      apiBase: cfg.apiBase ?? agent.apiBase ?? '',
+      apiKey: '',
+      inputVariableMappingList: Object.entries(mapping).map(([workflowVar, sampleField]) => ({
+        workflowVar,
+        sampleField,
+      })),
+    };
+  } else if (agent.agentType === 'cli') {
+    const envObj = cfg.env || {};
+    const envText = Object.entries(envObj)
+      .map(([k, v]) => `${k}=${v}`)
+      .join('\n');
+    base.config = {
+      commandTemplate: cfg.commandTemplate || '',
+      inputMode: cfg.inputMode || 'placeholder',
+      timeoutSec: cfg.timeoutSec || 120,
+      envText,
+    };
+  }
+
+  return base;
+}
+
+const AgentFormModal: React.FC<AgentFormModalProps> = ({ open, agent, onCancel, onOk }) => {
+  const [form] = Form.useForm();
   const [loading, setLoading] = React.useState(false);
   const isEdit = !!agent;
 
   const agentType = Form.useWatch('agentType', form) as AgentType | undefined;
-  const isDify = agentType === 'dify_chat' || agentType === 'dify_workflow';
 
   useEffect(() => {
     if (open) {
-      if (agent) {
-        form.setFieldsValue({
-          name: agent.name,
-          agentType: agent.agentType || 'model',
-          description: agent.description || '',
-          apiBase: agent.apiBase,
-          apiKey: agent.apiKey || '',
-          modelId: agent.modelId || '',
-          systemPrompt: agent.systemPrompt || '',
-          toolsEnabled: agent.toolsEnabled ?? false,
-          ragEnabled: agent.ragEnabled ?? false,
-          features: agent.features ? JSON.stringify(agent.features, null, 2) : '',
-        });
-      } else {
-        form.resetFields();
-      }
+      form.resetFields();
+      form.setFieldsValue(buildInitialValues(agent));
     }
   }, [open, agent, form]);
 
@@ -55,15 +151,32 @@ const AgentFormModal: React.FC<AgentFormModalProps> = ({
     try {
       const values = await form.validateFields();
       setLoading(true);
-      await onOk(values);
-      form.resetFields();
-    } catch (err: unknown) {
-      if (err && typeof err === 'object' && 'errorFields' in err) {
-        return;
+      const payload = buildSubmitPayload(values);
+      // For edit: drop blank apiKey so server keeps existing one
+      if (isEdit && (payload.config as any).apiKey === '') {
+        delete (payload.config as any).apiKey;
       }
-      message.error('操作失败');
+      await onOk(payload);
+    } catch (err: any) {
+      if (err && typeof err === 'object' && 'errorFields' in err) return;
+      message.error(err?.message || '操作失败');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const renderSubForm = () => {
+    switch (agentType) {
+      case 'openai_compat':
+        return <OpenAIAgentForm isEdit={isEdit} />;
+      case 'dify_chat':
+        return <DifyChatAgentForm isEdit={isEdit} />;
+      case 'dify_workflow':
+        return <DifyWorkflowAgentForm isEdit={isEdit} />;
+      case 'cli':
+        return <CliAgentForm />;
+      default:
+        return null;
     }
   };
 
@@ -74,24 +187,16 @@ const AgentFormModal: React.FC<AgentFormModalProps> = ({
       onOk={handleOk}
       onCancel={onCancel}
       confirmLoading={loading}
-      width={640}
+      width={680}
       destroyOnClose
     >
-      <Form
-        form={form}
-        layout="vertical"
-        initialValues={{
-          agentType: 'model',
-          toolsEnabled: false,
-          ragEnabled: false,
-        }}
-      >
+      <Form form={form} layout="vertical">
         <Form.Item
           name="agentType"
           label="智能体类型"
           rules={[{ required: true, message: '请选择智能体类型' }]}
         >
-          <Select options={AGENT_TYPE_OPTIONS} />
+          <Select options={AGENT_TYPE_OPTIONS} disabled={isEdit} />
         </Form.Item>
 
         <Form.Item
@@ -103,82 +208,10 @@ const AgentFormModal: React.FC<AgentFormModalProps> = ({
         </Form.Item>
 
         <Form.Item name="description" label="描述">
-          <TextArea placeholder="输入描述信息" rows={2} maxLength={500} />
+          <TextArea placeholder="可选描述信息" rows={2} maxLength={500} />
         </Form.Item>
 
-        <Form.Item
-          name="apiBase"
-          label={isDify ? '入口 URL' : 'API 地址'}
-          rules={[{ required: true, message: isDify ? '请输入入口 URL' : '请输入 API 地址' }]}
-        >
-          <Input placeholder={isDify ? '例如 https://api.dify.ai/v1' : '例如 https://api.openai.com/v1'} />
-        </Form.Item>
-
-        <Form.Item
-          name="apiKey"
-          label={isDify ? '入口 Key' : 'API Key'}
-          rules={[{ required: true, message: isDify ? '请输入入口 Key' : '请输入 API Key' }]}
-        >
-          <Input.Password placeholder={isDify ? '例如 app-xxxx' : '输入 API Key'} />
-        </Form.Item>
-
-        {!isDify && (
-          <Form.Item
-            name="modelId"
-            label="模型 ID"
-            rules={[{ required: !isDify, message: '请输入模型 ID' }]}
-          >
-            <Input placeholder="例如 gpt-4o" />
-          </Form.Item>
-        )}
-
-        {!isDify && (
-          <>
-            <Form.Item name="systemPrompt" label="系统提示词">
-              <TextArea placeholder="输入系统提示词" rows={4} />
-            </Form.Item>
-
-            <Form.Item
-              name="toolsEnabled"
-              label="启用工具调用"
-              valuePropName="checked"
-            >
-              <Switch />
-            </Form.Item>
-
-            <Form.Item
-              name="ragEnabled"
-              label="启用 RAG"
-              valuePropName="checked"
-            >
-              <Switch />
-            </Form.Item>
-
-            <Form.Item
-              name="features"
-              label="扩展特性 (JSON)"
-              rules={[
-                {
-                  validator: (_, value) => {
-                    if (!value || value.trim() === '') return Promise.resolve();
-                    try {
-                      JSON.parse(value);
-                      return Promise.resolve();
-                    } catch {
-                      return Promise.reject(new Error('请输入有效的 JSON'));
-                    }
-                  },
-                },
-              ]}
-            >
-              <TextArea
-                placeholder='可选，例如 { "streaming": true }'
-                rows={3}
-                style={{ fontFamily: 'monospace' }}
-              />
-            </Form.Item>
-          </>
-        )}
+        {renderSubForm()}
       </Form>
     </Modal>
   );

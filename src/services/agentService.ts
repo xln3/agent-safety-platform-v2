@@ -1,16 +1,50 @@
 import api from './api';
 
-export type AgentType = 'model' | 'dify_chat' | 'dify_workflow';
+export type AgentType = 'openai_compat' | 'dify_chat' | 'dify_workflow' | 'cli';
+
+export interface OpenAICompatConfig {
+  apiBase: string;
+  apiKey: string;
+  modelId: string;
+  systemPrompt?: string | null;
+}
+
+export interface DifyChatConfig {
+  apiBase: string;
+  apiKey: string;
+  systemPrompt?: string | null;
+}
+
+export interface DifyWorkflowConfig {
+  apiBase: string;
+  apiKey: string;
+  inputVariableMapping: Record<string, string>;
+}
+
+export interface CliConfig {
+  commandTemplate: string;
+  inputMode: 'placeholder' | 'stdin';
+  timeoutSec?: number;
+  env?: Record<string, string>;
+}
+
+export type AgentConfig =
+  | OpenAICompatConfig
+  | DifyChatConfig
+  | DifyWorkflowConfig
+  | CliConfig;
 
 export interface Agent {
   id: number;
   name: string;
-  agentType?: AgentType;
-  description?: string;
-  apiBase: string;
-  apiKey?: string;
-  modelId?: string;
-  systemPrompt?: string;
+  agentType: AgentType;
+  description?: string | null;
+  config?: AgentConfig | null;
+  /** Legacy fields — populated for openai_compat agents to keep evalRunner working. */
+  apiBase?: string | null;
+  apiKey?: string | null;
+  modelId?: string | null;
+  systemPrompt?: string | null;
   toolsEnabled?: boolean;
   ragEnabled?: boolean;
   features?: Record<string, unknown>;
@@ -21,15 +55,9 @@ export interface Agent {
 
 export interface AgentForm {
   name: string;
-  agentType?: AgentType;
+  agentType: AgentType;
   description?: string;
-  apiBase: string;
-  apiKey?: string;
-  modelId?: string;
-  systemPrompt?: string;
-  toolsEnabled?: boolean;
-  ragEnabled?: boolean;
-  features?: string;
+  config: AgentConfig;
 }
 
 export interface PaginatedResult<T> {
@@ -38,6 +66,13 @@ export interface PaginatedResult<T> {
   page: number;
   pageSize: number;
 }
+
+export const AGENT_TYPE_LABELS: Record<AgentType, string> = {
+  openai_compat: 'OpenAI 兼容模型',
+  dify_chat: 'Dify 对话',
+  dify_workflow: 'Dify 工作流',
+  cli: '本地 CLI',
+};
 
 export const agentService = {
   list: (params: { page?: number; pageSize?: number; keyword?: string }) =>

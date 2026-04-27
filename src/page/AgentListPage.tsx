@@ -17,8 +17,8 @@ import {
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import type { ColumnsType } from 'antd/es/table';
-import { agentService } from '../services/agentService';
-import type { Agent, AgentForm } from '../services/agentService';
+import { agentService, AGENT_TYPE_LABELS } from '../services/agentService';
+import type { Agent, AgentForm, AgentType } from '../services/agentService';
 import AgentFormModal from '../components/AgentFormModal';
 import dayjs from 'dayjs';
 
@@ -94,10 +94,11 @@ const AgentListPage: React.FC = () => {
     navigate(`/eval/new?agentId=${agentId}`);
   };
 
-  const AGENT_TYPE_LABELS: Record<string, { label: string; color: string }> = {
-    model: { label: '模型测试', color: 'default' },
-    dify_chat: { label: 'Dify 对话', color: 'blue' },
-    dify_workflow: { label: 'Dify 工作流', color: 'cyan' },
+  const AGENT_TYPE_COLORS: Record<AgentType, string> = {
+    openai_compat: 'default',
+    dify_chat: 'blue',
+    dify_workflow: 'cyan',
+    cli: 'purple',
   };
 
   const columns: ColumnsType<Agent> = [
@@ -113,26 +114,26 @@ const AgentListPage: React.FC = () => {
       title: '类型',
       dataIndex: 'agentType',
       key: 'agentType',
-      width: 120,
-      render: (type: string) => {
-        const cfg = AGENT_TYPE_LABELS[type || 'model'] || AGENT_TYPE_LABELS.model;
-        return <Tag color={cfg.color}>{cfg.label}</Tag>;
+      width: 130,
+      render: (type: AgentType) => {
+        const label = AGENT_TYPE_LABELS[type] || type;
+        return <Tag color={AGENT_TYPE_COLORS[type] || 'default'}>{label}</Tag>;
       },
     },
     {
-      title: '模型',
-      dataIndex: 'modelId',
-      key: 'modelId',
-      render: (text: string, record: Agent) => {
-        if (record.agentType === 'dify_chat' || record.agentType === 'dify_workflow') return '-';
-        return text || '-';
-      },
-    },
-    {
-      title: 'API 地址',
-      dataIndex: 'apiBase',
-      key: 'apiBase',
+      title: '模型 / 端点',
+      key: 'detail',
       ellipsis: true,
+      render: (_: unknown, record: Agent) => {
+        const cfg = (record.config || {}) as any;
+        if (record.agentType === 'openai_compat') {
+          return cfg.modelId || record.modelId || '-';
+        }
+        if (record.agentType === 'cli') {
+          return <code style={{ fontSize: 12 }}>{cfg.commandTemplate || '-'}</code>;
+        }
+        return cfg.apiBase || record.apiBase || '-';
+      },
     },
     {
       title: '状态',

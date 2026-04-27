@@ -25,7 +25,7 @@ import {
   ShopOutlined,
 } from '@ant-design/icons';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { agentService } from '../services/agentService';
+import { agentService, AGENT_TYPE_LABELS } from '../services/agentService';
 import { evalService } from '../services/evalService';
 import type { Agent } from '../services/agentService';
 import type { BenchmarkInfo, TaskMeta } from '../services/evalService';
@@ -69,12 +69,6 @@ const CATEGORIES: CategoryDef[] = [
     icon: <ShopOutlined />,
   },
 ];
-
-const AGENT_TYPE_LABELS: Record<string, string> = {
-  model: '模型测试',
-  dify_chat: 'Dify 对话',
-  dify_workflow: 'Dify 工作流',
-};
 
 /* ------------------------------------------------------------------ */
 /*  Component                                                          */
@@ -354,10 +348,15 @@ const EvalNewPage: React.FC = () => {
                     setSelectedAgentId(value);
                     setSelectedBenchmarks(new Set());
                   }}
-                  options={agents.map((a) => ({
-                    label: `${a.name} (${AGENT_TYPE_LABELS[a.agentType || 'model'] || a.agentType})${a.modelId ? ` - ${a.modelId}` : ''}`,
-                    value: a.id,
-                  }))}
+                  options={agents.map((a) => {
+                    const typeLabel = AGENT_TYPE_LABELS[a.agentType] || a.agentType;
+                    const cfg = (a.config || {}) as { modelId?: string };
+                    const modelHint = cfg.modelId || a.modelId;
+                    return {
+                      label: `${a.name} (${typeLabel})${modelHint ? ` - ${modelHint}` : ''}`,
+                      value: a.id,
+                    };
+                  })}
                   showSearch
                   filterOption={(input, option) =>
                     (option?.label as string)?.toLowerCase().includes(input.toLowerCase()) ?? false
@@ -372,7 +371,7 @@ const EvalNewPage: React.FC = () => {
                     <Descriptions.Item label="名称">{selectedAgent.name}</Descriptions.Item>
                     <Descriptions.Item label="类型">
                       <Tag color={isDifyAgent ? 'blue' : 'default'}>
-                        {AGENT_TYPE_LABELS[selectedAgent.agentType || 'model']}
+                        {AGENT_TYPE_LABELS[(selectedAgent.agentType as 'openai_compat' | 'dify_chat' | 'dify_workflow' | 'cli')]}
                       </Tag>
                     </Descriptions.Item>
                     <Descriptions.Item label={isDifyAgent ? '入口 URL' : 'API 地址'}>
@@ -435,7 +434,7 @@ const EvalNewPage: React.FC = () => {
                 <Descriptions.Item label="智能体">
                   {selectedAgent?.name || '-'}
                   <Tag color={isDifyAgent ? 'blue' : 'default'} style={{ marginLeft: 8 }}>
-                    {AGENT_TYPE_LABELS[selectedAgent?.agentType || 'model']}
+                    {AGENT_TYPE_LABELS[(selectedAgent?.agentType as 'openai_compat' | 'dify_chat' | 'dify_workflow' | 'cli') || 'openai_compat']}
                   </Tag>
                 </Descriptions.Item>
                 <Descriptions.Item label="基准测试">
