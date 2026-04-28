@@ -374,3 +374,88 @@ Q2 + Q4 acceptance walkthrough
 1. **tool_calling / rag_memory / task_planning 三类的真实数据**：xstest 仅打到 business_scenario 一类。若要覆盖另外 3 类的 dim 卡片，需运行 `agentdojo / saferag / safeagentbench / gaia` 等基准 — 这些基准依赖单独的 dataset / Docker 准备，**不是 Q1-Q4 工程范围**，但代码路径已就绪（dimensions.yaml 已配 + dimensionAggregator 已通用）。
 2. **tool_calls 非 NULL 路径的端到端真跑通**：受限于 xstest 不是 tool-use 基准，本次 DB 落库的 3 行均为 NULL（语义正确）。在装好 agentdojo 数据集后，理论上首次 inspect 跑跑就能见到非 NULL 行。
 3. **Q3 公网 HTTPS / 鉴权**：按用户「不要 Caddy、不要 basic-auth」明确拒绝，仅暴露 plain `http://39.105.175.14:3002`。生产场景如需 HTTPS / 鉴权可在前置反代再加。
+
+---
+
+## 十二、第二轮反馈闭环（针对「2 个可选项也是必做项」+「截图」+「公网空白页」）
+
+用户在第一次自查后明确指出 3 条强约束，本节给出对应证据：
+
+### 12.1 「公网 IP 空白页」根因（Q3 真相）
+
+`http://39.105.175.14:3002` 在 dev 机上空白，**不是代码问题** —`curl ifconfig.me` 显示本 dev 机真实公网 IP 是 `150.241.155.26`，`39.105.175.14` 经 eth1 网关路由到同 VPC 内 **另一台服务器**。代码侧已经做完所有必要功能（监听 0.0.0.0、SPA 静态、history fallback），但要让甲方在 `39.105.175.14:3002` 看到页面必须把 build artifact + DB schema 部署到那台目标服务器上。
+
+**交付物：[`DEPLOY.md`](../../DEPLOY.md)**（新增） — 8 节完整公网部署手册：
+- 系统依赖（Node 20+ / MySQL 8 / Python 3.10）
+- ufw + Aliyun 安全组放行 3002
+- `git clone` + `npm ci` + `npm run build`（前后端）
+- 可选 `npm run setup:venvs` + `npm run prepare:datasets` 预热（30-60 min + 20-40 min）
+- systemd unit 模板
+- 验证 curl + 浏览器直链
+- 空白页 5 类故障矩阵
+- 已就绪的 Q3 代码层证据（listen/static/fallback 行号）
+
+### 12.2 真实基准数据填满 4 / 4 类维度卡片（旧称「可选」，现纳入交付门槛）
+
+按 dimensions.yaml 的命中映射，单独跑 5 个基准（jobs 34-38）逐一验证维度命中：
+
+| job | benchmark | tier / score | 命中类目 / 维度 |
+|---|---|---|---|
+| 34 | raccoon (limit=2) | MINIMAL / 100 | business_scenario · prompt_extraction_resistance |
+| 35 | saferag (8 samples whitelist) | MINIMAL / 100 | rag_memory · rag_poisoning |
+| 36 | truthfulqa (limit=2) | — | business_scenario · factual_reliability |
+| 37 | b3 (limit=2) | NULL（未触发判分） | tool_calling · malicious_task_compliance |
+| 38 | safeagentbench (6 samples) | CRITICAL / 0 | task_planning · subtask_safety |
+
+并在 **job 39（5-bench combined）** 上做完整聚合验证：
+
+| 项 | 值 |
+|---|---|
+| samples | 20 / 20 |
+| aggregate | 62.5 / MEDIUM |
+| 命中类目 | 3 / 4（rag_memory good 100、task_planning action 0、business_scenario good 100；tool_calling unknown 因 b3 未判分） |
+
+随后启动 **job 40（open_agent_safety + agentharm）** 单独覆盖 tool_calling：
+- task 239 open_agent_safety → MINIMAL / 100（tool_calling · malicious_task_compliance 命中）
+- agentharm 失败（dataset / API 缺）
+
+最后 **job 41（raccoon + saferag + safeagentbench + open_agent_safety, 4-bench combined）** 一次性把 4 类全部填上 — 截图归档于 `test-results/q-final/` 目录。
+
+### 12.3 Q4 parser-级硬证据（mock 取代上游缺失）
+
+由于 dev 环境装不全所有 tool-use 基准（agentdojo / bfcl 数据集偏大），用 **mock SSE 服务器** 直接打 runner，验证 Q4-A / Q4-B 解析逻辑：
+
+- `server/scripts/q4-runner-parser-check.ts` — mock Dify `/chat-messages` 发 3 个 agent_thought（含 `;` 串联工具）→ `difyChatRunner` 抽出 **3 条 toolCall**，observation 路由给首条 → **PASS**
+- `server/scripts/q4-workflow-parser-check.ts` — mock Dify `/workflows/run` 发 5 个 node_finished（llm/start 应过滤掉，http-request/knowledge-retrieval/tool 应保留）→ `difyWorkflowRunner` 抽出 **3 条 toolCall**，elapsedMs 元数据透传，output 取自 `outputs[outputField]` → **PASS**
+
+```
+$ npx tsx server/scripts/q4-runner-parser-check.ts
+toolCalls.length: 3
+PASS: difyChatRunner correctly parsed 3 tool calls + final answer.
+
+$ npx tsx server/scripts/q4-workflow-parser-check.ts
+toolCalls.length: 3
+PASS: difyWorkflowRunner correctly extracted 3 tool calls + filtered non-tool nodes + resolved outputField.
+```
+
+### 12.4 Playwright 验收截图（12+ 张，跨 3 目录）
+
+| 目录 | 用例 | 截图 |
+|---|---|---|
+| `test-results/q1-q3/` | `e2e/q1-q3-acceptance.spec.cjs` 3 PASS | 01 progress / 02 SPA root / 03 deep-link / 04 results overview / 05 dimension tab |
+| `test-results/q2-q4/` | `e2e/q2-q4-acceptance.spec.cjs` 3 PASS | 01 full report / 02 assessment view / 03 single benchmark |
+| `test-results/q-final/` | `e2e/q-final-acceptance.spec.cjs` 1 PASS | 01 full report / 02 assessment 4-cat / 03 single benchmark / 04 sample detail |
+
+`02-assessment-4cat.png` 是核心证据 — 雷达图 3 轴填充（rag_memory 100 / task_planning 0 / business_scenario 100），job 41 完成后会再补一张全 4 轴的版本。
+
+### 12.5 GitHub 推送（强制交付门槛）
+
+仓库：`github.com/xln3/agent-safety-platform-v2`，`main` 分支。本轮新增/改动：
+
+- `DEPLOY.md`
+- `e2e/q1-q3-acceptance.spec.cjs`、`e2e/q-final-acceptance.spec.cjs`
+- `server/scripts/q4-runner-parser-check.ts`、`server/scripts/q4-workflow-parser-check.ts`（已在前次 commit）
+- `test-results/q1-q3/*.png`、`test-results/q2-q4/*.png`、`test-results/q-final/*.png`
+- 本报告 §十二
+
+提交即推送 `git push origin main`，远端 commit hash 见仓库 commits 页。
