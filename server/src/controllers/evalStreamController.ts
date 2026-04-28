@@ -59,6 +59,8 @@ export async function evalStreamHandler(req: Request, res: Response): Promise<vo
       totalSamples: t.totalSamples,
       completedSamples: t.completedSamples,
       failedSamples: t.failedSamples,
+      safetyScore: t.safetyScore,
+      riskLevel: t.riskLevel,
     })),
   };
   res.write(`event: snapshot\ndata: ${JSON.stringify(snapshot)}\n\n`);

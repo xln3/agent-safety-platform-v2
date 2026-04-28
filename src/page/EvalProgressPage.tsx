@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card, Button, Space, Typography, Tag, Popconfirm, message, Spin, Tabs } from 'antd';
 import {
   ArrowLeftOutlined,
@@ -34,9 +34,14 @@ const EvalProgressPage: React.FC = () => {
     });
   }, [jobId]);
 
-  const handleJobUpdate = (updatedJob: any) => {
+  // Stable reference: a fresh function object every render would invalidate
+  // EvalJobProgress's `fetchJob` useCallback, causing its useEffects to
+  // tear down and re-establish the SSE on every render. The repeated
+  // SSE reconnects each replayed a snapshot that wiped task safetyScore /
+  // riskLevel, producing a visible flicker on the progress page.
+  const handleJobUpdate = useCallback((updatedJob: any) => {
     setJob((prev) => prev ? { ...prev, ...updatedJob } : updatedJob);
-  };
+  }, []);
 
   const handleCancel = async () => {
     if (!jobId) return;

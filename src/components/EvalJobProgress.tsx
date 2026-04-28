@@ -131,14 +131,20 @@ const EvalJobProgress: React.FC<EvalJobProgressProps> = ({ jobId, onJobUpdate })
           setLiveTasks((prev) => {
             const next = new Map(prev);
             for (const t of data.tasks) {
+              const existing = next.get(t.id);
               next.set(t.id, {
                 id: t.id,
                 benchmark: t.benchmark,
                 taskName: t.taskName,
                 status: t.status,
-                totalSamples: t.totalSamples ?? 0,
-                completedSamples: t.completedSamples ?? 0,
-                failedSamples: t.failedSamples ?? 0,
+                totalSamples: t.totalSamples ?? existing?.totalSamples ?? 0,
+                completedSamples: t.completedSamples ?? existing?.completedSamples ?? 0,
+                failedSamples: t.failedSamples ?? existing?.failedSamples ?? 0,
+                // Server snapshot omits scoring fields; preserve the values
+                // we already have (e.g. fetched via /api/eval/jobs/:id) so a
+                // mid-flight reconnect doesn't blank out the score.
+                safetyScore: t.safetyScore ?? existing?.safetyScore,
+                riskLevel: t.riskLevel ?? existing?.riskLevel,
               });
             }
             return next;
@@ -299,7 +305,21 @@ const EvalJobProgress: React.FC<EvalJobProgressProps> = ({ jobId, onJobUpdate })
                 {completedItems} / {totalItems}
               </Text>
             </div>
-            <Progress percent={itemPercent} size="small" status="active" showInfo={false} />
+            <Progress
+              percent={itemPercent}
+              size="small"
+              // Mirror job-level status — `active` keeps the moving stripe
+              // animation running forever, which looked like a flicker on
+              // already-finished jobs.
+              status={
+                job.status === 'failed'
+                  ? 'exception'
+                  : job.status === 'completed'
+                    ? 'success'
+                    : 'active'
+              }
+              showInfo={false}
+            />
           </div>
         )}
       </Card>
