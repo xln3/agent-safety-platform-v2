@@ -4,8 +4,10 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import path from 'path';
 import fs from 'fs';
+import swaggerUi from 'swagger-ui-express';
 import config from './config';
 import routes from './routes';
+import { openapiSpec } from './openapi/spec';
 import { successResponse, errorResponse } from './utils/response';
 import logger from './utils/logger';
 import basicAuth from './middlewares/basicAuth';
@@ -53,10 +55,30 @@ app.get('/api/health', (_req: Request, res: Response) => {
   );
 });
 
+// Public API documentation — must be mounted before the Bearer auth gate so
+// integrators can browse the doc without a token. Calling APIs from the
+// "Try it out" panel still requires the token via the Authorize button.
+app.get('/api/docs.json', (_req: Request, res: Response) => {
+  res.json(openapiSpec);
+});
+app.use(
+  '/api/docs',
+  swaggerUi.serve,
+  swaggerUi.setup(openapiSpec, {
+    customSiteTitle: '智能体安全评估平台 API',
+    swaggerOptions: {
+      persistAuthorization: true,
+      docExpansion: 'list',
+      tagsSorter: 'alpha',
+    },
+  }),
+);
+
 // Bearer token auth
 app.use('/api', (req: Request, res: Response, next: NextFunction) => {
   if (!config.apiToken) return next();
   if (req.path === '/health') return next();
+  if (req.path === '/docs.json' || req.path.startsWith('/docs')) return next();
   const auth = req.headers.authorization;
   if (auth && auth === `Bearer ${config.apiToken}`) return next();
   res.status(401).json({ code: 401, message: '未授权，请提供有效的 API Token', data: null });

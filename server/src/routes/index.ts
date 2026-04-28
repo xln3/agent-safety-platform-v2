@@ -7,6 +7,7 @@ import benchmarkRoutes from './benchmarkRoutes';
 import judgeModelRoutes from './judgeModelRoutes';
 import internalAgentRunnerRoutes from './internalAgentRunnerRoutes';
 import difyProxyRoutes from './difyProxyRoutes';
+import v1Routes from './v1Routes';
 
 const router = Router();
 
@@ -18,5 +19,6 @@ router.use('/benchmarks', benchmarkRoutes);
 router.use('/judge-models', judgeModelRoutes);
 router.use('/internal/agent-runner', internalAgentRunnerRoutes);
 router.use('/dify-proxy', difyProxyRoutes);
+router.use('/v1', v1Routes);
 
 export default router;
