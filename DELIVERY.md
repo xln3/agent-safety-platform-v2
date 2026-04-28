@@ -192,6 +192,27 @@ npm run setup:venvs
 npm run prepare:datasets
 ```
 
+### 9.1 Docker 镜像预下载（仅当跑 needs_docker 基准时）
+
+下面 14 个基准依赖 Docker：`agentdojo`, `assistant_bench`, `browse_comp`, `cve_bench`, `cybench`, `cyberseceval_2`, `gaia`, `gdm_self_reasoning`, `gdm_stealth`, `gdpval`, `mind2web_sc`, `osworld`, `safeagentbench`, `threecb`。首次跑这些基准会触发 `docker pull`，国内拉镜像不稳定可能直接超时。建议先在服务器上预拉：
+
+```bash
+cd server
+
+# 预拉所有 needs_docker 基准的 Docker 镜像（自动跳过已存在的）
+npm run prepare:docker
+
+# 高级用法
+npm run prepare:docker -- --dry-run            # 仅打印计划，不真拉
+npm run prepare:docker -- --benchmark threecb  # 只准备某一个
+npm run prepare:docker -- --force              # 强制重新拉（已存在也覆盖）
+npm run prepare:docker -- --save               # 同时导出 .tar（数十 GB，仅用于离线传输场景）
+```
+
+镜像清单写入 `server/eval-engine/.docker-cache/manifest.json`，实际镜像存于 docker 守护进程的 `/var/lib/docker/`，**不打入交付包**。脚本会自动忽略 shell 层 `http_proxy/https_proxy`，避免 Clash 代理拦截 docker pull。
+
+> 部分基准（如 `threecb`、`gdm_self_reasoning`、`gdm_stealth`）的 Dockerfile 引用了**本地构建**的中间镜像（如 `threecb-debian-base`），这类镜像在评估时由 `inspect_ai` 自动构建，无法预拉，脚本会标记为 `skipped`。
+
 执行后所有评估子进程被强制为离线模式：
 
 | 环境变量 | 值 | 作用 |
@@ -242,14 +263,18 @@ curl -s http://39.105.175.14:3002/api/health   # 外网探针验证
 
 **第 1 层**：评估 UI 任务详情页里每条 task 的"错误信息"。
 
-**第 2 层**：评估子进程 stderr 与 inspect log。
+**第 2 层**：评估子进程的完整 stderr。每个失败的 task 都会落盘一份完整 stderr（不依赖 DB 截断）：
 
 ```bash
-# 后端进程级日志（含 spawn 时的命令、子进程退出码、stderr 摘要）
+# 单个 task 的完整 stderr 日志（路径见后端日志的 "full stderr: ..." 行）
+ls server/eval-engine/results/<sanitized_model>/<benchmark>/logs/task-<task_id>.stderr.log
+cat server/eval-engine/results/<sanitized_model>/<benchmark>/logs/task-<task_id>.stderr.log
+
+# 后端进程级日志（含 spawn 命令、退出码、stderr 摘要、stderr 文件路径提示）
 sudo journalctl -u asp-refractor -n 500 | grep -E "stderr|fail|error" -i
 
-# 单个 task 的 inspect 详细日志（按模型 + 基准分目录）
-ls server/eval-engine/results/<sanitized_model_name>/<benchmark>/logs/
+# 单个 task 的 inspect JSON log（成功跑完时才会有）
+ls server/eval-engine/results/<sanitized_model>/<benchmark>/logs/*.json
 ```
 
 **第 3 层**：常见根因对照表。
@@ -258,10 +283,30 @@ ls server/eval-engine/results/<sanitized_model_name>/<benchmark>/logs/
 |---|---|---|
 | 整批 task 立即失败 | 智能体 API 不通 / Key 失效 | 在"智能体管理"测试连通；用 curl 直接调 `apiBase` 验证 |
 | 部分 task `judge model` 报错 | 没建裁判模型 / 裁判 Key 失效 | 在"裁判模型管理"建条目，重跑 |
-| `cyberseceval_2` / `cybench` / `agentdojo` 等 14 个基准失败 | 没装/没起 Docker | `sudo systemctl status docker`，按需 `sudo systemctl start docker` |
+| `cyberseceval_2` / `cybench` / `agentdojo` 等 14 个基准失败 | 没装/没起 Docker / 镜像未预拉 | `sudo systemctl status docker`；跑 `cd server && npm run prepare:docker` |
+| `gdpval` Docker build 卡住或 `pip install ... exit code: 2` | 容器内 PyPI 国内访问慢/不通 | 见下方"gdpval / 中国网络下的 Docker 构建" |
 | `xstest` / `gaia` 数据集报 401 | 缺 `HF_TOKEN` 或没申请 gated 访问 | `.env` 配 `HF_TOKEN`，并在 https://huggingface.co/<repo> 申请访问 |
-| `assistant_bench_web_browser` 失败 | 缺 `TAVILY_API_KEY` | `.env` 配 `TAVILY_API_KEY` |
+| `assistant_bench_web_browser` 失败（"No inspect tasks were found"） | catalog.yaml 路径已修正 | 拉取最新代码 + 重启服务即可；若再出现说明 wrapper 目录被移动 |
+| `assistant_bench_web_browser` 失败（其他错误） | 缺 `TAVILY_API_KEY` | `.env` 配 `TAVILY_API_KEY` |
+| `agentharm` / `agentharm_benign` 报 "sample id ... not found" | 已修（index range expansion 改为 opt-in） | 拉取最新代码 + 重启即可 |
 | 任务卡住超过 30 分钟无进度 | 子进程僵死 | `jobWatchdog` 自动标记 failed；查看 systemd 日志确认 watchdog 触发 |
+
+### 11.x gdpval / 中国网络下的 Docker 构建
+
+`gdpval` 的 inspect_evals 上游包带一份 Dockerfile，构建时在容器内 `pip install` 147 个包（PyTorch CPU、OpenCV、weasyprint、ffmpeg-python 等）。Beijing 等国内网络下默认 PyPI 经常超时导致 `exit code: 2`。
+
+修复方案（在跑 `npm run prepare:docker` 之前一次性 patch）：
+
+```bash
+DF=$(ls /home/xln/agent-safety-platform-refractor/server/eval-engine/.venvs/gdpval/lib/python*/site-packages/inspect_evals/gdpval/Dockerfile)
+cp "$DF" "$DF.bak"
+sed -i \
+  -e 's|https://pypi.org/simple|https://pypi.tuna.tsinghua.edu.cn/simple|g' \
+  -e 's|https://download.pytorch.org/whl/cpu|https://mirrors.aliyun.com/pytorch-wheels/cpu/|g' \
+  "$DF"
+```
+
+之后 `cd server && npm run prepare:docker -- --benchmark gdpval --force` 重新构建。`pip install --upgrade inspect_evals` 会覆盖该 Dockerfile，覆盖后需重新 sed。
 
 ---
 
@@ -321,17 +366,32 @@ agent-safety-platform-refractor/
 │   │   ├── models/           #   Agent / EvalJob / EvalTask / EvalItem / JudgeModel / EvalReport
 │   │   └── config/           #   配置加载
 │   ├── dist/                 #   后端构建产物（npm run build 生成）
-│   ├── scripts/              #   setup-venvs / prepare-datasets / verify-offline / bridge-caches
+│   ├── scripts/              #   setup-venvs / prepare-datasets / prepare-docker / verify-offline / bridge-caches
 │   ├── eval-engine/          #   评估引擎根目录
-│   │   ├── benchmarks/       #     catalog.yaml + 每个 benchmark 的 .venv/
+│   │   ├── benchmarks/       #     catalog.yaml（69 个基准的注册表）
+│   │   ├── .venvs/           #     69 个 benchmark 各自的 Python venv（~10–15 GB）
 │   │   ├── datasets-cache/   #     HuggingFace 离线数据集 cache（~35 GB）
-│   │   ├── results/          #     评估结果 .eval 文件
+│   │   ├── .docker-cache/    #     Docker 镜像清单 manifest.json（实际镜像在 /var/lib/docker）
+│   │   ├── eval_benchmarks/  #     本地 benchmark wrapper（如 assistant_bench_web_browser_tavily）
+│   │   ├── results/          #     评估结果 .json / .eval 日志
 │   │   ├── ts_bridge_solver.py #   inspect_ai → TS 智能体反向回调入口
 │   │   └── patches/          #     上游 inspect_evals 的兼容补丁
 │   └── .env                  # 配置（见第五节）
 ├── e2e/                      # Playwright 端到端测试
 └── package.json / vite.config.ts / playwright.config.js / tsconfig.json
 ```
+
+### 14.1 缓存路径速查表
+
+| 类型 | 路径 | 大小 |
+|---|---|---|
+| Python venvs（69 个） | `server/eval-engine/.venvs/<benchmark>/` | ~10–15 GB |
+| HuggingFace 数据集 cache | `server/eval-engine/datasets-cache/` | ~35 GB |
+| inspect 评估结果 | `server/eval-engine/results/<model>/<benchmark>/logs/*.json` | 视跑量 |
+| Docker 镜像清单 | `server/eval-engine/.docker-cache/manifest.json` | < 1 MB |
+| Docker 实际镜像层 | `/var/lib/docker/`（docker daemon 管理） | 视镜像数量 |
+
+> `.venvs/` / `datasets-cache/` / `.docker-cache/` 都已加入 `.gitignore`，不入仓。`/var/lib/docker/` 由 Docker 守护进程管理，平台不直接读写。
 
 ---
 

@@ -67,60 +67,118 @@ paths:
   /api/v1/evaluate:
     post:
       tags: ["V1 (甲方接口)"]
-      summary: 提交评估任务（单次调用） / Submit evaluation in one call
+      summary: 提交评估任务（同步或异步） / Submit evaluation (sync or async)
       description: |
         甲方对接接口：一次调用即创建被测 agent + 评估任务并启动。
+        支持 4 种 agent 形态（openai_compat / dify_chat / dify_workflow / cli）。
 
         **输入字段对应**：
         | 甲方字段 | JSON 路径 | 说明 |
         |---|---|---|
         | 任务名称 | \`taskName\` | 可选，缺省自动生成 |
         | 被测智能体名称 | \`agent.name\` | 必填 |
-        | 被测智能体入口URL | \`agent.url\` | 必填，OpenAI 兼容的 \`/v1\` 根路径 |
-        | 被测智能体入口Key | \`agent.key\` | 必填 |
-        | 被测智能体模型ID | \`agent.modelId\` | 必填，inspect_ai \`--model\` 用 |
+        | agent 形态 | \`agent.agentType\` | openai_compat / dify_chat / dify_workflow / cli，缺省 openai_compat |
+        | 入口 URL / Key | \`agent.url\` / \`agent.key\` | openai_compat / dify_chat / dify_workflow 必填，cli 不需要 |
+        | 模型 ID | \`agent.modelId\` | openai_compat 必填 |
+        | Dify workflow 变量映射 | \`agent.inputVariableMapping\` | dify_workflow 必填，{difyVarName: evalStateField} |
+        | CLI 命令 / 输入模式 | \`agent.commandTemplate\` / \`agent.inputMode\` | cli 必填，inputMode ∈ {placeholder,stdin} |
         | 任务类型 | \`benchmarks\` | 必填，benchmark 列表，必须存在于 catalog |
         | 测试数据类型 | \`sampling.mode\` | \`all\`(全部) 或 \`random\`(随机抽样) |
         | 测试数据条数 | \`sampling.count\` | mode=random 时必填，按已选 benchmarks 平均拆分（per-bench limit = ceil(count / N)） |
 
+        **同步 vs 异步**：
+        - 默认异步：响应立刻返回 \`taskId\` (HTTP 201)，再通过 GET /api/v1/evaluate/{taskId} 轮询。
+        - 同步：query 加 \`?wait=true\` 或 body 加 \`wait: true\`，则阻塞到 job 终态或 \`timeoutSec\` 超时（默认 1800s，上限 3600s）；响应体与 GET 完全一致 (HTTP 200)。超时时返回 \`status: "timeout"\` + 已落盘部分数据。
+        - 同步模式下客户端断开 (TCP close) 会立即停止响应，但后端 job 仍继续跑，可用 GET 取最终结果。
+
         **判别说明**：
-        - V1 仅支持 \`openai_compat\` 形态智能体；其他形态请走两步流程：\`POST /api/agents\` + \`POST /api/eval/jobs\`。
         - 凡是 catalog 中标注 \`judge_model\` 的 benchmark 必须传 \`judgeModelId\`，否则报 400。
-        - 任务为异步：响应立刻返回，进度走 \`GET /api/eval/jobs/{taskId}/stream\`(SSE) 或轮询本接口的 GET 形态。
+      parameters:
+        - in: query
+          name: wait
+          required: false
+          schema: { type: boolean, default: false }
+          description: true 时同步阻塞到完成或超时；缺省 false 立即返回 taskId
       requestBody:
         required: true
         content:
           application/json:
             schema: { $ref: '#/components/schemas/V1SubmitRequest' }
             examples:
-              all_samples:
-                summary: 全量评估
+              openai_compat_async:
+                summary: openai_compat / 异步 / 全量
                 value:
                   taskName: 阿里云 GPT-4o 安全评估
                   agent:
                     name: gpt-4o-aliyun
+                    agentType: openai_compat
                     url: https://dashscope.aliyuncs.com/compatible-mode/v1
                     key: sk-xxxxxxxx
                     modelId: gpt-4o
                   benchmarks: [truthfulqa, xstest]
                   judgeModelId: 1
-              random_sampling:
-                summary: 抽样 100 条 / 平均拆分到 2 个 benchmark
+              openai_compat_sync_random:
+                summary: openai_compat / 同步抽样 3 条 / 600s 超时
                 value:
-                  taskName: 快速冒烟测试
+                  taskName: 同步冒烟测试
                   agent:
-                    name: gpt-4o-aliyun
-                    url: https://dashscope.aliyuncs.com/compatible-mode/v1
+                    name: gpt-4o-mini
+                    agentType: openai_compat
+                    url: https://api.openai.com/v1
                     key: sk-xxxxxxxx
-                    modelId: gpt-4o
-                  benchmarks: [truthfulqa, xstest]
-                  sampling:
-                    mode: random
-                    count: 100
+                    modelId: gpt-4o-mini
+                  benchmarks: [truthfulqa]
+                  sampling: { mode: random, count: 3 }
+                  wait: true
+                  timeoutSec: 600
+              dify_chat:
+                summary: dify_chat
+                value:
+                  taskName: Dify 客服机器人评估
+                  agent:
+                    name: dify-bot
+                    agentType: dify_chat
+                    url: https://api.dify.ai/v1
+                    key: app-xxxxxxxx
+                  benchmarks: [truthfulqa]
+                  judgeModelId: 1
+              dify_workflow:
+                summary: dify_workflow（含变量映射）
+                value:
+                  taskName: Dify Workflow 评估
+                  agent:
+                    name: dify-workflow
+                    agentType: dify_workflow
+                    url: https://api.dify.ai/v1
+                    key: app-xxxxxxxx
+                    inputVariableMapping:
+                      query: input
+                      context: metadata.context
+                  benchmarks: [truthfulqa]
+                  judgeModelId: 1
+              cli:
+                summary: cli（本地命令）
+                value:
+                  taskName: 本地 CLI agent 评估
+                  agent:
+                    name: my-cli
+                    agentType: cli
+                    commandTemplate: "python my_agent.py {INPUT}"
+                    inputMode: placeholder
+                    timeoutSec: 60
+                  benchmarks: [truthfulqa]
                   judgeModelId: 1
       responses:
+        '200':
+          description: 同步模式 (wait=true)；body 与 GET /api/v1/evaluate/{taskId} 同 schema。status='timeout' 表示超时返回部分数据
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Envelope'
+                  - properties: { data: { $ref: '#/components/schemas/V1StatusResponse' } }
         '201':
-          description: 已创建并入队 / Submitted
+          description: 异步模式 (默认)；已创建并入队 / Submitted
           content:
             application/json:
               schema:
@@ -1113,17 +1171,47 @@ components:
 
     V1AgentInput:
       type: object
-      required: [name, url, key, modelId]
+      required: [name, agentType]
+      description: |
+        4 种形态的 discriminated union，按 \`agentType\` 决定其他必填字段：
+          - openai_compat: name, agentType, url, key, modelId
+          - dify_chat:     name, agentType, url, key
+          - dify_workflow: name, agentType, url, key, inputVariableMapping
+          - cli:           name, agentType, commandTemplate, inputMode (timeoutSec optional)
       properties:
         name: { type: string, description: 被测智能体名称 }
-        url: { type: string, format: uri, description: 入口 URL（OpenAI 兼容的 /v1 根） }
-        key: { type: string, description: 入口 Key }
-        modelId: { type: string, description: inspect_ai --model 使用的模型 ID }
         agentType:
           type: string
-          enum: [openai_compat]
+          enum: [openai_compat, dify_chat, dify_workflow, cli]
           default: openai_compat
-          description: V1 仅支持 openai_compat
+        url:
+          type: string
+          format: uri
+          description: 入口 URL（openai_compat / dify_chat / dify_workflow 必填）
+        key:
+          type: string
+          description: 入口 Key（openai_compat / dify_chat / dify_workflow 必填）
+        modelId:
+          type: string
+          description: inspect_ai --model 使用的模型 ID（openai_compat 必填）
+        inputVariableMapping:
+          type: object
+          additionalProperties: { type: string }
+          description: |
+            dify_workflow 必填。键 = Dify workflow 接收的变量名；
+            值 = eval_state 字段路径（点号分隔）。
+        commandTemplate:
+          type: string
+          description: cli 必填。inputMode=placeholder 时必须包含 {INPUT}
+        inputMode:
+          type: string
+          enum: [placeholder, stdin]
+          description: cli 必填。placeholder 时 {INPUT} 替换；stdin 时通过 stdin 喂入
+        timeoutSec:
+          type: integer
+          minimum: 1
+          maximum: 3600
+          description: cli 可选。单条样本子进程超时（秒）
 
     V1Sampling:
       type: object
@@ -1161,6 +1249,20 @@ components:
         systemPrompt:
           type: string
           description: 注入到模型的 system message（可选）
+        wait:
+          type: boolean
+          default: false
+          description: |
+            true 时同步阻塞到完成或超时；缺省 false 立即返回 taskId。
+            也可通过 query string \`?wait=true\` 传递。
+        timeoutSec:
+          type: integer
+          minimum: 1
+          maximum: 3600
+          default: 1800
+          description: |
+            wait=true 时的超时上限（秒）。默认 1800，硬上限 3600。
+            超时返回 status='timeout' + 部分数据。
 
     V1SubmitResponse:
       type: object
@@ -1216,7 +1318,10 @@ components:
         completedAt: { type: string, format: date-time, nullable: true }
         status:
           type: string
-          enum: [pending, running, completed, failed]
+          enum: [pending, running, completed, failed, timeout]
+          description: |
+            timeout 仅出现在同步模式 (wait=true) 等待时间超过 timeoutSec 时返回，
+            此时数据为部分结果，job 仍在后端继续跑，可用 GET 取最终态。
         benchmarks:
           type: array
           items: { type: string }

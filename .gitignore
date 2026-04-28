@@ -8,6 +8,7 @@ server/eval-engine/.venvs/
 server/eval-engine/results/
 server/eval-engine/datasets-cache/*
 !server/eval-engine/datasets-cache/.gitkeep
+server/eval-engine/.docker-cache/
 __pycache__/
 *.pyc
 *.egg-info/

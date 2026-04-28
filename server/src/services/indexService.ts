@@ -20,6 +20,13 @@ export interface IndexData {
   sampleIds: string[];
 }
 
+/**
+ * Per-file flag controlling whether `"<n>-<m>"` keys are expanded as numeric
+ * ranges. Default is OFF — many real datasets (agentharm `1-1, 1-4`, ...) use
+ * literal hyphen-composite IDs. Set `expand_ranges: true` in the YAML to opt
+ * in for benchmarks where IDs really are numeric ranges.
+ */
+
 // ---------------------------------------------------------------------------
 // Constants
 // ---------------------------------------------------------------------------
@@ -40,25 +47,29 @@ export function getIndexPath(benchmarkName: string, taskName: string): string {
 
 /**
  * Expand range syntax in sample IDs.
- * "1-10" -> ["1", "2", ..., "10"]
+ * "1-10" -> ["1", "2", ..., "10"]   (only when enabled=true)
  * "sample-*" -> preserved as-is (wildcard)
+ *
+ * Default `enabled=false`: hyphen-composite IDs are returned literally. This
+ * is required for datasets like agentharm whose real sample IDs are strings
+ * like "1-1", "1-4" — expanding them produced "00000000000000000001" zfilled
+ * IDs that never matched the dataset (Bug found in job 52, 2026-04-28).
  */
-export function expandSampleRanges(samples: string[]): string[] {
+export function expandSampleRanges(samples: string[], enabled = false): string[] {
+  if (!enabled) {
+    return [...samples];
+  }
   const result: string[] = [];
   for (const s of samples) {
-    // Skip wildcards
     if (s.includes('*') || s.includes('?')) {
       result.push(s);
       continue;
     }
 
-    // Parse range syntax: "1-10" (only small, reasonable ranges)
     const match = s.match(/^(\d+)-(\d+)$/);
     if (match) {
       const start = parseInt(match[1], 10);
       const end = parseInt(match[2], 10);
-      // Only expand if it's a valid ascending range with <= 10000 items
-      // Prevents misinterpreting IDs like "101249559117529-0" as ranges
       if (start <= end && (end - start) < 10000) {
         for (let i = start; i <= end; i++) {
           result.push(String(i));
@@ -102,6 +113,7 @@ export function loadIndexFile(indexPath: string): IndexData | null {
   if (!data) return null;
 
   const mode = (data.mode || 'include') as 'include' | 'exclude';
+  const expandRanges = data.expand_ranges === true;
   const samplesData = data.samples;
 
   if (!samplesData) return null;
@@ -109,11 +121,9 @@ export function loadIndexFile(indexPath: string): IndexData | null {
   let sampleIds: string[];
 
   if (typeof samplesData === 'object' && !Array.isArray(samplesData)) {
-    // New format: dict {id: {sources, added}}
-    sampleIds = expandSampleRanges(Object.keys(samplesData));
+    sampleIds = expandSampleRanges(Object.keys(samplesData), expandRanges);
   } else if (Array.isArray(samplesData)) {
-    // Old format: list ["1", "2-5", ...]
-    sampleIds = expandSampleRanges(samplesData.map(String));
+    sampleIds = expandSampleRanges(samplesData.map(String), expandRanges);
   } else {
     return null;
   }

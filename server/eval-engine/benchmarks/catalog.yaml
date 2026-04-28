@@ -883,8 +883,9 @@ benchmarks:
       # Bug #119: 原 upstream assistant_bench_web_browser 因 inspect_ai web_search()
       # 默认使用内部 provider，doubao 等非 OpenAI 模型报 "No valid provider found"
       # 改用本地 wrapper，显式配置 Tavily 作为搜索引擎 (需 TAVILY_API_KEY 环境变量)
+      # 路径相对 evalPocRoot=server/eval-engine/，wrapper 实际目录是 benchmarks/eval_benchmarks/assistant_bench_tavily/
       - name: assistant_bench_web_browser
-        path: eval_benchmarks/assistant_bench_web_browser_tavily
+        path: benchmarks/eval_benchmarks/assistant_bench_tavily
 
   # ============================================================
   # 10. 多智能体安全

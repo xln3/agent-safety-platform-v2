@@ -101,6 +101,11 @@ export function buildInspectCommand(options: CommandBuildOptions): string[] {
 
   const cmd: string[] = [inspectPath, 'eval', taskSpec, '--model', modelForInspect];
 
+  // Use JSON log format so the platform produces single-file .json logs
+  // instead of the legacy .eval (zip) bundle. Old .eval files remain readable
+  // via resultReader's zip fallback path.
+  cmd.push('--log-format', 'json');
+
   // Custom solver — pushed early so it precedes other --solver-arg flags
   if (solverPath) {
     cmd.push('--solver', solverPath);

@@ -1,16 +1,23 @@
 /**
  * resultReader.ts
  *
- * Parse .eval ZIP files (produced by inspect_ai) to extract evaluation
- * metrics, status, and individual sample data.
+ * Parse inspect_ai log files to extract evaluation metrics, status, and
+ * individual sample data. Supports both formats:
  *
- * .eval file layout (ZIP archive):
- *   header.json                   - eval metadata, status, results/metrics
- *   _journal/start.json           - journal start (incomplete runs only have this)
- *   _journal/summaries/N.json     - incremental summaries
- *   summaries.json                - full sample summaries
- *   reductions.json               - reduction data
- *   samples/<id>_epoch_<n>.json   - individual sample results
+ *   .json — plain JSON file containing the full EvalLog (top-level keys
+ *           include `eval`, `results`, `samples`, `status`, ...). Written
+ *           when `inspect eval --log-format json` is used.
+ *
+ *   .eval — ZIP archive (legacy). Layout:
+ *             header.json                   - eval metadata, status, results/metrics
+ *             _journal/start.json           - journal start (incomplete runs)
+ *             _journal/summaries/N.json     - incremental summaries
+ *             summaries.json                - full sample summaries
+ *             reductions.json               - reduction data
+ *             samples/<id>_epoch_<n>.json   - individual sample results
+ *
+ * The platform now writes .json files for new runs but old .eval archives
+ * must still be readable.
  */
 
 import AdmZip from 'adm-zip';
@@ -348,49 +355,34 @@ function extractSampleScore(scores: unknown): number | null {
 // ---------------------------------------------------------------------------
 
 /**
- * Parse the header of a .eval ZIP file to get evaluation metadata, status,
- * and aggregated metric values.
- *
- * Supports two .eval formats:
- * - Classic: contains `header.json` at top level
- * - Journal v2: contains `_journal/start.json`. If `header.json` is missing
- *   the run is incomplete and we throw.
+ * Detect the log format by file extension. .json is the new default
+ * (inspect eval --log-format json); .eval is the legacy ZIP archive.
  */
-export async function readEvalHeader(filePath: string): Promise<EvalHeader> {
-  if (!fs.existsSync(filePath)) {
-    throw new Error(`Eval file not found: ${filePath}`);
-  }
+function isJsonLog(filePath: string): boolean {
+  return filePath.toLowerCase().endsWith('.json');
+}
 
-  let zip: AdmZip;
-  try {
-    zip = new AdmZip(filePath);
-  } catch (err) {
-    throw new Error(`Failed to open eval file as ZIP: ${filePath}`);
-  }
+/**
+ * Read the top-level EvalLog object from a plain-JSON log file.
+ * Returns the parsed data or throws if the file cannot be read/parsed.
+ */
+function readJsonLog(filePath: string): any {
+  const buf = fs.readFileSync(filePath);
+  return JSON.parse(buf.toString('utf-8'));
+}
 
-  const entryNames = zip.getEntries().map((e) => e.entryName);
-
-  // Determine which JSON to read for the header
-  let data: any = null;
-  if (entryNames.includes('header.json')) {
-    data = readZipJson(zip, 'header.json');
-  } else if (entryNames.includes('_journal/start.json')) {
-    // Incomplete run — no final results
-    throw new Error(`Eval file is incomplete (no header.json): ${filePath}`);
-  }
-
-  if (!data) {
-    throw new Error(`No valid header found in eval file: ${filePath}`);
-  }
-
+/**
+ * Build the canonical EvalHeader from the (already parsed) eval-log root
+ * object. Works for both formats since `eval`, `results`, `status` keys are
+ * identical between .eval/header.json and .json/root.
+ */
+function evalHeaderFromRoot(data: any): EvalHeader {
   const evalMeta = data.eval ?? {};
   const results = data.results ?? {};
   const scores: Array<{ metrics?: Record<string, RawMetricEntry> }> = results.scores ?? [];
 
-  // Merge all scorer metrics
   const merged = mergeScoreMetrics(scores);
 
-  // Build flat metric map (name -> value)
   const metricsFlat: Record<string, number> = {};
   for (const [key, entry] of Object.entries(merged)) {
     if (entry && typeof entry === 'object' && entry.value !== undefined) {
@@ -398,11 +390,9 @@ export async function readEvalHeader(filePath: string): Promise<EvalHeader> {
     }
   }
 
-  // Extract task name for metric priority lookup
   const rawTask: string = evalMeta.task ?? '';
   const taskName = rawTask.split('/').pop() ?? rawTask;
 
-  // Dataset info
   const dataset = evalMeta.dataset ?? {};
   const datasetName =
     typeof dataset === 'string'
@@ -421,12 +411,82 @@ export async function readEvalHeader(filePath: string): Promise<EvalHeader> {
 }
 
 /**
- * Extract individual sample results from a .eval ZIP file.
+ * Parse the header of an inspect_ai log file to get evaluation metadata,
+ * status, and aggregated metric values.
  *
- * Samples live under `samples/` inside the ZIP. Each file is a JSON object
- * representing one sample (id, input, target, output, scores, metadata).
+ * Dispatches on extension:
+ *   - .json — plain JSON, top-level keys = EvalLog fields
+ *   - .eval — ZIP archive containing header.json (legacy)
  *
- * Supports optional pagination via `offset` and `limit`.
+ * Throws when the file is missing, unreadable, or marks an incomplete run.
+ */
+export async function readEvalHeader(filePath: string): Promise<EvalHeader> {
+  if (!fs.existsSync(filePath)) {
+    throw new Error(`Eval file not found: ${filePath}`);
+  }
+
+  if (isJsonLog(filePath)) {
+    let data: any;
+    try {
+      data = readJsonLog(filePath);
+    } catch (err) {
+      throw new Error(`Failed to parse JSON eval log: ${filePath} — ${(err as Error).message}`);
+    }
+    if (!data || typeof data !== 'object') {
+      throw new Error(`Invalid JSON eval log (not an object): ${filePath}`);
+    }
+    return evalHeaderFromRoot(data);
+  }
+
+  // Legacy .eval ZIP path
+  let zip: AdmZip;
+  try {
+    zip = new AdmZip(filePath);
+  } catch (err) {
+    throw new Error(`Failed to open eval file as ZIP: ${filePath}`);
+  }
+
+  const entryNames = zip.getEntries().map((e) => e.entryName);
+
+  let data: any = null;
+  if (entryNames.includes('header.json')) {
+    data = readZipJson(zip, 'header.json');
+  } else if (entryNames.includes('_journal/start.json')) {
+    throw new Error(`Eval file is incomplete (no header.json): ${filePath}`);
+  }
+
+  if (!data) {
+    throw new Error(`No valid header found in eval file: ${filePath}`);
+  }
+
+  return evalHeaderFromRoot(data);
+}
+
+/**
+ * Extract a normalized sample record from a raw inspect_ai sample JSON.
+ * Used by both the .json (top-level array) and .eval (one file per sample)
+ * read paths.
+ */
+function normalizeSample(raw: any, fallbackId: string): EvalSample {
+  return {
+    id: raw.id ?? fallbackId,
+    input: extractInputText(raw.input),
+    target: raw.target != null ? String(raw.target) : undefined,
+    output: extractOutputText(raw.output),
+    score: extractSampleScore(raw.scores),
+    metadata: raw.metadata ?? undefined,
+  };
+}
+
+/**
+ * Extract individual sample results from an inspect_ai log file.
+ *
+ * Format dispatch:
+ *   - .json — top-level `samples` array; pagination is array slicing.
+ *   - .eval — one JSON file per sample under `samples/` inside the ZIP.
+ *
+ * Both formats use the same per-sample shape (id, input, target, output,
+ * scores, metadata). Pagination is offset/limit on the sorted list.
  */
 export async function readEvalSamples(
   filePath: string,
@@ -437,6 +497,31 @@ export async function readEvalSamples(
     throw new Error(`Eval file not found: ${filePath}`);
   }
 
+  // ----- New JSON format -----
+  if (isJsonLog(filePath)) {
+    let data: any;
+    try {
+      data = readJsonLog(filePath);
+    } catch (err) {
+      throw new Error(`Failed to parse JSON eval log: ${filePath} — ${(err as Error).message}`);
+    }
+
+    const rawSamples = Array.isArray(data?.samples) ? data.samples : [];
+    const total = rawSamples.length;
+    const sliced = rawSamples.slice(offset, offset + limit);
+    const samples: EvalSample[] = [];
+    for (let i = 0; i < sliced.length; i++) {
+      const raw = sliced[i];
+      try {
+        samples.push(normalizeSample(raw, `sample_${offset + i}`));
+      } catch (err) {
+        logger.warn(`Failed to normalize JSON sample[${offset + i}] in ${filePath}`);
+      }
+    }
+    return { samples, total };
+  }
+
+  // ----- Legacy .eval ZIP format -----
   let zip: AdmZip;
   try {
     zip = new AdmZip(filePath);
@@ -444,7 +529,6 @@ export async function readEvalSamples(
     throw new Error(`Failed to open eval file as ZIP: ${filePath}`);
   }
 
-  // Collect sample entry names (sorted for deterministic pagination)
   const sampleEntries = zip
     .getEntries()
     .filter((e) => e.entryName.startsWith('samples/') && e.entryName.endsWith('.json'))
@@ -452,8 +536,6 @@ export async function readEvalSamples(
     .sort();
 
   const total = sampleEntries.length;
-
-  // Apply pagination
   const sliced = sampleEntries.slice(offset, offset + limit);
 
   const samples: EvalSample[] = [];
@@ -461,16 +543,7 @@ export async function readEvalSamples(
     try {
       const raw = readZipJson(zip, entryName);
       if (!raw) continue;
-
-      const sample: EvalSample = {
-        id: raw.id ?? entryName,
-        input: extractInputText(raw.input),
-        target: raw.target != null ? String(raw.target) : undefined,
-        output: extractOutputText(raw.output),
-        score: extractSampleScore(raw.scores),
-        metadata: raw.metadata ?? undefined,
-      };
-      samples.push(sample);
+      samples.push(normalizeSample(raw, entryName));
     } catch (err) {
       logger.warn(`Failed to parse sample entry ${entryName} in ${filePath}`);
     }
@@ -480,14 +553,15 @@ export async function readEvalSamples(
 }
 
 /**
- * Scan a results directory for .eval files, optionally filtering by
- * benchmark and/or task name.
+ * Scan a results directory for inspect_ai log files, optionally filtering
+ * by benchmark and/or task name.
  *
  * Directory structure (from inspect_ai):
- *   results/<model>/<benchmark>/logs/<timestamp>_<task>_<id>.eval
+ *   results/<model>/<benchmark>/logs/<timestamp>_<task>_<id>.{json|eval}
  *
- * Returns absolute paths of matching .eval files, sorted newest-first
- * by filename (which starts with a timestamp).
+ * Returns absolute paths of matching files, sorted newest-first by filename
+ * (filenames start with a timestamp). Both .json (current default) and
+ * .eval (legacy) extensions are matched.
  */
 export async function findEvalFiles(
   resultsDir: string,
@@ -511,7 +585,6 @@ export async function findEvalFiles(
       for (const benchDir of benchDirs) {
         if (!benchDir.isDirectory()) continue;
 
-        // Filter by benchmark if provided
         if (benchmark && benchDir.name !== benchmark) continue;
 
         const logsDir = path.join(modelPath, benchDir.name, 'logs');
@@ -519,11 +592,11 @@ export async function findEvalFiles(
 
         const logEntries = fs.readdirSync(logsDir, { withFileTypes: true });
         for (const logEntry of logEntries) {
-          if (!logEntry.isFile() || !logEntry.name.endsWith('.eval')) continue;
+          if (!logEntry.isFile()) continue;
+          const lower = logEntry.name.toLowerCase();
+          if (!lower.endsWith('.eval') && !lower.endsWith('.json')) continue;
 
-          // Filter by taskName if provided (filename format: timestamp_taskname_id.eval)
           if (taskName) {
-            // Normalise: the filename uses hyphens where task names use underscores
             const normalisedFile = logEntry.name.toLowerCase().replace(/-/g, '_');
             const normalisedTask = taskName.toLowerCase().replace(/-/g, '_');
             if (!normalisedFile.includes(normalisedTask)) continue;
@@ -537,7 +610,6 @@ export async function findEvalFiles(
     logger.error('Error scanning results directory', err);
   }
 
-  // Sort by filename descending (newest first, since filenames start with timestamp)
   files.sort((a, b) => path.basename(b).localeCompare(path.basename(a)));
 
   return files;

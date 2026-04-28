@@ -161,30 +161,40 @@ class Semaphore {
 // ---------------------------------------------------------------------------
 
 /**
- * Check if an .eval file is complete by verifying it contains header.json
- * with a terminal status (success/error/cancelled).
+ * Check if an inspect_ai log file is complete by verifying it has a
+ * terminal status (success/error/cancelled).
+ *
+ * Supports both formats:
+ *   - .json — top-level `status` field on the parsed JSON object
+ *   - .eval — `status` field of the embedded `header.json` (legacy)
  */
 function isEvalFileComplete(filePath: string): boolean {
   try {
-    const zip = new AdmZip(filePath);
-    const header = readZipEntryJson<{ status?: string }>(zip, 'header.json');
-    if (!header) return false;
-    return ['success', 'error', 'cancelled'].includes(header.status || '');
+    let status: string | undefined;
+    if (filePath.toLowerCase().endsWith('.json')) {
+      const data = JSON.parse(fs.readFileSync(filePath, 'utf-8')) as { status?: string };
+      status = data?.status;
+    } else {
+      const zip = new AdmZip(filePath);
+      const header = readZipEntryJson<{ status?: string }>(zip, 'header.json');
+      status = header?.status;
+    }
+    return ['success', 'error', 'cancelled'].includes(status || '');
   } catch {
     return false;
   }
 }
 
 /**
- * Find the most recent .eval file produced for a given model + task.
+ * Find the most recent inspect_ai log file produced for a given model + task.
  *
  * Directory layout:
- *   results/{sanitized_model}/{benchmark}/logs/{timestamp}_{benchmark}_{hash}.eval
+ *   results/{sanitized_model}/{benchmark}/logs/{timestamp}_{benchmark}_{hash}.{json|eval}
  *
  * The model name is sanitized (slashes replaced with underscores).
  * We search across all matching model directories and pick the newest
- * **complete** file (contains header.json with terminal status) whose
- * name contains the task name.
+ * **complete** file whose name contains the task name. New runs produce
+ * .json files; old runs left .eval files — both are matched.
  *
  * @param afterMs  Only consider files modified after this epoch (ms).
  *                 Useful for recovery — skip stale files from earlier jobs.
@@ -236,7 +246,8 @@ function findLatestEvalFile(
     }
 
     for (const file of files) {
-      if (!file.endsWith('.eval')) {
+      const lower = file.toLowerCase();
+      if (!lower.endsWith('.eval') && !lower.endsWith('.json')) {
         continue;
       }
 
@@ -363,6 +374,12 @@ async function spawnTaskProcess(
   const resultsDir = env.INSPECT_LOG_DIR;
   fs.mkdirSync(resultsDir, { recursive: true });
 
+  // Per-task stderr log — preserves the FULL child process stderr to disk
+  // independent of DB truncation. Path is logged so operators can grep for it.
+  const stderrLogPath = path.join(resultsDir, `task-${task.id}.stderr.log`);
+  const stderrStream = fs.createWriteStream(stderrLogPath, { flags: 'a' });
+  stderrStream.write(`\n===== task ${task.id} | ${task.benchmark}/${task.taskName} | start ${new Date().toISOString()} =====\n`);
+
   // 6. Resolve index/sampling
   const indexResult = resolveIndexSampleIds({
     benchmarkName: task.benchmark,
@@ -435,6 +452,7 @@ async function spawnTaskProcess(
 
     proc.stderr?.on('data', (chunk: Buffer) => {
       const text = chunk.toString();
+      stderrStream.write(text);
       if (stderr.length < MAX_OUTPUT_SIZE) {
         stderr += text;
       }
@@ -447,10 +465,13 @@ async function spawnTaskProcess(
     });
 
     proc.on('error', (err) => {
+      try { stderrStream.end(`\n[spawn error] ${err.message}\n`); } catch {}
       reject(new Error(`Failed to spawn process: ${err.message}`));
     });
 
     proc.on('close', (code) => {
+      try { stderrStream.end(`\n===== task ${task.id} | exit ${code} | ${new Date().toISOString()} =====\n`); } catch {}
+      logger.info(`[${task.benchmark}/${task.taskName}] full stderr: ${stderrLogPath}`);
       // Docker post-cleanup (best-effort)
       if (benchmarkConfig.needsDocker) {
         cleanupDockerNetworks().catch(() => {});
@@ -506,7 +527,7 @@ async function executeTask(
         }
       } else {
         logger.warn(
-          `No .eval result file found for ${task.benchmark}/${task.taskName}`,
+          `No result log file (.json or .eval) found for ${task.benchmark}/${task.taskName}`,
         );
       }
 
@@ -907,8 +928,10 @@ function killProcess(proc: ChildProcess): void {
 /**
  * Truncate an error message to a reasonable length for storage.
  * Keeps the beginning (where the root cause usually is) and the end (context).
+ * Default 4000 — TEXT column is 64KB so well within bounds. Full stderr is
+ * always preserved on disk at <results>/task-<id>.stderr.log.
  */
-function truncateError(message: string, maxLength = 800): string {
+function truncateError(message: string, maxLength = 4000): string {
   if (message.length <= maxLength) {
     return message;
   }
