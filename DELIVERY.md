@@ -284,29 +284,12 @@ ls server/eval-engine/results/<sanitized_model>/<benchmark>/logs/*.json
 | 整批 task 立即失败 | 智能体 API 不通 / Key 失效 | 在"智能体管理"测试连通；用 curl 直接调 `apiBase` 验证 |
 | 部分 task `judge model` 报错 | 没建裁判模型 / 裁判 Key 失效 | 在"裁判模型管理"建条目，重跑 |
 | `cyberseceval_2` / `cybench` / `agentdojo` 等 14 个基准失败 | 没装/没起 Docker / 镜像未预拉 | `sudo systemctl status docker`；跑 `cd server && npm run prepare:docker` |
-| `gdpval` Docker build 卡住或 `pip install ... exit code: 2` | 容器内 PyPI 国内访问慢/不通 | 见下方"gdpval / 中国网络下的 Docker 构建" |
+| `gdpval` Docker build 卡住或 `pip install ... exit code: 2` | 容器内 PyPI 国内访问慢/不通 | 操作员级网络配置：在 docker daemon 或 `~/.pip/pip.conf` 配 PyPI 镜像，不在平台职责范围 |
 | `xstest` / `gaia` 数据集报 401 | 缺 `HF_TOKEN` 或没申请 gated 访问 | `.env` 配 `HF_TOKEN`，并在 https://huggingface.co/<repo> 申请访问 |
 | `assistant_bench_web_browser` 失败（"No inspect tasks were found"） | catalog.yaml 路径已修正 | 拉取最新代码 + 重启服务即可；若再出现说明 wrapper 目录被移动 |
 | `assistant_bench_web_browser` 失败（其他错误） | 缺 `TAVILY_API_KEY` | `.env` 配 `TAVILY_API_KEY` |
 | `agentharm` / `agentharm_benign` 报 "sample id ... not found" | 已修（index range expansion 改为 opt-in） | 拉取最新代码 + 重启即可 |
 | 任务卡住超过 30 分钟无进度 | 子进程僵死 | `jobWatchdog` 自动标记 failed；查看 systemd 日志确认 watchdog 触发 |
-
-### 11.x gdpval / 中国网络下的 Docker 构建
-
-`gdpval` 的 inspect_evals 上游包带一份 Dockerfile，构建时在容器内 `pip install` 147 个包（PyTorch CPU、OpenCV、weasyprint、ffmpeg-python 等）。Beijing 等国内网络下默认 PyPI 经常超时导致 `exit code: 2`。
-
-修复方案（在跑 `npm run prepare:docker` 之前一次性 patch）：
-
-```bash
-DF=$(ls /home/xln/agent-safety-platform-refractor/server/eval-engine/.venvs/gdpval/lib/python*/site-packages/inspect_evals/gdpval/Dockerfile)
-cp "$DF" "$DF.bak"
-sed -i \
-  -e 's|https://pypi.org/simple|https://pypi.tuna.tsinghua.edu.cn/simple|g' \
-  -e 's|https://download.pytorch.org/whl/cpu|https://mirrors.aliyun.com/pytorch-wheels/cpu/|g' \
-  "$DF"
-```
-
-之后 `cd server && npm run prepare:docker -- --benchmark gdpval --force` 重新构建。`pip install --upgrade inspect_evals` 会覆盖该 Dockerfile，覆盖后需重新 sed。
 
 ---
 
