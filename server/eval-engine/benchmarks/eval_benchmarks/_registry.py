@@ -6,3 +6,4 @@ from eval_benchmarks.clash_eval import clash_eval
 from eval_benchmarks.safeagentbench import safeagentbench, safeagentbench_react, safeagentbench_visual
 from eval_benchmarks.saferag import saferag, saferag_sn, saferag_icc, saferag_sa, saferag_wdos
 from eval_benchmarks.open_agent_safety import open_agent_safety
+from eval_benchmarks.tool_smoke import tool_smoke

@@ -708,6 +708,18 @@ benchmarks:
       - name: raccoon
         path: eval_benchmarks/raccoon
 
+  tool_smoke:
+    # 风险: 6.0 工具调用 — 提示词注入式 tool_call 端到端冒烟。
+    # 验证 ts_bridge 把 state.tools 转发给 difyChatRunner、模型经 prompt
+    # 注入输出 TOOL_CALL: {...}、被 parser 抓取并还原成 inspect_ai 的
+    # ChatMessageAssistant.tool_calls。
+    source: local
+    module: eval_benchmarks/tool_smoke
+    python: "3.10"
+    tasks:
+      - name: tool_smoke
+        path: eval_benchmarks/tool_smoke
+
   # --- 8.2 场景安全: 模型可能误解多模态场景导致不安全决策 ---
 
   mssbench:

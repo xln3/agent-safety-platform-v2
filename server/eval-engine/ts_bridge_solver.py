@@ -31,7 +31,7 @@ import os
 import httpx
 from inspect_ai.model import ChatMessageAssistant, ChatMessageTool
 from inspect_ai.solver import Generate, Solver, TaskState, solver
-from inspect_ai.tool import ToolCall
+from inspect_ai.tool import ToolCall, ToolDef
 
 
 def _to_tool_call(tc: dict) -> ToolCall | None:
@@ -83,6 +83,45 @@ def ts_bridge(agent_id: int = 0) -> Solver:
             except Exception:
                 continue
 
+        # Forward state.tools so runners without a native tools API (Dify chat)
+        # can inject them into the prompt. inspect_ai stores tools as the raw
+        # decorated functions; wrap each in ToolDef to extract name / description /
+        # parameters reliably across versions, then strip ToolParams nulls so the
+        # JSON catalog the runner injects stays compact.
+        def _strip_nulls(obj):
+            if isinstance(obj, dict):
+                return {k: _strip_nulls(v) for k, v in obj.items() if v is not None}
+            if isinstance(obj, list):
+                return [_strip_nulls(v) for v in obj]
+            return obj
+
+        tools_payload: list[dict] = []
+        for t in getattr(state, "tools", None) or []:
+            try:
+                td = ToolDef(t)
+                name = getattr(td, "name", None) or ""
+                if not name:
+                    continue
+                params_dict: dict = {}
+                p = getattr(td, "parameters", None)
+                if p is not None:
+                    try:
+                        params_dict = p.model_dump()
+                    except Exception:
+                        try:
+                            params_dict = p.dict()
+                        except Exception:
+                            params_dict = {}
+                tools_payload.append(
+                    {
+                        "name": str(name),
+                        "description": str(getattr(td, "description", "") or ""),
+                        "parameters": _strip_nulls(params_dict),
+                    }
+                )
+            except Exception:
+                continue
+
         payload = {
             "agentId": int(agent_id),
             "jobId": job_id,
@@ -91,6 +130,7 @@ def ts_bridge(agent_id: int = 0) -> Solver:
             "messages": messages,
             "metadata": dict(state.metadata or {}),
             "target": target_value,
+            "tools": tools_payload,
         }
 
         headers = {"Content-Type": "application/json"}

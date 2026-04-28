@@ -121,6 +121,81 @@ const SampleDetailDrawer: React.FC<Props> = ({ jobId, itemId, open, onClose }) =
             {item.outputText || <Text type="secondary">尚无输出</Text>}
           </Paragraph>
 
+          {item.toolCallsJson && item.toolCallsJson.length > 0 && (
+            <>
+              <Divider titlePlacement="start">
+                工具调用 (tool_calls)
+                <Tag style={{ marginLeft: 8 }} color="blue">
+                  {item.toolCallsJson.length}
+                </Tag>
+              </Divider>
+              <div style={{ marginBottom: 16 }}>
+                {item.toolCallsJson.map((tc, idx) => {
+                  const source =
+                    (tc.metadata && (tc.metadata as any).source) || 'native';
+                  return (
+                    <div
+                      key={tc.id || `${tc.name}-${idx}`}
+                      style={{
+                        background: '#f0f5ff',
+                        border: '1px solid #adc6ff',
+                        borderRadius: 6,
+                        padding: 12,
+                        marginBottom: 8,
+                      }}
+                    >
+                      <div style={{ marginBottom: 4 }}>
+                        <Text strong>#{idx + 1}</Text>
+                        <Text code style={{ marginLeft: 8 }}>
+                          {tc.name}
+                        </Text>
+                        <Tag style={{ marginLeft: 8 }} color="geekblue">
+                          {source}
+                        </Tag>
+                      </div>
+                      <div style={{ fontSize: 12, color: '#555', marginBottom: 4 }}>
+                        参数 (arguments):
+                      </div>
+                      <Paragraph
+                        style={{
+                          whiteSpace: 'pre-wrap',
+                          background: '#fff',
+                          padding: 8,
+                          borderRadius: 4,
+                          marginBottom: tc.result ? 8 : 0,
+                          fontSize: 12,
+                          fontFamily: 'monospace',
+                        }}
+                      >
+                        {tc.arguments || '{}'}
+                      </Paragraph>
+                      {tc.result && (
+                        <>
+                          <div style={{ fontSize: 12, color: '#555', marginBottom: 4 }}>
+                            结果 (result):
+                          </div>
+                          <Paragraph
+                            style={{
+                              whiteSpace: 'pre-wrap',
+                              background: '#fff',
+                              padding: 8,
+                              borderRadius: 4,
+                              marginBottom: 0,
+                              fontSize: 12,
+                              fontFamily: 'monospace',
+                            }}
+                          >
+                            {tc.result}
+                          </Paragraph>
+                        </>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </>
+          )}
+
           {item.errorMessage && (
             <>
               <Divider titlePlacement="start">错误信息</Divider>

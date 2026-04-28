@@ -69,6 +69,15 @@ function parseInput(body: any): RunnerInput | string {
   const sampleId = body.sampleId;
   if (!sampleId || typeof sampleId !== 'string') return 'sampleId is required';
   const input = typeof body.input === 'string' ? body.input : '';
+  const tools = Array.isArray(body.tools)
+    ? body.tools
+        .filter((t: any) => t && typeof t === 'object' && typeof t.name === 'string' && t.name)
+        .map((t: any) => ({
+          name: t.name,
+          description: typeof t.description === 'string' ? t.description : '',
+          parameters: t.parameters && typeof t.parameters === 'object' ? t.parameters : {},
+        }))
+    : [];
   return {
     agentId,
     jobId: body.jobId == null ? null : Number(body.jobId),
@@ -77,6 +86,7 @@ function parseInput(body: any): RunnerInput | string {
     messages: Array.isArray(body.messages) ? body.messages : [],
     metadata: body.metadata && typeof body.metadata === 'object' ? body.metadata : {},
     target: body.target ?? null,
+    tools: tools.length > 0 ? tools : undefined,
   };
 }
 

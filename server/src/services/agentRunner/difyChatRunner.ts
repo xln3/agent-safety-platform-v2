@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { randomUUID } from 'crypto';
-import type { AgentRunner, AgentToolCall, RunnerInput, RunnerOutput } from './types';
+import type { AgentRunner, AgentToolCall, AgentToolSpec, RunnerInput, RunnerOutput } from './types';
 import type { Agent } from '../../models';
 import logger from '../../utils/logger';
 
@@ -67,6 +67,121 @@ function parseSSEData(line: string): DifyEvent | null {
 }
 
 /**
+ * Render an inspect_ai-forwarded tool catalog into a prompt block the model
+ * can read. Dify chat has no native tools field, so the only way to expose
+ * tools is to describe them in text and ask the model to emit a sentinel line.
+ *
+ * Format chosen for stability:
+ *   TOOL_CALL: {"name": "<tool>", "arguments": {...}}
+ * Anchored to a fixed prefix so a regex catches it regardless of surrounding
+ * markdown / quotes the model might add.
+ */
+function formatToolCatalog(tools: AgentToolSpec[]): string {
+  const lines: string[] = [
+    'You have access to the following tools. When you need to use a tool, emit',
+    'EXACTLY one line in this format and then stop generating immediately:',
+    '',
+    '  TOOL_CALL: {"name": "<tool_name>", "arguments": {<json_args>}}',
+    '',
+    'Rules:',
+    '- The TOOL_CALL line must be on its own line, starting with the literal prefix "TOOL_CALL:".',
+    '- "arguments" must be a valid JSON object (use {} when no arguments).',
+    '- Do not wrap TOOL_CALL in code fences or markdown.',
+    '- Do not produce more than one TOOL_CALL per response.',
+    '- If you can answer without tools, do not emit TOOL_CALL — answer directly.',
+    '',
+    'Available tools:',
+  ];
+  for (const t of tools) {
+    const params = t.parameters && Object.keys(t.parameters).length ? JSON.stringify(t.parameters) : '{}';
+    lines.push(`- name: ${t.name}`);
+    if (t.description) lines.push(`  description: ${t.description}`);
+    lines.push(`  parameters_schema: ${params}`);
+  }
+  return lines.join('\n');
+}
+
+/**
+ * Parse `TOOL_CALL: {...}` sentinel lines from model output. Tolerates:
+ *   - leading whitespace
+ *   - both `"args"` and `"arguments"` keys
+ *   - Chinese full-width colons (`：`) in case the model translates the prefix
+ *   - JSON that runs past one line (greedy match through balanced braces)
+ *
+ * Returns the matched calls AND the cleaned text (sentinel lines stripped) so
+ * the assistant turn surfaced to scorers carries only the natural-language
+ * portion of the answer.
+ */
+function parseToolCallsFromText(
+  text: string,
+): { calls: { name: string; arguments: string }[]; cleaned: string } {
+  const calls: { name: string; arguments: string }[] = [];
+  if (!text) return { calls, cleaned: text };
+
+  // Match `TOOL_CALL` (case-insensitive), optional spaces, ASCII or full-width
+  // colon, then a JSON object captured by balanced-brace counting.
+  const prefixRe = /TOOL_CALL\s*[:：]\s*/gi;
+  let cleaned = text;
+  let match: RegExpExecArray | null;
+  const removals: { start: number; end: number }[] = [];
+
+  while ((match = prefixRe.exec(text)) !== null) {
+    const jsonStart = match.index + match[0].length;
+    if (text[jsonStart] !== '{') continue;
+    let depth = 0;
+    let inStr = false;
+    let esc = false;
+    let end = -1;
+    for (let i = jsonStart; i < text.length; i++) {
+      const ch = text[i];
+      if (esc) {
+        esc = false;
+        continue;
+      }
+      if (ch === '\\' && inStr) {
+        esc = true;
+        continue;
+      }
+      if (ch === '"') inStr = !inStr;
+      if (inStr) continue;
+      if (ch === '{') depth++;
+      else if (ch === '}') {
+        depth--;
+        if (depth === 0) {
+          end = i + 1;
+          break;
+        }
+      }
+    }
+    if (end === -1) continue;
+    const jsonStr = text.slice(jsonStart, end);
+    try {
+      const parsed = JSON.parse(jsonStr);
+      const name = typeof parsed?.name === 'string' ? parsed.name : '';
+      if (!name) continue;
+      const argsObj = parsed.arguments ?? parsed.args ?? {};
+      const argsStr = typeof argsObj === 'string' ? argsObj : JSON.stringify(argsObj);
+      calls.push({ name, arguments: argsStr });
+      removals.push({ start: match.index, end });
+    } catch {
+      // Malformed JSON in TOOL_CALL — skip and let the natural-language
+      // portion stay as-is.
+    }
+  }
+
+  if (removals.length > 0) {
+    // Strip in reverse so indices stay valid.
+    for (let i = removals.length - 1; i >= 0; i--) {
+      const r = removals[i];
+      cleaned = cleaned.slice(0, r.start) + cleaned.slice(r.end);
+    }
+    cleaned = cleaned.replace(/\n{3,}/g, '\n\n').trim();
+  }
+
+  return { calls, cleaned };
+}
+
+/**
  * Convert one Dify agent_thought event into 0..N OpenAI-style tool calls.
  * Dify packs all tools the agent decided to invoke into a single thought:
  *   - `tool` is a string; comma- or semicolon-separated when chained.
@@ -122,9 +237,53 @@ export const difyChatRunner: AgentRunner = {
       throw new Error(`Agent ${agent.id} (${agent.name}) missing Dify chat config (apiBase/apiKey)`);
     }
 
-    let query = input.input || '';
-    if (cfg.systemPrompt) {
-      query = `${cfg.systemPrompt}\n\n${query}`;
+    // Dify /chat-messages has no system role: flatten cfg + injected ChatMessageSystem
+    // into a [SYSTEM] block at query head so raccoon-style prompt-leak benchmarks
+    // can actually reach the model with the template they want it to leak.
+    const cfgSystem = (cfg.systemPrompt || '').trim();
+    const injectedSystem: string[] = [];
+    const turns: { role: string; content: string }[] = [];
+
+    if (input.messages && input.messages.length > 0) {
+      for (const m of input.messages) {
+        const content = (m.content || '').trim();
+        if (!content) continue;
+        if (m.role === 'system') {
+          injectedSystem.push(content);
+        } else if (m.role === 'user' || m.role === 'assistant') {
+          turns.push({ role: m.role, content });
+        }
+      }
+    }
+
+    // Tool catalog injection: Dify chat has no tools API, so describe the
+    // benchmark's tools in the [SYSTEM] block and ask the model to emit
+    // `TOOL_CALL: {...}` sentinel lines we can parse out.
+    const toolCatalog = (input.tools && input.tools.length > 0)
+      ? formatToolCatalog(input.tools)
+      : '';
+
+    let body: string;
+    if (turns.length === 0) {
+      body = input.input || '';
+    } else if (turns.length === 1 && turns[0].role === 'user') {
+      body = turns[0].content;
+    } else {
+      body = turns.map((t) => `${t.role}: ${t.content}`).join('\n\n');
+    }
+
+    let query = body;
+    const systemParts = [cfgSystem, ...injectedSystem, toolCatalog].filter(Boolean);
+    if (systemParts.length > 0) {
+      const systemBlock = systemParts.join('\n\n');
+      // Always wrap in [SYSTEM] when there's an injected tool catalog or an
+      // inspect_ai-injected ChatMessageSystem, so the model sees a clear
+      // boundary between operator instructions and the user query.
+      if (injectedSystem.length > 0 || toolCatalog) {
+        query = `[SYSTEM]\n${systemBlock}\n[/SYSTEM]\n\n${body}`;
+      } else {
+        query = `${systemBlock}\n\n${body}`;
+      }
     }
 
     const url = `${cfg.apiBase.replace(/\/+$/, '')}/chat-messages`;
@@ -218,6 +377,33 @@ export const difyChatRunner: AgentRunner = {
         logger.warn(
           `Dify chat sample ${input.sampleId} produced no message chunks; falling back to last thought (${answer.length} chars)`,
         );
+      }
+    }
+
+    // Prompt-injected tool-call extraction: when the benchmark forwarded a
+    // tool catalog (input.tools), scan the model's natural-language answer
+    // for `TOOL_CALL: {...}` sentinel lines and surface them as AgentToolCalls
+    // alongside whatever Dify already reported via agent_thought.
+    if (input.tools && input.tools.length > 0 && answer) {
+      const { calls, cleaned } = parseToolCallsFromText(answer);
+      if (calls.length > 0) {
+        const allowedNames = new Set(input.tools.map((t) => t.name));
+        for (const c of calls) {
+          if (!allowedNames.has(c.name)) {
+            logger.warn(
+              `Dify chat sample ${input.sampleId} emitted TOOL_CALL for unknown tool "${c.name}"; keeping anyway`,
+            );
+          }
+          toolCalls.push({
+            id: `dify-injected-${randomUUID()}`,
+            name: c.name,
+            arguments: c.arguments,
+            metadata: { source: 'dify_chat.prompt_injected' },
+          });
+        }
+        // Strip the sentinel lines from the surfaced answer so scorers grade
+        // the natural-language portion only.
+        answer = cleaned;
       }
     }
 

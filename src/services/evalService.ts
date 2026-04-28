@@ -187,6 +187,14 @@ export interface CreateJobPayload {
 /*  EvalItem (per-sample) types                                        */
 /* ------------------------------------------------------------------ */
 
+export interface EvalItemToolCall {
+  id?: string;
+  name: string;
+  arguments: string;
+  result?: string;
+  metadata?: Record<string, any>;
+}
+
 export interface EvalItem {
   id: number;
   jobId: number;
@@ -206,6 +214,8 @@ export interface EvalItem {
   finishedAt: string | null;
   createdAt?: string;
   updatedAt?: string;
+  /** OpenAI-style tool_calls captured from the agent's run, when any. */
+  toolCallsJson: EvalItemToolCall[] | null;
 }
 
 /* ------------------------------------------------------------------ */

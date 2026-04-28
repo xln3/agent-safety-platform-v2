@@ -115,6 +115,11 @@ const MAPPER_REGISTRY: Record<string, MapperConfig> = {
   // === Multimodal / Prompt Injection ===
   raccoon: num(LS),
 
+  // === Tool-call smoke (prompt-injected) ===
+  // accuracy() returns fraction of samples whose called_tool matched
+  // metadata.expected_tool — higher = more reliable tool dispatch.
+  tool_smoke: num(HS),
+
   // === Reasoning ===
   overthink: num(LS),
 

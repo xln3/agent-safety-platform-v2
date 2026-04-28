@@ -1,5 +1,17 @@
 import type { Agent } from '../../models';
 
+/**
+ * Tool spec forwarded by ts_bridge_solver from inspect_ai's `state.tools`.
+ * Kept loose because Dify chat doesn't have a native tools field — runners
+ * inject these into the prompt as a catalog the model can read.
+ */
+export interface AgentToolSpec {
+  name: string;
+  description?: string;
+  /** JSON Schema (loose) describing the tool's parameters. */
+  parameters?: Record<string, any>;
+}
+
 /** Payload posted by ts_bridge_solver.py to /api/internal/agent-runner/invoke. */
 export interface RunnerInput {
   agentId: number;
@@ -9,6 +21,13 @@ export interface RunnerInput {
   messages: { role: string; content: string }[];
   metadata: Record<string, any>;
   target?: string | string[] | null;
+  /**
+   * Tools the underlying inspect_ai Task wired up (web_search, web_browser, …).
+   * Empty when the benchmark didn't declare any. Runners that lack a native
+   * tools API (Dify chat) inject this list into the prompt; runners that do
+   * (OpenAI-compat) can pass it through verbatim.
+   */
+  tools?: AgentToolSpec[];
 }
 
 /**
