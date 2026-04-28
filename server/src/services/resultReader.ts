@@ -288,6 +288,21 @@ function extractOutputText(output: unknown): string {
       if (msg && typeof msg.content === 'string') {
         return msg.content;
       }
+      // Multimodal content blocks: [{ type: 'text', text: '...' }, ...]
+      if (msg && Array.isArray(msg.content)) {
+        const text = msg.content
+          .filter((b: any) => b && typeof b === 'object' && typeof b.text === 'string')
+          .map((b: any) => b.text)
+          .join('');
+        if (text) return text;
+      }
+      if (typeof choices[0]?.text === 'string') {
+        return choices[0].text;
+      }
+    }
+    // inspect_ai newer format: top-level `completion` string when choices is empty.
+    if (typeof obj.completion === 'string' && obj.completion.length > 0) {
+      return obj.completion;
     }
   }
   return '';
