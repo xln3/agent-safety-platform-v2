@@ -1,0 +1,21 @@
+[Unit]
+Description=Agent Safety Platform Refractor v2 (backend + SPA on :3002)
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=xln
+Group=xln
+WorkingDirectory=/home/xln/agent-safety-platform-refractor/server
+ExecStart=/home/xln/.config/nvm/versions/node/v24.6.0/bin/node dist/index.js
+Environment=NODE_ENV=production
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=asp-refractor
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

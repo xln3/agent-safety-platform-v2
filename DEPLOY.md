@@ -122,3 +122,47 @@ http://39.105.175.14:3002/eval    → 评估任务列表
 - `server/src/index.ts`：`server.listen(PORT, '0.0.0.0', ...)` — 接受任意网卡入站
 - `server/src/app.ts`：`express.static(path.resolve(__dirname, '../../dist'))` 提供前端 bundle，`app.get(/^\/(?!api(?:\/|$)).*/, ...)` 把非 `/api/*` 的路径回退到 `index.html`，让 React Router deep-link 可用
 - 同源同端口 `:3002` 提供 `/` (SPA) + `/api/*` (REST + SSE) — 不需要单独跑前端 dev server，不存在 CORS 问题
+
+---
+
+## 九、本机当前部署快照（39.105.175.14，2026-04-28 落地）
+
+> 这一节是事实记录，不是参考模板。下面的命令甲方复制即用。
+
+**访问入口**：`http://39.105.175.14:3002/`（首页 / SPA）、`http://39.105.175.14:3002/eval`（评估列表）、`http://39.105.175.14:3002/api/health`（健康检查）
+
+**进程形态**：systemd 服务 `asp-refractor.service`，自启，崩溃自动 5 秒后重启。`ts-node-dev` 已退役，跑的是编译后的 `node dist/index.js`。
+
+**项目位置**：`/home/xln/agent-safety-platform-refractor`
+
+**甲方日常 3 条命令**：
+
+```bash
+# 看服务状态
+sudo systemctl status asp-refractor
+
+# 重启（拉了新代码 / 改了配置后）
+sudo systemctl restart asp-refractor
+
+# 看实时日志（Ctrl+C 退出）
+sudo journalctl -u asp-refractor -f
+```
+
+**改了代码怎么办**（甲方接班场景）：
+
+```bash
+cd /home/xln/agent-safety-platform-refractor
+git pull origin main
+cd server && npm install --omit=dev && npm run build   # 编译后端
+cd ..      && npm install              && npm run build   # 编译前端
+sudo systemctl restart asp-refractor
+```
+
+**unit 文件位置**：`/etc/systemd/system/asp-refractor.service`，仓库内备份 `ops/asp-refractor.service`（首次部署或损坏后用 `sudo cp ops/asp-refractor.service /etc/systemd/system/ && sudo systemctl daemon-reload` 恢复）
+
+**外网验证**（任何机器都可跑，不依赖这台机）：
+
+```bash
+curl -s http://39.105.175.14:3002/api/health
+# 期望：{"code":0,"message":"success","data":{"status":"ok",...}}
+```
