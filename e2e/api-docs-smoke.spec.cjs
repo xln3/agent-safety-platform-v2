@@ -42,6 +42,10 @@ test('docs.json is valid OpenAPI 3', async ({ request }) => {
   expect(body.paths['/api/v1/evaluate/{taskId}'].get).toBeTruthy();
   expect(body.components.schemas.V1SubmitRequest).toBeTruthy();
   expect(body.components.schemas.V1StatusResponse).toBeTruthy();
+  expect(body.components.schemas.V1JudgeModelInline).toBeTruthy();
+  expect(body.components.schemas.V1JudgeModelInline.required).toEqual(
+    expect.arrayContaining(['apiBase', 'apiKey', 'modelId']),
+  );
 });
 
 test('POST /api/v1/evaluate validates required fields', async ({ request }) => {

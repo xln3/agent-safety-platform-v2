@@ -1,7 +1,7 @@
 /**
  * v1 wrapper API — flat single-call interface requested by 甲方.
  *
- * 接收甲方扁平 schema (taskName, agent, benchmarks, sampling, judgeModelId)，
+ * 接收甲方扁平 schema (taskName, agent, benchmarks, sampling, judgeModelId | judgeModel)，
  * 内部展开为 Agent + EvalJob + EvalTask 三张表 + runJob fire-and-forget。
  *
  * 支持的 agent 形态（4 种，与网页版一致）：
@@ -15,11 +15,19 @@
  *   - POST /api/v1/evaluate?wait=true        同步：阻塞到 job 终态或 timeoutSec
  *   - GET  /api/v1/evaluate/:taskId          查询当前状态 + 已落盘样本
  *
+ * 裁判模型两条路（二选一）：
+ *   - judgeModelId: <number>          引用已存在的 JudgeModel 行
+ *   - judgeModel:   { apiBase, apiKey, modelId, name? }
+ *                   内联：内部 sha256 去重 upsert 到 judge_models 表
+ *
  * 输入/输出语义保证：
  *   GET /api/v1/evaluate/:taskId 返回的 tasks[].samples[].input 是 inspect_ai
  *   注入到 Agent 的原始 prompt，output 是 Agent 的完整文本响应。判官交互
  *   (judge model 调用、scoring explanation) 不会出现在 input/output 字段，
  *   仅判官给出的最终数值分会反映到 task 级 safetyScore 上。
+ *
+ * 安全：所有响应中的 apiKey/key 字段固定屏蔽为 "***"（请求中传入的真实
+ *   值仅入库 + 调用上游使用，不回显给调用方——他自己手里就有原值）。
  *
  * 实现要点：
  *   - 每次提交都创建新 Agent（name 加时间戳后缀避免唯一约束碰撞）。
@@ -29,6 +37,7 @@
  *   - 同步模式：2s 间隔轮询 EvalJob.status；客户端断开立刻 return（job 继续跑）。
  */
 
+import * as crypto from 'crypto';
 import { Request, Response } from 'express';
 import { Agent, EvalJob, EvalTask, JudgeModel } from '../models';
 import { runJob } from '../services/evalRunner';
@@ -74,12 +83,20 @@ interface V1SamplingPayload {
   count?: number;
 }
 
+interface V1JudgeModelInline {
+  apiBase: string;
+  apiKey: string;
+  modelId: string;
+  name?: string;
+}
+
 interface V1SubmitPayload {
   taskName?: string;
   agent: V1AgentPayload;
   benchmarks: string[];
   sampling: V1SamplingPayload;
   judgeModelId?: number;
+  judgeModel?: V1JudgeModelInline;
   concurrency?: number;
   systemPrompt?: string;
 }
@@ -199,6 +216,27 @@ function validateSubmit(body: any): { error: string | null; payload: V1SubmitPay
       return { error: 'judgeModelId must be a positive integer', payload: null };
     }
   }
+  if (body.judgeModel !== undefined && body.judgeModel !== null) {
+    if (body.judgeModelId !== undefined && body.judgeModelId !== null) {
+      return { error: 'judgeModelId 与 judgeModel 二选一，不能同时传', payload: null };
+    }
+    const j = body.judgeModel;
+    if (typeof j !== 'object' || Array.isArray(j)) {
+      return { error: 'judgeModel must be an object', payload: null };
+    }
+    if (typeof j.apiBase !== 'string' || !j.apiBase.trim()) {
+      return { error: 'Missing required field: judgeModel.apiBase', payload: null };
+    }
+    if (typeof j.apiKey !== 'string' || !j.apiKey.trim()) {
+      return { error: 'Missing required field: judgeModel.apiKey', payload: null };
+    }
+    if (typeof j.modelId !== 'string' || !j.modelId.trim()) {
+      return { error: 'Missing required field: judgeModel.modelId', payload: null };
+    }
+    if (j.name !== undefined && typeof j.name !== 'string') {
+      return { error: 'judgeModel.name must be a string when provided', payload: null };
+    }
+  }
   if (body.concurrency !== undefined && body.concurrency !== null) {
     const c = Number(body.concurrency);
     if (!Number.isInteger(c) || c < 1 || c > 10) {
@@ -235,6 +273,16 @@ function validateSubmit(body: any): { error: string | null; payload: V1SubmitPay
       benchmarks: benchmarks.map((b: string) => b.trim()),
       sampling: { mode: samplingMode, count: sampling?.count },
       judgeModelId: body.judgeModelId != null ? Number(body.judgeModelId) : undefined,
+      judgeModel: body.judgeModel
+        ? {
+            apiBase: String(body.judgeModel.apiBase).trim(),
+            apiKey: String(body.judgeModel.apiKey).trim(),
+            modelId: String(body.judgeModel.modelId).trim(),
+            ...(body.judgeModel.name !== undefined
+              ? { name: String(body.judgeModel.name).trim() }
+              : {}),
+          }
+        : undefined,
       concurrency: body.concurrency != null ? Number(body.concurrency) : undefined,
       systemPrompt: typeof body.systemPrompt === 'string' ? body.systemPrompt : undefined,
     },
@@ -291,16 +339,32 @@ function buildAgentConfigAndLegacy(
   }
 }
 
-/** Echo back ONLY the fields the user originally provided, preserving agentType discriminant. */
+/**
+ * Echo back ONLY the fields the user originally provided, preserving agentType
+ * discriminant. Secret fields (`key`) are masked to `***` — caller already
+ * holds the real value, returning it serves zero business purpose and only
+ * widens the leak surface.
+ */
 function echoAgent(p: V1AgentPayload): Record<string, unknown> {
   const out: Record<string, unknown> = { name: p.name, agentType: p.agentType };
   if (p.url !== undefined) out.url = p.url;
-  if (p.key !== undefined) out.key = p.key;
+  if (p.key !== undefined) out.key = '***';
   if (p.modelId !== undefined) out.modelId = p.modelId;
   if (p.inputVariableMapping !== undefined) out.inputVariableMapping = p.inputVariableMapping;
   if (p.commandTemplate !== undefined) out.commandTemplate = p.commandTemplate;
   if (p.inputMode !== undefined) out.inputMode = p.inputMode;
   if (p.timeoutSec !== undefined) out.timeoutSec = p.timeoutSec;
+  return out;
+}
+
+/** Echo inline judgeModel with apiKey masked. */
+function echoJudgeModelInline(j: V1JudgeModelInline): Record<string, unknown> {
+  const out: Record<string, unknown> = {
+    apiBase: j.apiBase,
+    modelId: j.modelId,
+    apiKey: '***',
+  };
+  if (j.name !== undefined) out.name = j.name;
   return out;
 }
 
@@ -330,11 +394,12 @@ async function buildStatusPayload(
       name: dbAgent?.name ?? '',
       agentType: dbAgent?.agentType ?? 'openai_compat',
       url: dbAgent?.apiBase ?? null,
-      key: dbAgent?.apiKey ?? null,
+      key: dbAgent?.apiKey ? '***' : null,
       modelId: dbAgent?.modelId ?? null,
     };
   const echoTaskName = v1Echo.taskName ?? job.name;
   const echoSampling = v1Echo.sampling ?? { mode: job.samplingMode, count: null };
+  const echoJudgeInline = v1Echo.judgeModelInline ?? null;
 
   const tasks = ((job as any).tasks ?? []) as EvalTask[];
   const sortedTasks = [...tasks].sort((a, b) => {
@@ -377,6 +442,10 @@ async function buildStatusPayload(
     taskId: job.id,
     taskName: echoTaskName,
     agent: echoAgentObj,
+    ...(job.judgeModelId != null ? { judgeModelId: job.judgeModelId } : {}),
+    ...(echoJudgeInline
+      ? { judgeModel: { ...echoJudgeInline, apiKey: '***' } }
+      : {}),
     startedAt: (job.startedAt ?? job.createdAt)?.toISOString() ?? null,
     completedAt: job.completedAt?.toISOString() ?? null,
     status: job.status,
@@ -491,7 +560,11 @@ export const v1Controller = {
         return;
       }
 
-      // Strict judge gate
+      // Resolve judge model — either an existing PK or an inline config we
+      // upsert into the JudgeModel table (deterministic dedup name based on
+      // sha256 of (apiBase, apiKey, modelId), so identical configs reuse the
+      // same row instead of growing unbounded).
+      let resolvedJudgeId: number | null = null;
       let resolvedJudgeName: string | null = null;
       if (payload.judgeModelId != null) {
         const judgeRec = await JudgeModel.findByPk(payload.judgeModelId);
@@ -499,6 +572,28 @@ export const v1Controller = {
           res.status(404).json(errorResponse(`JudgeModel not found: ${payload.judgeModelId}`));
           return;
         }
+        resolvedJudgeId = judgeRec.id;
+        resolvedJudgeName = judgeRec.modelId;
+      } else if (payload.judgeModel) {
+        const inline = payload.judgeModel;
+        const safeModel = inline.modelId.replace(/[^a-zA-Z0-9_.-]/g, '_').slice(0, 40);
+        const hash = crypto
+          .createHash('sha256')
+          .update(`${inline.apiBase}|${inline.apiKey}|${inline.modelId}`)
+          .digest('hex')
+          .slice(0, 12);
+        const dedupName = `v1-inline-${safeModel}-${hash}`.slice(0, 128);
+        const [judgeRec] = await JudgeModel.findOrCreate({
+          where: { name: dedupName },
+          defaults: {
+            name: dedupName,
+            apiBase: inline.apiBase,
+            apiKey: inline.apiKey,
+            modelId: inline.modelId,
+            description: inline.name ? `[v1 inline] ${inline.name}` : '[v1 inline]',
+          },
+        });
+        resolvedJudgeId = judgeRec.id;
         resolvedJudgeName = judgeRec.modelId;
       }
       if (!resolvedJudgeName) {
@@ -510,7 +605,7 @@ export const v1Controller = {
         if (benchmarksNeedingJudge.length > 0) {
           res.status(400).json(
             errorResponse(
-              `以下 benchmark 需要裁判模型但未提供 judgeModelId: ${benchmarksNeedingJudge.join(', ')}`,
+              `以下 benchmark 需要裁判模型但未提供 judgeModelId/judgeModel: ${benchmarksNeedingJudge.join(', ')}`,
             ),
           );
           return;
@@ -575,7 +670,7 @@ export const v1Controller = {
 
       const job = await EvalJob.create({
         agentId: agentRecord.id,
-        judgeModelId: payload.judgeModelId ?? null,
+        judgeModelId: resolvedJudgeId,
         name: jobName,
         benchmarks: payload.benchmarks,
         modelId,
@@ -587,6 +682,17 @@ export const v1Controller = {
             taskName: payload.taskName ?? null,
             agent: echoAgent(payload.agent),
             sampling: { mode: payload.sampling.mode, count: totalCount || null },
+            ...(payload.judgeModel
+              ? {
+                  judgeModelInline: {
+                    apiBase: payload.judgeModel.apiBase,
+                    modelId: payload.judgeModel.modelId,
+                    ...(payload.judgeModel.name !== undefined
+                      ? { name: payload.judgeModel.name }
+                      : {}),
+                  },
+                }
+              : {}),
           },
         },
         concurrency: payload.concurrency ?? 5,
@@ -652,6 +758,10 @@ export const v1Controller = {
             taskId: job.id,
             taskName: payload.taskName ?? jobName,
             agent: echoAgent(payload.agent),
+            ...(resolvedJudgeId != null ? { judgeModelId: resolvedJudgeId } : {}),
+            ...(payload.judgeModel
+              ? { judgeModel: echoJudgeModelInline(payload.judgeModel) }
+              : {}),
             startedAt: job.createdAt?.toISOString() ?? new Date().toISOString(),
             status: job.status,
             benchmarks: payload.benchmarks,

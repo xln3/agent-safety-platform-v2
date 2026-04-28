@@ -91,8 +91,15 @@ paths:
         - 同步：query 加 \`?wait=true\` 或 body 加 \`wait: true\`，则阻塞到 job 终态或 \`timeoutSec\` 超时（默认 1800s，上限 3600s）；响应体与 GET 完全一致 (HTTP 200)。超时时返回 \`status: "timeout"\` + 已落盘部分数据。
         - 同步模式下客户端断开 (TCP close) 会立即停止响应，但后端 job 仍继续跑，可用 GET 取最终结果。
 
-        **判别说明**：
-        - 凡是 catalog 中标注 \`judge_model\` 的 benchmark 必须传 \`judgeModelId\`，否则报 400。
+        **判别模型（二选一，需判基准必传）**：
+        - \`judgeModelId\`: 整数，引用已存在的 JudgeModel 行（先 \`POST /api/judge-models\` 创建）。
+        - \`judgeModel\`:   对象 \`{ apiBase, apiKey, modelId, name? }\`，内联传入；
+          后端按 \`(apiBase, apiKey, modelId)\` 哈希去重 upsert 到 judge_models 表，
+          相同三元组复用同一行——一次调用即可。
+        - 同时传两个 → 400。需判 benchmark 一个都不传 → 400。
+
+        **响应屏蔽**：所有响应（同步/异步/GET）中 \`agent.key\` 与 \`judgeModel.apiKey\`
+        固定为 \`"***"\`，仅作字段占位；请求中的真实值不回显。
       parameters:
         - in: query
           name: wait
@@ -168,6 +175,24 @@ paths:
                     timeoutSec: 60
                   benchmarks: [truthfulqa]
                   judgeModelId: 1
+              inline_judge_saferag:
+                summary: 内联裁判模型 / inline judgeModel（一次调用，无需先建 JudgeModel）
+                value:
+                  taskName: SafeRAG 内联裁判一次跑
+                  agent:
+                    name: dify-bot
+                    agentType: dify_chat
+                    url: https://api.dify.ai/v1
+                    key: app-xxxxxxxx
+                  benchmarks: [saferag]
+                  judgeModel:
+                    apiBase: https://api.openai.com/v1
+                    apiKey: sk-xxxxxxxx
+                    modelId: gpt-4o
+                    name: gpt-4o-judge
+                  sampling: { mode: random, count: 5 }
+                  wait: true
+                  timeoutSec: 900
       responses:
         '200':
           description: 同步模式 (wait=true)；body 与 GET /api/v1/evaluate/{taskId} 同 schema。status='timeout' 表示超时返回部分数据
@@ -1226,6 +1251,27 @@ components:
           maximum: 10000
           description: mode=random 时必填，按已选 benchmarks 平均拆分
 
+    V1JudgeModelInline:
+      type: object
+      required: [apiBase, apiKey, modelId]
+      description: |
+        内联裁判模型配置。后端按 sha256(apiBase|apiKey|modelId)[:12] 去重 upsert
+        到 judge_models 表——相同三元组复用同一行，不会无限膨胀。
+      properties:
+        apiBase:
+          type: string
+          format: uri
+          description: 裁判模型 API base URL
+        apiKey:
+          type: string
+          description: 请求中传入真实 key；响应中固定屏蔽为 "***"
+        modelId:
+          type: string
+          description: 裁判模型名（如 gpt-4o、deepseek-chat）
+        name:
+          type: string
+          description: 可选，仅作展示；不参与去重
+
     V1SubmitRequest:
       type: object
       required: [agent, benchmarks]
@@ -1240,7 +1286,15 @@ components:
         sampling: { $ref: '#/components/schemas/V1Sampling' }
         judgeModelId:
           type: integer
-          description: 凡是 catalog 中含 judge_model 的 benchmark 必填
+          description: |
+            裁判模型 ID（引用已存在的 JudgeModel 行）。与 judgeModel 二选一。
+            需判 benchmark 必传二者之一。
+        judgeModel:
+          allOf:
+            - $ref: '#/components/schemas/V1JudgeModelInline'
+          description: |
+            内联裁判模型配置（一次调用即可）。与 judgeModelId 二选一。
+            需判 benchmark 必传二者之一。
         concurrency:
           type: integer
           minimum: 1
@@ -1271,7 +1325,20 @@ components:
           type: integer
           description: 后续 GET /api/v1/evaluate/{taskId} 用的 ID
         taskName: { type: string }
-        agent: { $ref: '#/components/schemas/V1AgentInput' }
+        agent:
+          allOf:
+            - $ref: '#/components/schemas/V1AgentInput'
+          description: |
+            回显请求中的 agent；响应里 \`key\` 字段固定为 "***"。
+        judgeModelId:
+          type: integer
+          nullable: true
+          description: 内部解析后的 judge_models.id（仅当本任务用到了裁判模型时返回）
+        judgeModel:
+          allOf:
+            - $ref: '#/components/schemas/V1JudgeModelInline'
+          description: |
+            仅当请求传入了内联 judgeModel 时回显；apiKey 字段固定 "***"。
         startedAt: { type: string, format: date-time }
         status:
           type: string
@@ -1313,7 +1380,20 @@ components:
       properties:
         taskId: { type: integer }
         taskName: { type: string }
-        agent: { $ref: '#/components/schemas/V1AgentInput' }
+        agent:
+          allOf:
+            - $ref: '#/components/schemas/V1AgentInput'
+          description: |
+            回显请求中的 agent；响应里 \`key\` 字段固定为 "***"。
+        judgeModelId:
+          type: integer
+          nullable: true
+          description: 内部解析后的 judge_models.id（仅当本任务用到了裁判模型时返回）
+        judgeModel:
+          allOf:
+            - $ref: '#/components/schemas/V1JudgeModelInline'
+          description: |
+            仅当原始请求传入了内联 judgeModel 时回显；apiKey 字段固定 "***"。
         startedAt: { type: string, format: date-time, nullable: true }
         completedAt: { type: string, format: date-time, nullable: true }
         status:
