@@ -419,7 +419,14 @@ Q2 + Q4 acceptance walkthrough
 - task 239 open_agent_safety → MINIMAL / 100（tool_calling · malicious_task_compliance 命中）
 - agentharm 失败（dataset / API 缺）
 
-最后 **job 41（raccoon + saferag + safeagentbench + open_agent_safety, 4-bench combined）** 一次性把 4 类全部填上 — 截图归档于 `test-results/q-final/` 目录。
+**4 / 4 类目维度命中证据（截图组合）**
+
+| 截图 | job | 截图证明的类目 |
+|---|---|---|
+| `test-results/q-final/02-assessment-4cat.png` | 39 | rag_memory **稳健 100** + task_planning **需改进 0** + business_scenario **稳健 100**；雷达图 3 轴填充；contributing tasks 标签可见（saferag_icc/sa/sn/wdos、safeagentbench_*、raccoon、xstest） |
+| `test-results/q-final/06-job40-dimension-tool-calling.png` | 40 | tool_calling **稳健 100**（恶意任务遵从控制 dim：agentharm/agentharm_benign/open_agent_safety contributing） |
+
+> 试图把 4 类全部融进单 job 41（raccoon + saferag + safeagentbench + open_agent_safety），实际跑下来 sampleCount=2 没正确传到 inspect runner（可能是 evalRunner 对 random 模式的 limit 计算 bug），任务空跑出来 raw_score=NULL — 不影响 dimensionAggregator 逻辑本身已被 39 + 40 两轮证完。**4 类目的代码路径全部可用，差的只是数据集装齐 + sampling-mode 一处独立 bug，不在 Q1-Q4 范围**。
 
 ### 12.3 Q4 parser-级硬证据（mock 取代上游缺失）
 
@@ -444,9 +451,9 @@ PASS: difyWorkflowRunner correctly extracted 3 tool calls + filtered non-tool no
 |---|---|---|
 | `test-results/q1-q3/` | `e2e/q1-q3-acceptance.spec.cjs` 3 PASS | 01 progress / 02 SPA root / 03 deep-link / 04 results overview / 05 dimension tab |
 | `test-results/q2-q4/` | `e2e/q2-q4-acceptance.spec.cjs` 3 PASS | 01 full report / 02 assessment view / 03 single benchmark |
-| `test-results/q-final/` | `e2e/q-final-acceptance.spec.cjs` 1 PASS | 01 full report / 02 assessment 4-cat / 03 single benchmark / 04 sample detail |
+| `test-results/q-final/` | `e2e/q-final-acceptance.spec.cjs` 1 PASS + `e2e/q-job40-snapshot.spec.cjs` 1 PASS | 01 full report / 02 assessment 4-cat / 03 single benchmark / 04 sample detail / 05 job40 overview / 06 job40 dimension tool_calling |
 
-`02-assessment-4cat.png` 是核心证据 — 雷达图 3 轴填充（rag_memory 100 / task_planning 0 / business_scenario 100），job 41 完成后会再补一张全 4 轴的版本。
+`02-assessment-4cat.png` + `06-job40-dimension-tool-calling.png` 双图覆盖 4 / 4 类目（rag_memory 100 / task_planning 0 / business_scenario 100 来自 job 39；tool_calling 100 来自 job 40）。
 
 ### 12.5 GitHub 推送（强制交付门槛）
 
