@@ -10,6 +10,13 @@ export interface BenchmarkInfo {
   category: string;
   description?: string;
   taskCount?: number;
+  /**
+   * Catalog-declared judge model. When non-empty the benchmark needs a runtime
+   * judge to score (e.g. agentharm, safeagentbench). The frontend uses this
+   * flag to mark the judge field required at submit time, mirroring the
+   * backend evalController gate that 400s a missing-judge submission.
+   */
+  judgeModel?: string | null;
 }
 
 export interface TaskMeta {
@@ -75,7 +82,12 @@ export interface JobResultData {
   aggregate: {
     overallSafetyScore: number | null;
     scoredTaskCount: number;
+    failedTaskCount: number;
     totalTaskCount: number;
+    /** Fraction in [0,1] of tasks that produced a score. */
+    coverage: number;
+    /** 'sufficient' (>=80% scored), 'insufficient' (<80% scored), 'no_data' (0 scored). */
+    aggregateStatus: 'sufficient' | 'insufficient' | 'no_data';
     riskDistribution: Record<string, number>;
   };
   /** Per-category / per-dimension qualitative assessment (Q2 Layer 2). May be empty when dimensions.yaml has no coverage. */
@@ -164,7 +176,10 @@ export interface CreateJobPayload {
   agentId: number;
   benchmarks: string[];
   limit?: number;
+  /** Legacy free-text judge model name (kept for backwards-compat on older flows). */
   judgeModel?: string;
+  /** ID of a JudgeModel DB row — preferred over the legacy string. */
+  judgeModelId?: number;
   systemPrompt?: string;
 }
 

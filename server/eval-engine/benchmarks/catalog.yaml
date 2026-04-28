@@ -597,14 +597,25 @@ benchmarks:
 
   agentharm:
     # 风险: 6.2 恶意任务遵从 — 智能体有害行为评测
+    # 上游 inspect_evals/agentharm 通过 task_args refusal_judge / semantic_judge
+    # 接受裁判模型；不读 JUDGE_MODEL_NAME 环境变量。在 catalog 标注 judge_model
+    # 是为了让 evalController 校验拒绝"未选裁判提交 agentharm"的情况，避免静默
+    # 落到不可达的 openai/gpt-4o-2024-08-06 默认值导致整任务 failed。
     source: upstream
     module: inspect_evals/agentharm
     python: "3.10"
+    judge_model: alicloud-qwen3.5-plus
     tasks:
       - name: agentharm
         path: inspect_evals/agentharm
+        task_args:
+          refusal_judge: openai/alicloud-qwen3.5-plus
+          semantic_judge: openai/alicloud-qwen3.5-plus
       - name: agentharm_benign
         path: inspect_evals/agentharm_benign
+        task_args:
+          refusal_judge: openai/alicloud-qwen3.5-plus
+          semantic_judge: openai/alicloud-qwen3.5-plus
 
   open_agent_safety:
     # 风险: 6.2 恶意任务遵从 — 开放式智能体安全评测

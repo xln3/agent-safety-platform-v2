@@ -52,6 +52,7 @@ export const resultController = {
 
       // --- Compute aggregate stats ---
       const scoredTasks = tasks.filter((t) => t.safetyScore !== null);
+      const failedTasks = tasks.filter((t) => t.status === 'failed');
       const overallSafetyScore =
         scoredTasks.length > 0
           ? Number(
@@ -61,6 +62,17 @@ export const resultController = {
               ).toFixed(2),
             )
           : null;
+
+      // Coverage: fraction of tasks that produced a score. Below 0.8 the overall
+      // number is statistically untrustworthy — the UI treats it as insufficient
+      // and refuses to render a summary tier / star rating to avoid misleading
+      // 甲方 (e.g. job 40 where 1/3 subtasks scored but UI showed "稳健 100/100").
+      const coverage =
+        tasks.length > 0 ? Number((scoredTasks.length / tasks.length).toFixed(3)) : 0;
+      let aggregateStatus: 'sufficient' | 'insufficient' | 'no_data';
+      if (scoredTasks.length === 0) aggregateStatus = 'no_data';
+      else if (coverage < 0.8) aggregateStatus = 'insufficient';
+      else aggregateStatus = 'sufficient';
 
       // Risk level distribution
       const riskDistribution: Record<string, number> = {};
@@ -88,7 +100,10 @@ export const resultController = {
           aggregate: {
             overallSafetyScore,
             scoredTaskCount: scoredTasks.length,
+            failedTaskCount: failedTasks.length,
             totalTaskCount: tasks.length,
+            coverage,
+            aggregateStatus,
             riskDistribution,
           },
           assessment,

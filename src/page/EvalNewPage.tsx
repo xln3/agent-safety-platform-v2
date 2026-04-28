@@ -27,8 +27,10 @@ import {
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { agentService, AGENT_TYPE_LABELS } from '../services/agentService';
 import { evalService } from '../services/evalService';
+import { judgeModelService } from '../services/judgeModelService';
 import type { Agent } from '../services/agentService';
 import type { BenchmarkInfo, TaskMeta } from '../services/evalService';
+import type { JudgeModel } from '../services/judgeModelService';
 
 const { Text } = Typography;
 
@@ -86,6 +88,7 @@ const EvalNewPage: React.FC = () => {
   const [agents, setAgents] = useState<Agent[]>([]);
   const [benchmarksByCategory, setBenchmarksByCategory] = useState<Record<string, BenchmarkInfo[]>>({});
   const [taskMeta, setTaskMeta] = useState<Record<string, TaskMeta>>({});
+  const [judgeModels, setJudgeModels] = useState<JudgeModel[]>([]);
   const [loading, setLoading] = useState(false);
 
   /* ---- form state ---- */
@@ -94,7 +97,7 @@ const EvalNewPage: React.FC = () => {
   );
   const [selectedBenchmarks, setSelectedBenchmarks] = useState<Set<string>>(new Set());
   const [limit, setLimit] = useState<number | null>(null);
-  const [judgeModel, setJudgeModel] = useState('');
+  const [judgeModelId, setJudgeModelId] = useState<number | undefined>(undefined);
   const [systemPrompt, setSystemPrompt] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
@@ -102,18 +105,33 @@ const EvalNewPage: React.FC = () => {
   const selectedAgent = agents.find((a) => a.id === selectedAgentId);
   const isDifyAgent = selectedAgent?.agentType === 'dify_chat' || selectedAgent?.agentType === 'dify_workflow';
 
+  /**
+   * Whether any selected benchmark advertises a `judgeModel` in the catalog —
+   * mirrors the backend evalController gate. When true the judge field becomes
+   * required (red asterisk) and submit is blocked until a JudgeModel is
+   * picked. Source of truth is the catalog field; the frontend simply surfaces
+   * the same constraint visually so the user does not run into a 400.
+   */
+  const benchmarksNeedingJudge = useMemo(() => {
+    const flat: BenchmarkInfo[] = Object.values(benchmarksByCategory).flat();
+    return flat.filter((b) => selectedBenchmarks.has(b.name) && b.judgeModel);
+  }, [benchmarksByCategory, selectedBenchmarks]);
+  const judgeRequired = benchmarksNeedingJudge.length > 0;
+
   /* ---- fetch data on mount ---- */
   const fetchInitialData = useCallback(async () => {
     setLoading(true);
     try {
-      const [agentData, benchmarks, meta] = await Promise.all([
+      const [agentData, benchmarks, meta, judges] = await Promise.all([
         agentService.list({ page: 1, pageSize: 100 }),
         evalService.getBenchmarks(),
         evalService.getTaskMeta(),
+        judgeModelService.list({ page: 1, pageSize: 100 }),
       ]);
 
       setAgents(agentData.list || []);
       setTaskMeta(meta || {});
+      setJudgeModels(judges.list || []);
 
       const grouped: Record<string, BenchmarkInfo[]> = {};
       for (const b of (Array.isArray(benchmarks) ? benchmarks : [])) {
@@ -292,6 +310,12 @@ const EvalNewPage: React.FC = () => {
       message.warning('请选择智能体和基准测试');
       return;
     }
+    if (judgeRequired && !judgeModelId) {
+      message.warning(
+        `以下 benchmark 需要裁判模型：${benchmarksNeedingJudge.map((b) => b.name).join(', ')}`,
+      );
+      return;
+    }
 
     setSubmitting(true);
     try {
@@ -299,7 +323,7 @@ const EvalNewPage: React.FC = () => {
         agentId: selectedAgentId,
         benchmarks: Array.from(selectedBenchmarks),
         ...(limit ? { limit } : {}),
-        ...(judgeModel.trim() ? { judgeModel: judgeModel.trim() } : {}),
+        ...(judgeModelId ? { judgeModelId } : {}),
         ...(systemPrompt.trim() ? { systemPrompt: systemPrompt.trim() } : {}),
       });
       message.success('评估任务已创建');
@@ -421,8 +445,30 @@ const EvalNewPage: React.FC = () => {
                   style={{ width: '100%' }}
                 />
               </Form.Item>
-              <Form.Item label="裁判模型" help="用于评分的模型（留空使用默认）">
-                <Input placeholder="例如 gpt-4o-mini" value={judgeModel} onChange={(e) => setJudgeModel(e.target.value)} />
+              <Form.Item
+                label="裁判模型"
+                required={judgeRequired}
+                validateStatus={judgeRequired && !judgeModelId ? 'error' : undefined}
+                help={
+                  judgeRequired ? (
+                    <span style={{ color: '#b91c1c' }}>
+                      已选 benchmark 需要裁判模型：{benchmarksNeedingJudge.map((b) => b.name).join(', ')}
+                    </span>
+                  ) : (
+                    '用于打分的裁判模型（部分 benchmark 必填，未选时不依赖裁判可留空）'
+                  )
+                }
+              >
+                <Select
+                  placeholder={judgeRequired ? '请选择裁判模型（必填）' : '请选择裁判模型（可选）'}
+                  value={judgeModelId}
+                  onChange={(v) => setJudgeModelId(v as number | undefined)}
+                  allowClear
+                  options={judgeModels.map((j) => ({
+                    value: j.id,
+                    label: `${j.name} (${j.modelId})`,
+                  }))}
+                />
               </Form.Item>
               <Form.Item label="系统提示词" help="可选，会覆盖智能体的默认系统提示词">
                 <Input.TextArea rows={4} placeholder="输入自定义系统提示词..." value={systemPrompt} onChange={(e) => setSystemPrompt(e.target.value)} />
@@ -445,7 +491,11 @@ const EvalNewPage: React.FC = () => {
                   </Space>
                 </Descriptions.Item>
                 {limit && <Descriptions.Item label="样本数限制">{limit}</Descriptions.Item>}
-                {judgeModel.trim() && <Descriptions.Item label="裁判模型">{judgeModel.trim()}</Descriptions.Item>}
+                {judgeModelId && (
+                  <Descriptions.Item label="裁判模型">
+                    {judgeModels.find((j) => j.id === judgeModelId)?.name || `#${judgeModelId}`}
+                  </Descriptions.Item>
+                )}
               </Descriptions>
             </Card>
           </div>
@@ -466,7 +516,11 @@ const EvalNewPage: React.FC = () => {
           <Button
             type="primary"
             loading={submitting}
-            disabled={!selectedAgentId || selectedBenchmarks.size === 0}
+            disabled={
+              !selectedAgentId ||
+              selectedBenchmarks.size === 0 ||
+              (judgeRequired && !judgeModelId)
+            }
             onClick={handleSubmit}
           >
             开始评估

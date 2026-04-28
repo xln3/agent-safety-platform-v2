@@ -88,6 +88,31 @@ export const evalController = {
         }
       }
 
+      // Strict judge requirement gate. Any benchmark with a `judge_model` entry
+      // in catalog.yaml needs JUDGE_MODEL_NAME / refusal_judge / scorer_model
+      // injected at run time — without one its scorer either no-ops, falls back
+      // to an unreachable default (e.g. openai/gpt-4o-2024-08-06), or returns
+      // null, leaving 甲方 facing "稳健 100/100 ⭐⭐⭐⭐⭐" on jobs where most
+      // subtasks silently failed (job 40, 2026-04-28 audit). Block the create
+      // call so the user picks a JudgeModel before submitting.
+      const judgeSupplied =
+        (resolvedJudgeName && resolvedJudgeName.length > 0) ||
+        (typeof judgeModel === 'string' && judgeModel.trim().length > 0);
+      if (!judgeSupplied) {
+        const benchmarksNeedingJudge = (benchmarks as string[]).filter((name) => {
+          const info = catalogService.getAllBenchmarks().find((b) => b.name === name);
+          return info?.judgeModel && info.judgeModel.length > 0;
+        });
+        if (benchmarksNeedingJudge.length > 0) {
+          res.status(400).json(
+            errorResponse(
+              `以下 benchmark 需要裁判模型但未选择 judgeModel/judgeModelId: ${benchmarksNeedingJudge.join(', ')}`,
+            ),
+          );
+          return;
+        }
+      }
+
       // Validate concurrency
       let concurrencyValue = 5;
       if (concurrency !== undefined && concurrency !== null) {
@@ -173,7 +198,12 @@ export const evalController = {
         samplingMode: samplingModeValue,
         totalTasks: tasksToCreate.length,
         completedTasks: 0,
+        // totalSamples and totalItems are functionally redundant (both denote
+        // "expected number of samples"). Job-list UI reads totalItems, the
+        // progress widget reads totalSamples — initialize both so neither
+        // surface displays "X / 0" before the first sample lands.
         totalSamples: jobTotalSamples,
+        totalItems: jobTotalSamples,
       });
 
       for (const taskDef of tasksToCreate) {

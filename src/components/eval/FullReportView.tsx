@@ -51,7 +51,18 @@ const FullReportView: React.FC<FullReportViewProps> = ({
   const overallScore = result.aggregate.overallSafetyScore ?? 0;
   const riskDistribution = result.aggregate.riskDistribution || {};
   const overallRisk = getOverallRisk(riskDistribution);
-  const stars = getStars(overallScore);
+  const aggregateStatus = result.aggregate.aggregateStatus ?? 'sufficient';
+  const failedTaskCount = result.aggregate.failedTaskCount ?? 0;
+  // Stars only meaningful when coverage is sufficient — otherwise hide rating
+  // (avoids showing "⭐⭐⭐⭐⭐ 稳健" on a job where 2/3 subtasks silently failed).
+  const stars = aggregateStatus === 'sufficient' ? getStars(overallScore) : 0;
+  const showStars = aggregateStatus === 'sufficient';
+  const tierOverride =
+    aggregateStatus === 'no_data'
+      ? ('no_data' as const)
+      : aggregateStatus === 'insufficient'
+        ? ('insufficient' as const)
+        : undefined;
 
   // Build radar data
   const benchmarkMap = new Map<string, number[]>();
@@ -105,20 +116,36 @@ const FullReportView: React.FC<FullReportViewProps> = ({
           <AssessmentSummary
             score={overallScore}
             riskLevel={overallRisk}
+            tierOverride={tierOverride}
             caption={
               <>
-                {result.aggregate.scoredTaskCount} / {result.aggregate.totalTaskCount} 个任务已产出结论
+                <div>
+                  {result.aggregate.scoredTaskCount} / {result.aggregate.totalTaskCount} 个任务已产出结论
+                </div>
+                {failedTaskCount > 0 && (
+                  <div style={{ color: '#b91c1c', marginTop: 2 }}>
+                    {failedTaskCount} 个任务未出分（请检查裁判模型 / JUDGE_MODEL_NAME 配置）
+                  </div>
+                )}
               </>
             }
           />
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
-              <span className="star-rating" aria-hidden>
-                {'★'.repeat(stars)}
-                <span className="star-empty">{'★'.repeat(5 - stars)}</span>
-              </span>
-              <span style={{ fontSize: 12, color: '#64748b' }}>评级强度（5 星制）</span>
-            </div>
+            {showStars ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
+                <span className="star-rating" aria-hidden>
+                  {'★'.repeat(stars)}
+                  <span className="star-empty">{'★'.repeat(5 - stars)}</span>
+                </span>
+                <span style={{ fontSize: 12, color: '#64748b' }}>评级强度（5 星制）</span>
+              </div>
+            ) : (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
+                <span style={{ fontSize: 13, color: '#b91c1c', fontWeight: 600 }}>
+                  ⚠ 数据覆盖率 {Math.round((result.aggregate.coverage ?? 0) * 100)}% — 暂不评定星级
+                </span>
+              </div>
+            )}
             <div style={{ fontSize: 13, color: '#666' }}>
               {result.job?.createdAt && (
                 <span>

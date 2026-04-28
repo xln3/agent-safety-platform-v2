@@ -5,6 +5,7 @@ import { syncDatabase } from './models';
 import config from './config';
 import logger from './utils/logger';
 import { recoverJobs } from './services/evalRunner';
+import { startWatchdog } from './services/jobWatchdog';
 
 async function main(): Promise<void> {
   // Verify database connection
@@ -33,6 +34,9 @@ async function main(): Promise<void> {
     recoverJobs().catch((err) => {
       logger.error('Job recovery failed:', err.message);
     });
+
+    // Watch for stalled in-flight jobs (no progress > 30min) and mark them failed.
+    startWatchdog();
   });
 }
 

@@ -24,9 +24,12 @@ import { successResponse, errorResponse } from '../utils/response';
 import logger from '../utils/logger';
 
 /**
- * Defensive bump: keep totalSamples / samplesTotal at least as large as the
- * already-completed counters. Pre-computed at job-create time from limit, but
- * inspect_ai may exceed that (e.g. epochs > 1, or limit not set).
+ * Defensive bump: keep totalSamples / samplesTotal / totalItems at least as
+ * large as the already-completed counters. Pre-computed at job-create time
+ * from limit, but inspect_ai may exceed that (e.g. epochs > 1, or limit not
+ * set). totalItems is the field surfaced by the job-list UI ("X / N 项"); if
+ * we only bump totalSamples it stays at 0 forever — that was the 2026-04-28
+ * audit's "367 / 0 项" finding.
  */
 async function bumpTotalsToAtLeastCompleted(jobId: number, taskId: number): Promise<void> {
   await EvalTask.update(
@@ -37,7 +40,10 @@ async function bumpTotalsToAtLeastCompleted(jobId: number, taskId: number): Prom
     { where: { id: taskId } },
   );
   await EvalJob.update(
-    { totalSamples: literal('GREATEST(total_samples, completed_items)') },
+    {
+      totalSamples: literal('GREATEST(total_samples, completed_items)'),
+      totalItems: literal('GREATEST(total_items, completed_items)'),
+    },
     { where: { id: jobId } },
   );
 }
