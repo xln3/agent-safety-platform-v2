@@ -18,6 +18,7 @@ import { Agent, EvalJob, EvalTask, JudgeModel } from '../models';
 import { EVAL_STATUS, TASK_STATUS } from '../constants';
 import { config } from '../config';
 import logger from '../utils/logger';
+import { readZipEntryJson } from '../utils/zipReader';
 import { computeTaskScore } from './scoreService';
 import catalogService from './catalogService';
 import * as venvService from './venvService';
@@ -25,6 +26,8 @@ import { buildEnvironment, JudgeModelOverride } from './environmentBuilder';
 import { buildInspectCommand, normalizeModelName } from './commandBuilder';
 import { resolveIndexSampleIds } from './indexService';
 import { dockerPreCleanup, cleanupDockerNetworks, ensureThorServer } from './dockerService';
+import { setActiveTask, clearActiveTask } from './activeTaskRegistry';
+import { sseService } from './sseService';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -164,13 +167,9 @@ class Semaphore {
 function isEvalFileComplete(filePath: string): boolean {
   try {
     const zip = new AdmZip(filePath);
-    const headerEntry = zip.getEntry('header.json');
-    if (!headerEntry) {
-      return false;
-    }
-    const header = JSON.parse(headerEntry.getData().toString('utf8'));
-    // A complete eval file has a terminal status
-    return ['success', 'error', 'cancelled'].includes(header.status);
+    const header = readZipEntryJson<{ status?: string }>(zip, 'header.json');
+    if (!header) return false;
+    return ['success', 'error', 'cancelled'].includes(header.status || '');
   } catch {
     return false;
   }
@@ -383,6 +382,9 @@ async function spawnTaskProcess(
     limit: job.limit || undefined,
     effectiveJudge,
     judgeParam: benchmarkConfig.judgeParam,
+    judgeOverride: judgeModelOverride
+      ? { apiBase: judgeModelOverride.apiBase, apiKey: judgeModelOverride.apiKey }
+      : null,
     modelRoles: mergedModelRoles,
     taskArgs: taskInfo?.taskArgs as Record<string, unknown> | undefined,
     sampleIds: indexResult?.sampleIds,
@@ -476,6 +478,14 @@ async function executeTask(
     startedAt: new Date(),
   });
 
+  sseService.emit(job.id, 'task.start', {
+    jobId: job.id,
+    taskId: task.id,
+    benchmark: task.benchmark,
+    taskName: task.taskName,
+    startedAt: new Date().toISOString(),
+  });
+
   let lastError: string | null = null;
   let lastErrorType: ErrorType = 'UNKNOWN';
 
@@ -503,6 +513,21 @@ async function executeTask(
       await task.update({
         status: TASK_STATUS.SUCCESS,
         completedAt: new Date(),
+      });
+
+      // Reload to pick up score columns set by computeTaskScore.
+      await task.reload();
+      sseService.emit(job.id, 'task.finish', {
+        jobId: job.id,
+        taskId: task.id,
+        benchmark: task.benchmark,
+        taskName: task.taskName,
+        status: 'success',
+        safetyScore: task.safetyScore,
+        riskLevel: task.riskLevel,
+        samplesTotal: task.samplesTotal,
+        samplesPassed: task.samplesPassed,
+        finishedAt: new Date().toISOString(),
       });
       return;
     } catch (err: any) {
@@ -538,10 +563,23 @@ async function executeTask(
   }
 
   // All attempts exhausted — mark as failed
+  const finalErrorMessage = lastError
+    ? `[${lastErrorType}] ${truncateError(lastError)}`
+    : 'Unknown error';
   await task.update({
     status: TASK_STATUS.FAILED,
-    errorMessage: lastError ? `[${lastErrorType}] ${truncateError(lastError)}` : 'Unknown error',
+    errorMessage: finalErrorMessage,
     completedAt: new Date(),
+  });
+
+  sseService.emit(job.id, 'task.finish', {
+    jobId: job.id,
+    taskId: task.id,
+    benchmark: task.benchmark,
+    taskName: task.taskName,
+    status: 'failed',
+    errorMessage: finalErrorMessage,
+    finishedAt: new Date().toISOString(),
   });
 }
 
@@ -554,6 +592,14 @@ async function runTaskAttempt(
   job: EvalJob,
   jobId: string,
 ): Promise<void> {
+  // Register the active task for this job so the ts_bridge solver callbacks
+  // (which only carry jobId) can attribute samples to this task.
+  setActiveTask(job.id, {
+    taskId: task.id,
+    benchmark: task.benchmark,
+    taskName: task.taskName,
+  });
+
   const { proc, done } = await spawnTaskProcess(task, agent, job);
 
   // Track the process for cancellation
@@ -599,6 +645,7 @@ async function runTaskAttempt(
     }
     // Safety net: ensure process is dead
     killProcess(proc);
+    clearActiveTask(job.id);
   }
 }
 
@@ -658,6 +705,14 @@ export async function runJob(jobId: number): Promise<void> {
   await theJob.update({
     status: EVAL_STATUS.RUNNING,
     startedAt: new Date(),
+  });
+
+  sseService.emit(theJob.id, 'job.start', {
+    jobId: theJob.id,
+    name: theJob.name,
+    totalTasks: theJob.totalTasks,
+    benchmarks: theJob.benchmarks,
+    startedAt: new Date().toISOString(),
   });
 
   // Fetch all tasks for this job
@@ -731,14 +786,23 @@ export async function runJob(jobId: number): Promise<void> {
 
   // Update final job status
   const finalCompleted = await getCompletedCount(jobId);
+  const finalStatus = hasFailure ? EVAL_STATUS.FAILED : EVAL_STATUS.COMPLETED;
   await theJob.update({
-    status: hasFailure ? EVAL_STATUS.FAILED : EVAL_STATUS.COMPLETED,
+    status: finalStatus,
     completedAt: new Date(),
     completedTasks: finalCompleted,
   });
 
   // Clean up process tracking
   runningProcesses.delete(jobIdStr);
+
+  sseService.emit(theJob.id, 'job.finish', {
+    jobId: theJob.id,
+    status: finalStatus,
+    totalTasks: tasks.length,
+    completedTasks: finalCompleted,
+    finishedAt: new Date().toISOString(),
+  });
 
   logger.info(
     `Eval job finished: ${jobId}, status=${hasFailure ? 'failed' : 'completed'}, ` +

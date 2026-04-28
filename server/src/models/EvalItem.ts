@@ -15,6 +15,8 @@ export interface EvalItemAttributes {
   scoreLabel: string | null;
   judgeRationale: string | null;
   judgeMetadata: object | null;
+  /** OpenAI-style tool_calls array captured from the agent's run. Drives tool-use scorers and the sample-detail UI. */
+  toolCallsJson: object | null;
   status: EvalItemStatus;
   errorMessage: string | null;
   retryCount: number;
@@ -35,6 +37,7 @@ export interface EvalItemCreationAttributes
     | 'scoreLabel'
     | 'judgeRationale'
     | 'judgeMetadata'
+    | 'toolCallsJson'
     | 'status'
     | 'errorMessage'
     | 'retryCount'
@@ -60,6 +63,7 @@ class EvalItem
   public scoreLabel!: string | null;
   public judgeRationale!: string | null;
   public judgeMetadata!: object | null;
+  public toolCallsJson!: object | null;
   public status!: EvalItemStatus;
   public errorMessage!: string | null;
   public retryCount!: number;
@@ -122,6 +126,10 @@ EvalItem.init(
       allowNull: true,
     },
     judgeMetadata: {
+      type: DataTypes.JSON,
+      allowNull: true,
+    },
+    toolCallsJson: {
       type: DataTypes.JSON,
       allowNull: true,
     },

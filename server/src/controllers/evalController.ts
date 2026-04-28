@@ -150,6 +150,14 @@ export const evalController = {
 
       const jobName = `eval-${agent.name}-${Date.now()}`;
 
+      // Pre-compute totalSamples from limit so the frontend shows "X / N" instead of
+      // "X / 0" while inspect_ai is still enumerating the dataset. Defensive bumps in
+      // internalAgentRunnerController keep this honest if inspect_ai exceeds the
+      // predicted count.
+      const limitNum = limit != null ? Number(limit) : 0;
+      const perTaskTotal = limitNum > 0 ? limitNum : 0;
+      const jobTotalSamples = perTaskTotal * tasksToCreate.length;
+
       const job = await EvalJob.create({
         agentId,
         judgeModelId: resolvedJudgeName ? Number(judgeModelId) : null,
@@ -165,6 +173,7 @@ export const evalController = {
         samplingMode: samplingModeValue,
         totalTasks: tasksToCreate.length,
         completedTasks: 0,
+        totalSamples: jobTotalSamples,
       });
 
       for (const taskDef of tasksToCreate) {
@@ -173,6 +182,8 @@ export const evalController = {
           agentId,
           benchmark: taskDef.benchmark,
           taskName: taskDef.taskName,
+          samplesTotal: perTaskTotal,
+          totalSamples: perTaskTotal,
         });
       }
 

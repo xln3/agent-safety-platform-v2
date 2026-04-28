@@ -15,6 +15,8 @@ import {
   SearchOutlined,
   AlertOutlined,
   DatabaseOutlined,
+  UnorderedListOutlined,
+  RadarChartOutlined,
 } from '@ant-design/icons';
 import { useParams, useNavigate } from 'react-router-dom';
 import { evalService } from '../services/evalService';
@@ -24,6 +26,8 @@ import FullReportView from '../components/eval/FullReportView';
 import SingleBenchmarkView from '../components/eval/SingleBenchmarkView';
 import HighRiskView from '../components/eval/HighRiskView';
 import DatasetExamplesView from '../components/eval/DatasetExamplesView';
+import LiveItemsView from '../components/eval/LiveItemsView';
+import AssessmentView from '../components/eval/AssessmentView';
 
 const { Title, Text } = Typography;
 
@@ -110,6 +114,13 @@ const EvalResultsPage: React.FC = () => {
         />
       ),
     },
+    ...(result.assessment && result.assessment.categories.length > 0
+      ? [{
+          key: 'assessment',
+          label: <span><RadarChartOutlined /> 维度评估</span>,
+          children: <AssessmentView assessment={result.assessment!} />,
+        }]
+      : []),
     {
       key: 'single-benchmark',
       label: <span><SearchOutlined /> 单项基准</span>,
@@ -124,6 +135,11 @@ const EvalResultsPage: React.FC = () => {
       key: 'dataset',
       label: <span><DatabaseOutlined /> 数据集</span>,
       children: <DatasetExamplesView result={result} />,
+    },
+    {
+      key: 'samples',
+      label: <span><UnorderedListOutlined /> 样本明细</span>,
+      children: result.job?.id ? <LiveItemsView jobId={result.job.id} /> : null,
     },
   ];
 

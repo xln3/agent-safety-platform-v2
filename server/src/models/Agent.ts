@@ -87,7 +87,6 @@ Agent.init(
     name: {
       type: DataTypes.STRING(256),
       allowNull: false,
-      unique: true,
     },
     agentType: {
       type: DataTypes.STRING(32),
@@ -150,6 +149,11 @@ Agent.init(
     sequelize,
     tableName: 'agents',
     modelName: 'Agent',
+    // Stable named unique index. Declaring it here (instead of `unique: true`
+    // on the column) keeps Sequelize's alter:true mode from creating a fresh
+    // `name_N` constraint on every restart — which previously caused the
+    // table to bump up against MySQL's 64-key limit.
+    indexes: [{ unique: true, name: 'agents_name_unique', fields: ['name'] }],
   },
 );
 

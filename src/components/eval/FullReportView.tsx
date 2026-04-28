@@ -1,10 +1,10 @@
 import React from 'react';
 import { Card, Button, Row, Col } from 'antd';
 import type { JobResultData, TaskResultItem } from '../../services/evalService';
-import SafetyScoreGauge from '../SafetyScoreGauge';
-import RiskLevelBadge from '../RiskLevelBadge';
 import EvalRadarChart from '../EvalRadarChart';
-import ScoreBar from '../ScoreBar';
+import AssessmentSummary from './AssessmentSummary';
+import AssessmentBadge from './AssessmentBadge';
+import AssessmentBar from './AssessmentBar';
 
 interface BenchmarkSummary {
   benchmark: string;
@@ -102,19 +102,26 @@ const FullReportView: React.FC<FullReportViewProps> = ({
       <div className="eval-section">
         <div className="eval-section-title">概览</div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
-          <SafetyScoreGauge score={overallScore} riskLevel={overallRisk} size={120} />
+          <AssessmentSummary
+            score={overallScore}
+            riskLevel={overallRisk}
+            caption={
+              <>
+                {result.aggregate.scoredTaskCount} / {result.aggregate.totalTaskCount} 个任务已产出结论
+              </>
+            }
+          />
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
-              <RiskLevelBadge level={overallRisk} />
-              <span className="star-rating">
+              <span className="star-rating" aria-hidden>
                 {'★'.repeat(stars)}
                 <span className="star-empty">{'★'.repeat(5 - stars)}</span>
               </span>
+              <span style={{ fontSize: 12, color: '#64748b' }}>评级强度（5 星制）</span>
             </div>
             <div style={{ fontSize: 13, color: '#666' }}>
-              {result.aggregate.scoredTaskCount} / {result.aggregate.totalTaskCount} 个任务已评分
               {result.job?.createdAt && (
-                <span style={{ marginLeft: 12 }}>
+                <span>
                   评估时间：{new Date(result.job.createdAt).toLocaleString('zh-CN')}
                 </span>
               )}
@@ -137,10 +144,10 @@ const FullReportView: React.FC<FullReportViewProps> = ({
                 <div className="benchmark-row" key={bm.benchmark}>
                   <div className="benchmark-row-label">
                     <div className="benchmark-name">{bm.benchmark}</div>
-                    {bm.riskLevel && <RiskLevelBadge level={bm.riskLevel} />}
+                    {bm.riskLevel && <AssessmentBadge riskLevel={bm.riskLevel} size="small" />}
                   </div>
                   <div className="benchmark-row-bar">
-                    <ScoreBar score={bm.avgScore} height={10} />
+                    <AssessmentBar score={bm.avgScore} riskLevel={bm.riskLevel} height={10} />
                     <div className="benchmark-row-meta">
                       {bm.sampleCount > 0 && <span>{bm.sampleCount} 样本</span>}
                       {bm.interpretation && (
@@ -167,11 +174,11 @@ const FullReportView: React.FC<FullReportViewProps> = ({
                 <th style={{ textAlign: 'left', padding: '8px 12px', fontWeight: 600, color: '#666' }}>
                   任务名称
                 </th>
-                <th style={{ textAlign: 'right', padding: '8px 12px', fontWeight: 600, color: '#666', width: 80 }}>
-                  安全评分
+                <th style={{ textAlign: 'right', padding: '8px 12px', fontWeight: 600, color: '#666', width: 160 }}>
+                  评估趋势
                 </th>
-                <th style={{ textAlign: 'center', padding: '8px 12px', fontWeight: 600, color: '#666', width: 80 }}>
-                  风险等级
+                <th style={{ textAlign: 'center', padding: '8px 12px', fontWeight: 600, color: '#666', width: 96 }}>
+                  评估等级
                 </th>
                 <th style={{ textAlign: 'right', padding: '8px 12px', fontWeight: 600, color: '#666', width: 80 }}>
                   样本数
@@ -210,14 +217,18 @@ const FullReportView: React.FC<FullReportViewProps> = ({
                       </td>
                       <td style={{ padding: '8px 12px', textAlign: 'right' }}>
                         {task.safetyScore !== null ? (
-                          <ScoreBar score={task.safetyScore} maxWidth="120px" />
+                          <AssessmentBar
+                            score={task.safetyScore}
+                            riskLevel={task.riskLevel}
+                            maxWidth="160px"
+                          />
                         ) : (
                           <span style={{ color: '#999' }}>-</span>
                         )}
                       </td>
                       <td style={{ padding: '8px 12px', textAlign: 'center' }}>
                         {task.riskLevel ? (
-                          <RiskLevelBadge level={task.riskLevel} />
+                          <AssessmentBadge riskLevel={task.riskLevel} size="small" />
                         ) : (
                           <span style={{ color: '#999' }}>-</span>
                         )}
@@ -240,11 +251,12 @@ const FullReportView: React.FC<FullReportViewProps> = ({
         </div>
       </div>
 
-      {/* Risk Analysis */}
+      {/* Improvement queue (formerly "高危任务"). Wording softened so the badge
+          drives prioritisation, not a "高危" label. */}
       {highRiskTasks.length > 0 && (
         <div className="eval-section">
           <div className="eval-section-title">
-            风险分析（{highRiskTasks.length} 个高危任务）
+            重点改进项（{highRiskTasks.length} 项需优先处理）
           </div>
           <div>
             {highRiskTasks.map((task) => (
@@ -256,10 +268,9 @@ const FullReportView: React.FC<FullReportViewProps> = ({
                   )}
                 </div>
                 <div className="high-risk-actions">
-                  <RiskLevelBadge level={task.riskLevel!} />
+                  <AssessmentBadge riskLevel={task.riskLevel!} size="small" />
                   <Button
                     type="link"
-                    danger
                     size="small"
                     onClick={() => onHighRiskDetail(task.id, task.taskName)}
                   >

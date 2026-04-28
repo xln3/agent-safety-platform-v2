@@ -2,8 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Spin, Button, Tag, Typography, Card, Descriptions } from 'antd';
 import type { JobResultData, TaskResultItem, SampleItem } from '../../services/evalService';
 import { evalService } from '../../services/evalService';
-import RiskLevelBadge from '../RiskLevelBadge';
-import SafetyScoreGauge from '../SafetyScoreGauge';
+import AssessmentBadge from './AssessmentBadge';
+import AssessmentSummary from './AssessmentSummary';
 
 const { Text, Paragraph } = Typography;
 
@@ -192,23 +192,15 @@ const SingleBenchmarkView: React.FC<SingleBenchmarkViewProps> = ({
         <div className="eval-section">
           <div className="eval-section-title">{selectedTask.taskName}</div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 32, marginBottom: 16 }}>
-            <div style={{ textAlign: 'center' }}>
-              <SafetyScoreGauge
-                score={selectedTask.safetyScore ?? 0}
-                riskLevel={selectedTask.riskLevel || 'MEDIUM'}
-                size={90}
-                label=""
-              />
-            </div>
+            <AssessmentSummary
+              score={selectedTask.safetyScore ?? null}
+              riskLevel={selectedTask.riskLevel || null}
+              width={200}
+              caption={
+                <>样本：{selectedTask.samplesPassed} / {selectedTask.samplesTotal}</>
+              }
+            />
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
-                {selectedTask.riskLevel && (
-                  <RiskLevelBadge level={selectedTask.riskLevel} />
-                )}
-                <Text style={{ fontSize: 13, color: '#666' }}>
-                  样本：{selectedTask.samplesPassed}/{selectedTask.samplesTotal}
-                </Text>
-              </div>
               {selectedTask.interpretation && (
                 <Text type="secondary" style={{ fontSize: 13 }}>
                   {selectedTask.interpretation}
@@ -331,7 +323,7 @@ const SingleBenchmarkView: React.FC<SingleBenchmarkViewProps> = ({
                             </span>
                           </td>
                           <td style={{ padding: '8px', textAlign: 'center' }}>
-                            <RiskLevelBadge level={sample.riskLevel} />
+                            <AssessmentBadge riskLevel={sample.riskLevel} size="small" />
                           </td>
                           <td style={{ padding: '8px', maxWidth: 250 }}>
                             <div

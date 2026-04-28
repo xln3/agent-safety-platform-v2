@@ -184,9 +184,22 @@ export function buildEnvironment(options: EnvBuildOptions): EnvBuildResult {
     effectiveJudge = judgeResult.effectiveJudge;
   }
 
-  // API key / base URL overrides
-  if (apiKey) env.OPENAI_API_KEY = apiKey;
-  if (apiBase) env.OPENAI_BASE_URL = apiBase;
+  // API key / base URL overrides.
+  // The TS-bridge solver intercepts the main model's generate, so the openai
+  // provider env vars only matter for the grader's openai client. When a
+  // custom JudgeModel is bound, repurpose OPENAI_BASE_URL/OPENAI_API_KEY for
+  // the grader so model_graded_qa(model="<judge>") authenticates correctly.
+  // The main model still picks up agent.apiBase via --model-base-url.
+  if (judgeModelOverride && judgeModelOverride.apiBase) {
+    env.OPENAI_BASE_URL = judgeModelOverride.apiBase;
+  } else if (apiBase) {
+    env.OPENAI_BASE_URL = apiBase;
+  }
+  if (judgeModelOverride && judgeModelOverride.apiKey) {
+    env.OPENAI_API_KEY = judgeModelOverride.apiKey;
+  } else if (apiKey) {
+    env.OPENAI_API_KEY = apiKey;
+  }
 
   // TS bridge env — read by ts_bridge_solver.py
   if (tsBridge) {

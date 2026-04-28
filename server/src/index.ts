@@ -20,10 +20,12 @@ async function main(): Promise<void> {
     logger.info('Database synced');
   }
 
-  // Start HTTP server
+  // Start HTTP server — bind 0.0.0.0 so the server accepts connections on all
+  // interfaces (required for public-IP deployments). SERVER_HOST env overrides.
   const port = config.server.port;
-  app.listen(port, () => {
-    logger.info(`Agent Safety Evaluation Platform server running on port ${port}`);
+  const host = process.env.SERVER_HOST || '0.0.0.0';
+  app.listen(port, host, () => {
+    logger.info(`Agent Safety Evaluation Platform server running on ${host}:${port}`);
     logger.info(`Environment: ${config.nodeEnv}`);
     logger.info(`Health check: http://localhost:${port}/api/health`);
 

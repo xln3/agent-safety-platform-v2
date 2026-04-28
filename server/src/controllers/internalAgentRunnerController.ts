@@ -1,14 +1,51 @@
+/**
+ * Internal callback endpoint hit by the Python ts_bridge solver.
+ *
+ * The solver calls POST /api/internal/agent-runner/invoke once per sample.
+ * This controller:
+ *   1. Finds the EvalJob's active task via activeTaskRegistry (to attribute
+ *      the sample to the right EvalTask, since the solver only knows jobId).
+ *   2. Creates/updates an EvalItem (status=running) and emits `sample.start`.
+ *   3. Dispatches to the right runner (openai_compat / dify_chat / dify_workflow / cli).
+ *   4. On success: updates EvalItem (status=success, outputText, latencyMs)
+ *      and increments task/job sample counters; emits `sample.finish`.
+ *   5. On failure (after one retry): updates EvalItem (status=failed,
+ *      errorMessage); emits `sample.finish` with status=failed.
+ */
+
 import { Request, Response } from 'express';
+import { literal } from 'sequelize';
 import { agentService } from '../services/agentService';
 import { invokeAgent, RunnerInput } from '../services/agentRunner';
+import { EvalItem, EvalTask, EvalJob } from '../models';
+import { getActiveTask } from '../services/activeTaskRegistry';
+import { sseService } from '../services/sseService';
 import { successResponse, errorResponse } from '../utils/response';
 import logger from '../utils/logger';
+
+/**
+ * Defensive bump: keep totalSamples / samplesTotal at least as large as the
+ * already-completed counters. Pre-computed at job-create time from limit, but
+ * inspect_ai may exceed that (e.g. epochs > 1, or limit not set).
+ */
+async function bumpTotalsToAtLeastCompleted(jobId: number, taskId: number): Promise<void> {
+  await EvalTask.update(
+    {
+      samplesTotal: literal('GREATEST(samples_total, completed_samples)'),
+      totalSamples: literal('GREATEST(total_samples, completed_samples)'),
+    },
+    { where: { id: taskId } },
+  );
+  await EvalJob.update(
+    { totalSamples: literal('GREATEST(total_samples, completed_items)') },
+    { where: { id: jobId } },
+  );
+}
 
 const MAX_RETRIES = 1;
 
 function isRetriable(err: any): boolean {
   if (!err) return false;
-  // axios network/timeout errors
   if (err.code && ['ECONNRESET', 'ETIMEDOUT', 'ECONNABORTED', 'ENETUNREACH'].includes(err.code)) {
     return true;
   }
@@ -37,6 +74,49 @@ function parseInput(body: any): RunnerInput | string {
   };
 }
 
+/**
+ * Locate or create an EvalItem row for (taskId, sampleId).
+ * Returns null when no active task is registered for this jobId — that means
+ * either the job already finished or the runner failed to register the task.
+ */
+async function ensureEvalItem(
+  jobId: number,
+  taskId: number,
+  benchmark: string,
+  sampleId: string,
+  inputJson: object,
+): Promise<EvalItem> {
+  const [item] = await EvalItem.findOrCreate({
+    where: { taskId, sampleId },
+    defaults: {
+      jobId,
+      taskId,
+      benchmark,
+      sampleId,
+      inputJson,
+      status: 'running',
+      retryCount: 0,
+      startedAt: new Date(),
+    },
+  });
+
+  // If the row already existed (e.g. the solver retried this sample at the
+  // inspect_ai layer), bump retryCount and reset to running.
+  if (item.status !== 'running') {
+    await item.update({
+      status: 'running',
+      retryCount: (item.retryCount || 0) + 1,
+      errorMessage: null,
+      startedAt: new Date(),
+      finishedAt: null,
+      outputText: null,
+      latencyMs: null,
+    });
+  }
+
+  return item;
+}
+
 export const internalAgentRunnerController = {
   async invoke(req: Request, res: Response): Promise<void> {
     const parsed = parseInput(req.body);
@@ -53,15 +133,93 @@ export const internalAgentRunnerController = {
         return;
       }
 
+      // Locate the active task within this job so we can attribute samples.
+      const jobId = input.jobId ?? null;
+      const active = jobId != null ? getActiveTask(jobId) : undefined;
+
+      let item: EvalItem | null = null;
+      if (jobId != null && active) {
+        try {
+          item = await ensureEvalItem(
+            jobId,
+            active.taskId,
+            active.benchmark,
+            input.sampleId,
+            {
+              input: input.input,
+              messages: input.messages,
+              metadata: input.metadata,
+              target: input.target,
+            },
+          );
+
+          sseService.emit(jobId, 'sample.start', {
+            jobId,
+            taskId: active.taskId,
+            benchmark: active.benchmark,
+            taskName: active.taskName,
+            sampleId: input.sampleId,
+            itemId: item.id,
+            startedAt: item.startedAt,
+          });
+        } catch (persistErr: any) {
+          // Don't fail the agent call if persistence fails — log and continue.
+          logger.warn(
+            `EvalItem persistence failed (job=${jobId} sample=${input.sampleId}): ${persistErr.message}`,
+          );
+        }
+      }
+
       let lastErr: any = null;
       for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
         try {
           const result = await invokeAgent(agent, input);
+
+          if (item && jobId != null) {
+            await item.update({
+              status: 'success',
+              outputText: result.output,
+              latencyMs: result.latencyMs,
+              finishedAt: new Date(),
+              errorMessage: null,
+              toolCallsJson: result.toolCalls && result.toolCalls.length > 0
+                ? (result.toolCalls as unknown as object)
+                : null,
+            });
+
+            // Bump per-task and per-job sample counters.
+            await EvalTask.increment(
+              { completedSamples: 1, samplesPassed: 1 },
+              { where: { id: active!.taskId } },
+            );
+            await EvalJob.increment(
+              { completedItems: 1 },
+              { where: { id: jobId } },
+            );
+            await bumpTotalsToAtLeastCompleted(jobId, active!.taskId);
+
+            sseService.emit(jobId, 'sample.finish', {
+              jobId,
+              taskId: active!.taskId,
+              benchmark: active!.benchmark,
+              taskName: active!.taskName,
+              sampleId: input.sampleId,
+              itemId: item.id,
+              status: 'success',
+              latencyMs: result.latencyMs,
+              outputPreview: typeof result.output === 'string'
+                ? result.output.slice(0, 240)
+                : '',
+              finishedAt: new Date().toISOString(),
+            });
+          }
+
           res.json(
             successResponse({
               output: result.output,
               latencyMs: result.latencyMs,
               attempts: attempt + 1,
+              toolCalls: result.toolCalls ?? [],
             }),
           );
           return;
@@ -73,6 +231,37 @@ export const internalAgentRunnerController = {
           if (attempt >= MAX_RETRIES || !isRetriable(err)) break;
         }
       }
+
+      // All attempts exhausted — record failure.
+      if (item && jobId != null && active) {
+        const errMsg = lastErr?.message || 'unknown error';
+        await item.update({
+          status: 'failed',
+          errorMessage: errMsg.slice(0, 4000),
+          finishedAt: new Date(),
+        });
+        await EvalTask.increment(
+          { completedSamples: 1, failedSamples: 1 },
+          { where: { id: active.taskId } },
+        );
+        await EvalJob.increment(
+          { completedItems: 1 },
+          { where: { id: jobId } },
+        );
+        await bumpTotalsToAtLeastCompleted(jobId, active.taskId);
+        sseService.emit(jobId, 'sample.finish', {
+          jobId,
+          taskId: active.taskId,
+          benchmark: active.benchmark,
+          taskName: active.taskName,
+          sampleId: input.sampleId,
+          itemId: item.id,
+          status: 'failed',
+          errorMessage: errMsg.slice(0, 240),
+          finishedAt: new Date().toISOString(),
+        });
+      }
+
       res
         .status(502)
         .json(errorResponse(`Agent invocation failed: ${lastErr?.message || 'unknown error'}`));

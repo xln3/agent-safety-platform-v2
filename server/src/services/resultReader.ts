@@ -17,6 +17,7 @@ import AdmZip from 'adm-zip';
 import * as fs from 'fs';
 import * as path from 'path';
 import logger from '../utils/logger';
+import { readZipEntryJson } from '../utils/zipReader';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -240,18 +241,10 @@ function mergeScoreMetrics(
 /**
  * Safely read and parse a JSON entry from the ZIP.
  * Returns `null` when the entry is missing or the data is not valid JSON.
+ * Handles zstd-compressed entries (newer inspect_ai default).
  */
 function readZipJson(zip: AdmZip, entryName: string): any | null {
-  const entry = zip.getEntry(entryName);
-  if (!entry) {
-    return null;
-  }
-  try {
-    const buf = entry.getData();
-    return JSON.parse(buf.toString('utf-8'));
-  } catch {
-    return null;
-  }
+  return readZipEntryJson(zip, entryName);
 }
 
 /**

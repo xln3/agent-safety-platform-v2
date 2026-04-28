@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Button, Space, Typography, Tag, Popconfirm, message, Spin } from 'antd';
+import { Card, Button, Space, Typography, Tag, Popconfirm, message, Spin, Tabs } from 'antd';
 import {
   ArrowLeftOutlined,
   EyeOutlined,
   StopOutlined,
+  DashboardOutlined,
+  UnorderedListOutlined,
 } from '@ant-design/icons';
 import { useParams, useNavigate } from 'react-router-dom';
 import { evalService } from '../services/evalService';
 import type { EvalJob } from '../services/evalService';
 import EvalJobProgress from '../components/EvalJobProgress';
+import LiveItemsView from '../components/eval/LiveItemsView';
 import dayjs from 'dayjs';
 
 const { Title, Text } = Typography;
@@ -116,7 +119,21 @@ const EvalProgressPage: React.FC = () => {
         </Card>
       )}
 
-      <EvalJobProgress jobId={jobId} onJobUpdate={handleJobUpdate} />
+      <Tabs
+        defaultActiveKey="progress"
+        items={[
+          {
+            key: 'progress',
+            label: <span><DashboardOutlined /> 进度概览</span>,
+            children: <EvalJobProgress jobId={jobId} onJobUpdate={handleJobUpdate} />,
+          },
+          {
+            key: 'samples',
+            label: <span><UnorderedListOutlined /> 样本明细</span>,
+            children: <LiveItemsView jobId={jobId} live={!isTerminal} />,
+          },
+        ]}
+      />
     </div>
   );
 };

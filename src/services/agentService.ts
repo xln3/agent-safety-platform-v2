@@ -74,6 +74,21 @@ export const AGENT_TYPE_LABELS: Record<AgentType, string> = {
   cli: '本地 CLI',
 };
 
+export interface DifyParameterVariable {
+  variable: string;
+  label?: string;
+  type: string;
+  required?: boolean;
+  maxLength?: number | null;
+  default?: string | null;
+  options?: string[];
+}
+
+export interface DifyParametersResponse {
+  variables: DifyParameterVariable[];
+  raw: Record<string, unknown>;
+}
+
 export const agentService = {
   list: (params: { page?: number; pageSize?: number; keyword?: string }) =>
     api.get<unknown, PaginatedResult<Agent>>('/api/agents', { params }),
@@ -86,4 +101,7 @@ export const agentService = {
     api.put<unknown, Agent>(`/api/agents/${id}`, data),
 
   remove: (id: number) => api.delete<unknown, void>(`/api/agents/${id}`),
+
+  fetchDifyParameters: (data: { apiBase: string; apiKey: string }) =>
+    api.post<unknown, DifyParametersResponse>('/api/dify-proxy/parameters', data),
 };

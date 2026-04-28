@@ -78,6 +78,34 @@ export interface JobResultData {
     totalTaskCount: number;
     riskDistribution: Record<string, number>;
   };
+  /** Per-category / per-dimension qualitative assessment (Q2 Layer 2). May be empty when dimensions.yaml has no coverage. */
+  assessment?: DimensionsAssessment;
+}
+
+export type AssessmentTier = 'good' | 'watch' | 'action' | 'unknown';
+
+export interface AggregatedDimension {
+  id: string;
+  title: string;
+  score: number | null;
+  tier: AssessmentTier;
+  recommendation: string;
+  contributing: { benchmark: string; taskName: string; safetyScore: number | null }[];
+}
+
+export interface AggregatedCategory {
+  id: string;
+  title: string;
+  description?: string;
+  score: number | null;
+  tier: AssessmentTier;
+  dimensions: AggregatedDimension[];
+}
+
+export interface DimensionsAssessment {
+  categories: AggregatedCategory[];
+  recommendations: { categoryId: string; dimensionId: string; tier: AssessmentTier; text: string }[];
+  unmatched: { benchmark: string; taskName: string }[];
 }
 
 export interface TaskResultItem {
@@ -141,6 +169,88 @@ export interface CreateJobPayload {
 }
 
 /* ------------------------------------------------------------------ */
+/*  EvalItem (per-sample) types                                        */
+/* ------------------------------------------------------------------ */
+
+export interface EvalItem {
+  id: number;
+  jobId: number;
+  taskId: number;
+  benchmark: string;
+  sampleId: string;
+  inputJson: any;
+  outputText: string | null;
+  score: number | null;
+  scoreLabel: string | null;
+  judgeRationale: string | null;
+  status: 'pending' | 'running' | 'success' | 'failed';
+  errorMessage: string | null;
+  retryCount: number;
+  latencyMs: number | null;
+  startedAt: string | null;
+  finishedAt: string | null;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+/* ------------------------------------------------------------------ */
+/*  SSE event types                                                    */
+/* ------------------------------------------------------------------ */
+
+export type SseEventName =
+  | 'snapshot'
+  | 'job.start'
+  | 'job.finish'
+  | 'task.start'
+  | 'task.finish'
+  | 'sample.start'
+  | 'sample.finish'
+  | 'heartbeat';
+
+export interface SseHandlers {
+  onSnapshot?: (data: any) => void;
+  onJobStart?: (data: any) => void;
+  onJobFinish?: (data: any) => void;
+  onTaskStart?: (data: any) => void;
+  onTaskFinish?: (data: any) => void;
+  onSampleStart?: (data: any) => void;
+  onSampleFinish?: (data: any) => void;
+  onError?: (err: Event) => void;
+}
+
+/**
+ * Open an SSE connection to the job stream. Returns the underlying EventSource
+ * so the caller can `.close()` it. The vite dev proxy forwards `/api/...` to
+ * the backend so we use a relative URL.
+ */
+function openJobStream(jobId: number, handlers: SseHandlers): EventSource {
+  const es = new EventSource(`/api/eval/jobs/${jobId}/stream`);
+
+  const wrap = (cb?: (d: any) => void) => (e: MessageEvent) => {
+    if (!cb) return;
+    try {
+      cb(JSON.parse(e.data));
+    } catch {
+      cb(e.data);
+    }
+  };
+
+  es.addEventListener('snapshot', wrap(handlers.onSnapshot) as EventListener);
+  es.addEventListener('job.start', wrap(handlers.onJobStart) as EventListener);
+  es.addEventListener('job.finish', wrap(handlers.onJobFinish) as EventListener);
+  es.addEventListener('task.start', wrap(handlers.onTaskStart) as EventListener);
+  es.addEventListener('task.finish', wrap(handlers.onTaskFinish) as EventListener);
+  es.addEventListener('sample.start', wrap(handlers.onSampleStart) as EventListener);
+  es.addEventListener('sample.finish', wrap(handlers.onSampleFinish) as EventListener);
+  // heartbeat events are intentionally ignored — they only keep the connection alive
+  es.onerror = (err) => {
+    handlers.onError?.(err);
+  };
+
+  return es;
+}
+
+/* ------------------------------------------------------------------ */
 /*  Service                                                            */
 /* ------------------------------------------------------------------ */
 
@@ -185,5 +295,17 @@ export const evalService = {
 
   getCategories: () =>
     api.get<unknown, EvalCategory[]>('/api/eval/categories'),
+
+  /* ---------- Per-sample item API ---------- */
+
+  listJobItems: (jobId: number, params?: { page?: number; pageSize?: number; taskId?: number; status?: string }) =>
+    api.get<unknown, PaginatedResult<EvalItem>>(`/api/eval/jobs/${jobId}/items`, { params }),
+
+  getJobItem: (jobId: number, itemId: number) =>
+    api.get<unknown, EvalItem>(`/api/eval/jobs/${jobId}/items/${itemId}`),
+
+  /* ---------- SSE stream ---------- */
+
+  openJobStream,
 
 };

@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useCallback } from 'react';
-import { Card, Progress, Tag, List, Spin, Typography } from 'antd';
+import React, { useEffect, useRef, useCallback, useState } from 'react';
+import { Card, Progress, Tag, List, Spin, Typography, Badge } from 'antd';
 import {
   CheckCircleOutlined,
   CloseCircleOutlined,
   SyncOutlined,
   ClockCircleOutlined,
+  ThunderboltOutlined,
 } from '@ant-design/icons';
 import { evalService } from '../services/evalService';
 import type { EvalJob, EvalTask } from '../services/evalService';
@@ -32,16 +33,72 @@ interface EvalJobProgressProps {
   onJobUpdate?: (job: EvalJob) => void;
 }
 
+interface LiveTask {
+  id: number;
+  benchmark: string;
+  taskName: string;
+  status: 'pending' | 'running' | 'success' | 'failed';
+  totalSamples: number;
+  completedSamples: number;
+  failedSamples: number;
+  safetyScore?: number | null;
+  riskLevel?: string | null;
+}
+
+interface LiveSampleEvent {
+  taskId: number;
+  benchmark: string;
+  taskName: string;
+  sampleId: string;
+  status: 'running' | 'success' | 'failed';
+  outputPreview?: string;
+  errorMessage?: string;
+  latencyMs?: number;
+  ts: number;
+}
+
+const RECENT_BUFFER = 8;
+
 const EvalJobProgress: React.FC<EvalJobProgressProps> = ({ jobId, onJobUpdate }) => {
-  const [job, setJob] = React.useState<EvalJob | null>(null);
-  const [loading, setLoading] = React.useState(true);
+  const [job, setJob] = useState<EvalJob | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [liveTasks, setLiveTasks] = useState<Map<number, LiveTask>>(new Map());
+  const [recentEvents, setRecentEvents] = useState<LiveSampleEvent[]>([]);
+  const [completedItems, setCompletedItems] = useState(0);
+  const [totalItems, setTotalItems] = useState(0);
+
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const esRef = useRef<EventSource | null>(null);
+
+  const mergeTasks = useCallback((tasks: EvalTask[]) => {
+    setLiveTasks((prev) => {
+      const next = new Map(prev);
+      for (const t of tasks) {
+        const existing = next.get(t.id);
+        next.set(t.id, {
+          id: t.id,
+          benchmark: t.benchmark,
+          taskName: t.taskName,
+          status: t.status as LiveTask['status'],
+          totalSamples: t.samplesTotal ?? existing?.totalSamples ?? 0,
+          completedSamples: existing?.completedSamples ?? 0,
+          failedSamples: existing?.failedSamples ?? 0,
+          safetyScore: t.safetyScore,
+          riskLevel: t.riskLevel,
+        });
+      }
+      return next;
+    });
+  }, []);
 
   const fetchJob = useCallback(async () => {
     try {
-      const data = await evalService.getJob(jobId) as EvalJob;
+      const data = (await evalService.getJob(jobId)) as EvalJob;
       setJob(data);
       onJobUpdate?.(data);
+      setCompletedItems(data.completedItems ?? 0);
+      setTotalItems(data.totalItems ?? 0);
+      if (data.tasks) mergeTasks(data.tasks);
 
       if (data.status !== 'running' && data.status !== 'pending') {
         if (timerRef.current) {
@@ -54,18 +111,134 @@ const EvalJobProgress: React.FC<EvalJobProgressProps> = ({ jobId, onJobUpdate })
     } finally {
       setLoading(false);
     }
-  }, [jobId, onJobUpdate]);
+  }, [jobId, onJobUpdate, mergeTasks]);
 
   useEffect(() => {
     fetchJob();
-    timerRef.current = setInterval(fetchJob, 3000);
-
+    // Light fallback polling — SSE handles real-time, this catches drops.
+    timerRef.current = setInterval(fetchJob, 15_000);
     return () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
+      if (timerRef.current) clearInterval(timerRef.current);
     };
   }, [fetchJob]);
+
+  useEffect(() => {
+    const es = evalService.openJobStream(jobId, {
+      onSnapshot: (data: any) => {
+        setCompletedItems(data.completedItems ?? 0);
+        setTotalItems(data.totalItems ?? 0);
+        if (Array.isArray(data.tasks)) {
+          setLiveTasks((prev) => {
+            const next = new Map(prev);
+            for (const t of data.tasks) {
+              next.set(t.id, {
+                id: t.id,
+                benchmark: t.benchmark,
+                taskName: t.taskName,
+                status: t.status,
+                totalSamples: t.totalSamples ?? 0,
+                completedSamples: t.completedSamples ?? 0,
+                failedSamples: t.failedSamples ?? 0,
+              });
+            }
+            return next;
+          });
+        }
+      },
+      onTaskStart: (data: any) => {
+        setLiveTasks((prev) => {
+          const next = new Map(prev);
+          const existing = next.get(data.taskId);
+          next.set(data.taskId, {
+            id: data.taskId,
+            benchmark: data.benchmark,
+            taskName: data.taskName,
+            status: 'running',
+            totalSamples: existing?.totalSamples ?? 0,
+            completedSamples: 0,
+            failedSamples: 0,
+          });
+          return next;
+        });
+      },
+      onTaskFinish: (data: any) => {
+        setLiveTasks((prev) => {
+          const next = new Map(prev);
+          const existing = next.get(data.taskId);
+          if (existing) {
+            next.set(data.taskId, {
+              ...existing,
+              status: data.status,
+              safetyScore: data.safetyScore ?? existing.safetyScore,
+              riskLevel: data.riskLevel ?? existing.riskLevel,
+              totalSamples: data.samplesTotal ?? existing.totalSamples,
+            });
+          }
+          return next;
+        });
+      },
+      onSampleStart: (data: any) => {
+        setRecentEvents((prev) => {
+          const next: LiveSampleEvent[] = [
+            {
+              taskId: data.taskId,
+              benchmark: data.benchmark,
+              taskName: data.taskName,
+              sampleId: data.sampleId,
+              status: 'running',
+              ts: Date.now(),
+            },
+            ...prev,
+          ];
+          return next.slice(0, RECENT_BUFFER);
+        });
+      },
+      onSampleFinish: (data: any) => {
+        setLiveTasks((prev) => {
+          const next = new Map(prev);
+          const existing = next.get(data.taskId);
+          if (existing) {
+            next.set(data.taskId, {
+              ...existing,
+              completedSamples: existing.completedSamples + 1,
+              failedSamples: existing.failedSamples + (data.status === 'failed' ? 1 : 0),
+            });
+          }
+          return next;
+        });
+        setCompletedItems((c) => c + 1);
+        setRecentEvents((prev) => {
+          const next: LiveSampleEvent[] = [
+            {
+              taskId: data.taskId,
+              benchmark: data.benchmark,
+              taskName: data.taskName,
+              sampleId: data.sampleId,
+              status: data.status,
+              outputPreview: data.outputPreview,
+              errorMessage: data.errorMessage,
+              latencyMs: data.latencyMs,
+              ts: Date.now(),
+            },
+            ...prev.filter((e) => e.sampleId !== data.sampleId),
+          ];
+          return next.slice(0, RECENT_BUFFER);
+        });
+      },
+      onJobFinish: () => {
+        // Final state arrives via the next fetchJob() tick; trigger immediately.
+        fetchJob();
+      },
+      onError: () => {
+        // SSE will auto-reconnect; nothing to do here besides logging.
+      },
+    });
+    esRef.current = es;
+    return () => {
+      es.close();
+      esRef.current = null;
+    };
+  }, [jobId, fetchJob]);
 
   if (loading && !job) {
     return (
@@ -80,10 +253,15 @@ const EvalJobProgress: React.FC<EvalJobProgressProps> = ({ jobId, onJobUpdate })
   }
 
   const statusCfg = STATUS_CONFIG[job.status] || STATUS_CONFIG.pending;
-  const percent =
-    job.totalTasks > 0
-      ? Math.round((job.completedTasks / job.totalTasks) * 100)
-      : 0;
+  const taskPercent =
+    job.totalTasks > 0 ? Math.round((job.completedTasks / job.totalTasks) * 100) : 0;
+  const itemPercent =
+    totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0;
+
+  const taskList = Array.from(liveTasks.values()).sort((a, b) => {
+    if (a.benchmark !== b.benchmark) return a.benchmark.localeCompare(b.benchmark);
+    return a.taskName.localeCompare(b.taskName);
+  });
 
   return (
     <div>
@@ -102,7 +280,7 @@ const EvalJobProgress: React.FC<EvalJobProgressProps> = ({ jobId, onJobUpdate })
           </Text>
         </div>
         <Progress
-          percent={percent}
+          percent={taskPercent}
           status={
             job.status === 'failed'
               ? 'exception'
@@ -111,23 +289,67 @@ const EvalJobProgress: React.FC<EvalJobProgressProps> = ({ jobId, onJobUpdate })
                 : 'active'
           }
           strokeWidth={12}
-          style={{ marginBottom: 0 }}
+          style={{ marginBottom: totalItems > 0 ? 12 : 0 }}
         />
+        {totalItems > 0 && (
+          <div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+              <Text type="secondary">样本进度</Text>
+              <Text type="secondary">
+                {completedItems} / {totalItems}
+              </Text>
+            </div>
+            <Progress percent={itemPercent} size="small" status="active" showInfo={false} />
+          </div>
+        )}
       </Card>
 
-      {job.tasks && job.tasks.length > 0 && (
+      {recentEvents.length > 0 && (
+        <Card size="small" title={<><ThunderboltOutlined /> 实时活动</>} style={{ marginBottom: 16 }}>
+          <List
+            size="small"
+            dataSource={recentEvents}
+            renderItem={(e) => {
+              const cfg = STATUS_CONFIG[e.status] || STATUS_CONFIG.running;
+              return (
+                <List.Item style={{ padding: '4px 0' }}>
+                  <div style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <Badge status={e.status === 'success' ? 'success' : e.status === 'failed' ? 'error' : 'processing'} />
+                    <Text style={{ minWidth: 200 }} ellipsis>
+                      <Text strong>{e.benchmark}</Text> · {e.taskName}
+                    </Text>
+                    <Text code style={{ fontSize: 12 }}>{e.sampleId}</Text>
+                    <Tag color={cfg.color}>{cfg.label}</Tag>
+                    {e.latencyMs != null && (
+                      <Text type="secondary" style={{ fontSize: 12 }}>{e.latencyMs}ms</Text>
+                    )}
+                    <Text
+                      type={e.status === 'failed' ? 'danger' : 'secondary'}
+                      ellipsis
+                      style={{ flex: 1, fontSize: 12 }}
+                    >
+                      {e.errorMessage || e.outputPreview || ''}
+                    </Text>
+                  </div>
+                </List.Item>
+              );
+            }}
+          />
+        </Card>
+      )}
+
+      {taskList.length > 0 && (
         <Card title="任务详情">
           <List
-            dataSource={job.tasks}
-            renderItem={(task: EvalTask) => {
-              const taskStatus = STATUS_CONFIG[task.status] || STATUS_CONFIG.pending;
-              const taskPercent =
-                task.samplesTotal > 0
-                  ? Math.round((task.samplesPassed / task.samplesTotal) * 100)
-                  : 0;
+            dataSource={taskList}
+            renderItem={(task) => {
+              const taskStatusCfg = STATUS_CONFIG[task.status] || STATUS_CONFIG.pending;
+              const sampleTotal = task.totalSamples || 0;
+              const samplePercent =
+                sampleTotal > 0 ? Math.round((task.completedSamples / sampleTotal) * 100) : 0;
 
               return (
-                <List.Item>
+                <List.Item key={task.id}>
                   <div style={{ width: '100%' }}>
                     <div
                       style={{
@@ -143,11 +365,11 @@ const EvalJobProgress: React.FC<EvalJobProgressProps> = ({ jobId, onJobUpdate })
                           {task.taskName}
                         </Text>
                         <Tag
-                          color={taskStatus.color}
-                          icon={taskStatus.icon}
+                          color={taskStatusCfg.color}
+                          icon={taskStatusCfg.icon}
                           style={{ marginLeft: 8 }}
                         >
-                          {taskStatus.label}
+                          {taskStatusCfg.label}
                         </Tag>
                         {task.riskLevel && (
                           <Tag
@@ -156,6 +378,16 @@ const EvalJobProgress: React.FC<EvalJobProgressProps> = ({ jobId, onJobUpdate })
                           >
                             {task.riskLevel}
                           </Tag>
+                        )}
+                        {sampleTotal > 0 && (
+                          <Text type="secondary" style={{ marginLeft: 8, fontSize: 12 }}>
+                            {task.completedSamples}/{sampleTotal} 样本
+                            {task.failedSamples > 0 && (
+                              <Text type="danger" style={{ marginLeft: 4 }}>
+                                · {task.failedSamples} 失败
+                              </Text>
+                            )}
+                          </Text>
                         )}
                       </div>
                       {task.safetyScore !== undefined && task.safetyScore !== null && (
@@ -173,12 +405,8 @@ const EvalJobProgress: React.FC<EvalJobProgressProps> = ({ jobId, onJobUpdate })
                         </Text>
                       )}
                     </div>
-                    {task.status === 'running' && (
-                      <Progress
-                        percent={taskPercent}
-                        size="small"
-                        status="active"
-                      />
+                    {task.status === 'running' && sampleTotal > 0 && (
+                      <Progress percent={samplePercent} size="small" status="active" />
                     )}
                   </div>
                 </List.Item>

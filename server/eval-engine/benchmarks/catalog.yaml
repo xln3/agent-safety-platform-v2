@@ -81,6 +81,7 @@ benchmarks:
     source: upstream
     module: inspect_evals/xstest
     python: "3.10"
+    judge_param: scorer_model
     tasks:
       - name: xstest
         path: inspect_evals/xstest

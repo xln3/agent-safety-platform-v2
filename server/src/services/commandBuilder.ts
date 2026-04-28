@@ -17,6 +17,13 @@ export interface CommandBuildOptions {
   limit?: number;
   effectiveJudge?: string | null;
   judgeParam?: string;
+  /**
+   * Per-judge overrides (base URL / api key). When present, the grader role
+   * is emitted as a JSON `--model-role` spec so inspect_ai forwards them to
+   * the openai provider; otherwise the bare model name is used and the
+   * provider falls back to the same env vars as the solver.
+   */
+  judgeOverride?: { apiBase?: string | null; apiKey?: string | null } | null;
   modelRoles?: Record<string, string>;
   taskArgs?: Record<string, unknown>;
   sampleIds?: string[] | null;
@@ -76,6 +83,7 @@ export function buildInspectCommand(options: CommandBuildOptions): string[] {
     limit,
     effectiveJudge,
     judgeParam,
+    judgeOverride,
     modelRoles,
     taskArgs,
     sampleIds,
@@ -142,7 +150,18 @@ export function buildInspectCommand(options: CommandBuildOptions): string[] {
 
   // Judge model
   if (effectiveJudge) {
-    cmd.push('--model-role', `grader=${effectiveJudge}`);
+    if (judgeOverride && (judgeOverride.apiBase || judgeOverride.apiKey)) {
+      // inspect_ai parses --model-role JSON via parse_model_role_cli_args:
+      // it pops "model" + "model_args"; "model_args" is forwarded to the
+      // provider's get_model() (so base_url + api_key live there).
+      const modelArgs: Record<string, unknown> = {};
+      if (judgeOverride.apiBase) modelArgs.base_url = judgeOverride.apiBase;
+      if (judgeOverride.apiKey) modelArgs.api_key = judgeOverride.apiKey;
+      const roleSpec: Record<string, unknown> = { model: effectiveJudge, model_args: modelArgs };
+      cmd.push('--model-role', `grader=${JSON.stringify(roleSpec)}`);
+    } else {
+      cmd.push('--model-role', `grader=${effectiveJudge}`);
+    }
     if (judgeParam) {
       cmd.push('-T', `${judgeParam}=${effectiveJudge}`);
     }

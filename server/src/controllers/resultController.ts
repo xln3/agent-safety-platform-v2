@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { EvalJob, EvalTask, Agent } from '../models';
 import { readEvalSamples } from '../services/resultReader';
+import { aggregateDimensions, TaskResultRow } from '../services/dimensionAggregator';
 import { successResponse, errorResponse } from '../utils/response';
 import logger from '../utils/logger';
 
@@ -69,6 +70,17 @@ export const resultController = {
         }
       }
 
+      // Per-category / per-dimension assessment (Q2 Layer 2). The aggregator
+      // is data-driven from dimensions.yaml, so adding a new benchmark to the
+      // catalog only needs a YAML edit, not a controller change.
+      const aggregatorRows: TaskResultRow[] = taskResults.map((t) => ({
+        benchmark: t.benchmark,
+        taskName: t.taskName,
+        safetyScore: t.safetyScore == null ? null : Number(t.safetyScore),
+        riskLevel: t.riskLevel,
+      }));
+      const assessment = aggregateDimensions(aggregatorRows);
+
       res.json(
         successResponse({
           job,
@@ -79,6 +91,7 @@ export const resultController = {
             totalTaskCount: tasks.length,
             riskDistribution,
           },
+          assessment,
         }),
       );
     } catch (error: any) {

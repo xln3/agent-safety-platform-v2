@@ -11,10 +11,33 @@ export interface RunnerInput {
   target?: string | string[] | null;
 }
 
+/**
+ * One tool invocation observed during the agent's run, in OpenAI-compatible
+ * shape. The Dify chat/workflow runners synthesize these from streaming
+ * agent_thought / node_finished events; the OpenAI runner could populate them
+ * verbatim from the API response. Persisted to EvalItem.toolCallsJson and
+ * forwarded to inspect_ai by ts_bridge_solver as ChatMessageAssistant.tool_calls
+ * + ChatMessageTool sequences so tool-use scorers can grade them.
+ */
+export interface AgentToolCall {
+  /** Stable per-call id; ts-bridge uses this to pair assistant.tool_calls with the tool result. */
+  id: string;
+  /** Tool / function name as the agent saw it. */
+  name: string;
+  /** Arguments as a JSON string (OpenAI tool_calls convention). Empty string when unknown. */
+  arguments: string;
+  /** Tool's textual result / observation, when the agent surfaced one. */
+  result?: string;
+  /** Free-form metadata for diagnostics (node type, latency, status, etc.). */
+  metadata?: Record<string, any>;
+}
+
 export interface RunnerOutput {
   output: string;
   latencyMs: number;
   raw?: unknown;
+  /** Tool invocations performed by the agent during this sample, in call order. */
+  toolCalls?: AgentToolCall[];
 }
 
 export interface AgentRunner {
