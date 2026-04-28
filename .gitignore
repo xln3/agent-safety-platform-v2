@@ -14,7 +14,6 @@ __pycache__/
 e2e/*
 !e2e/README.md
 !e2e/*.spec.*
-!e2e/report/
 e2e-demo.ts
 server/tsconfig.tsbuildinfo
 
@@ -25,3 +24,6 @@ _worklog/05-test-artifacts/
 
 # Build
 tsconfig.tsbuildinfo
+
+# Claude Code 项目本地状态（scheduled_tasks.lock / worktrees / agents — 不入仓）
+.claude/
