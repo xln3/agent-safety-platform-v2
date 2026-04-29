@@ -396,7 +396,9 @@ async function spawnTaskProcess(
     taskSpec,
     modelForInspect: normalizeModelName(job.modelId),
     apiBase: agent.apiBase ?? undefined,
-    limit: job.limit || undefined,
+    // Per-task limit lives on EvalTask now (V1 base+remainder allocation).
+    // Legacy job-wide `limit` is the fallback for older callers.
+    limit: task.samplesTotal || job.limit || undefined,
     effectiveJudge,
     judgeParam: benchmarkConfig.judgeParam,
     judgeOverride: judgeModelOverride

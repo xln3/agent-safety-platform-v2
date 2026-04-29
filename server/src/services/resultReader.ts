@@ -47,6 +47,7 @@ export interface EvalSample {
   output: string;
   score: number | null;
   metadata?: Record<string, any>;
+  error?: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -468,13 +469,48 @@ export async function readEvalHeader(filePath: string): Promise<EvalHeader> {
  * read paths.
  */
 function normalizeSample(raw: any, fallbackId: string): EvalSample {
+  let output = extractOutputText(raw.output);
+
+  // Defensive fallback: when the solver populated state.messages but not
+  // state.output (or the extractor's known fields are empty), pull the last
+  // assistant turn from messages[]. Covers bridge variants that forget to
+  // mirror completion into output, plus partial-run scenarios.
+  if (!output && Array.isArray(raw.messages)) {
+    for (let i = raw.messages.length - 1; i >= 0; i--) {
+      const m = raw.messages[i];
+      if (!m || typeof m !== 'object' || m.role !== 'assistant') continue;
+      if (typeof m.content === 'string' && m.content.length > 0) {
+        output = m.content;
+        break;
+      }
+      if (Array.isArray(m.content)) {
+        const text = m.content
+          .filter((b: any) => b && typeof b === 'object' && typeof b.text === 'string')
+          .map((b: any) => b.text)
+          .join('');
+        if (text) {
+          output = text;
+          break;
+        }
+      }
+    }
+  }
+
+  const errMsg =
+    raw?.error && typeof raw.error === 'object' && typeof raw.error.message === 'string'
+      ? String(raw.error.message).slice(0, 500)
+      : typeof raw?.error === 'string'
+        ? raw.error.slice(0, 500)
+        : undefined;
+
   return {
     id: raw.id ?? fallbackId,
     input: extractInputText(raw.input),
     target: raw.target != null ? String(raw.target) : undefined,
-    output: extractOutputText(raw.output),
+    output,
     score: extractSampleScore(raw.scores),
     metadata: raw.metadata ?? undefined,
+    ...(errMsg ? { error: errMsg } : {}),
   };
 }
 

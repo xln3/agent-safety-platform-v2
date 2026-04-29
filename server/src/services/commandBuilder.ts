@@ -149,7 +149,12 @@ export function buildInspectCommand(options: CommandBuildOptions): string[] {
   // Limit (only if no sample IDs specified)
   if (limit && !hasSampleIds) {
     cmd.push('--limit', String(limit));
-    // Override hardcoded epochs to prevent multiplication
+  }
+
+  // Force epochs=1 whenever the caller asked for a finite budget — applies to
+  // both --limit and --sample-id paths so that benchmarks like b3 (epochs=5
+  // default) don't silently 5× the requested sample count.
+  if (limit) {
     cmd.push('--epochs', '1');
   }
 

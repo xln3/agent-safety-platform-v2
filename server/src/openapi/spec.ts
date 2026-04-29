@@ -84,7 +84,7 @@ paths:
         | CLI 命令 / 输入模式 | \`agent.commandTemplate\` / \`agent.inputMode\` | cli 必填，inputMode ∈ {placeholder,stdin} |
         | 任务类型 | \`benchmarks\` | 必填，benchmark 列表，必须存在于 catalog |
         | 测试数据类型 | \`sampling.mode\` | \`all\`(全部) 或 \`random\`(随机抽样) |
-        | 测试数据条数 | \`sampling.count\` | mode=random 时必填，按已选 benchmarks 平均拆分（per-bench limit = ceil(count / N)） |
+        | 测试数据条数 | \`sampling.count\` | mode=random 时必填。**base+remainder** 拆分到 N 个 task：base=⌊count/N⌋、前 \`count mod N\` 个 task 多 +1。例：count=20 + 3 tasks → 7+7+6。所有 task 强制 \`--epochs 1\`，避免 b3 等默认 epochs>1 的 benchmark 倍乘超额。若某 benchmark 自身数据集不足额度，实际样本数会少于请求；GET 响应里会出现 \`samplingNotes\` 提示差额。 |
 
         **同步 vs 异步**：
         - 默认异步：响应立刻返回 \`taskId\` (HTTP 201)，再通过 GET /api/v1/evaluate/{taskId} 轮询。
@@ -241,9 +241,12 @@ paths:
         | 任务开始时间 | \`startedAt\` |
         | 任务类型 | \`benchmarks\` 数组 |
         | 每条测试项的输入/输出 | \`tasks[].samples[].{input,output}\` |
+        | 单条样本异常信息 | \`tasks[].samples[].error\` 仅出现在该样本异常时 |
+        | 整体抽样差额提示 | \`samplingNotes\` 仅当实际样本数 < 请求时出现（多为某 benchmark 数据集不够额度）|
 
         **状态字段**: \`status\` ∈ {pending, running, completed, failed}。
         \`tasks[].samples\` 仅在该子任务跑完落盘 \`.eval\` 文件后才有内容；运行中查为空数组。
+        如需运行时实时拿每条样本，改用 \`/api/v1/evaluate/{taskId}/stream\`。
       responses:
         '200':
           description: OK
@@ -253,6 +256,39 @@ paths:
                 allOf:
                   - $ref: '#/components/schemas/Envelope'
                   - properties: { data: { $ref: '#/components/schemas/V1StatusResponse' } }
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /api/v1/evaluate/{taskId}/stream:
+    parameters:
+      - in: path
+        name: taskId
+        required: true
+        schema: { type: integer }
+        description: POST /api/v1/evaluate 返回的 taskId
+    get:
+      tags: ["V1 (甲方接口)"]
+      summary: SSE 实时事件流（每完成一条样本即推送）/ Server-Sent Events for live per-sample updates
+      description: |
+        \`Content-Type: text/event-stream\`。建立连接后立刻发一份初始 \`status\` 快照（与 GET /api/v1/evaluate/{taskId} 同结构），
+        随后每当后端跑完一条样本/一条 task/整个 job，即推送一帧。
+
+        | event | data 字段 |
+        |---|---|
+        | status | 初始 V1StatusResponse 全量快照 |
+        | task.start / task.finish | \`{ taskId, benchmark, taskName, status, ... }\` |
+        | sample.start | \`{ jobId, taskId, sampleId, input, ... }\` |
+        | sample.finish | \`{ jobId, taskId, sampleId, output, score, error?, ... }\` |
+        | job.finish | \`{ jobId, status, ... }\` |
+        | heartbeat | \`{ ts }\` 每 15 s 一次，用于穿透代理 / 防超时断流 |
+
+        Swagger UI 不渲染 SSE。本地用 \`curl -N http://host/api/v1/evaluate/{taskId}/stream\` 或浏览器 \`new EventSource(url)\` 测试。
+      responses:
+        '200':
+          description: text/event-stream
+          content:
+            text/event-stream:
+              schema: { type: string }
         '404':
           $ref: '#/components/responses/NotFound'
 
@@ -1356,6 +1392,12 @@ components:
         id: { type: string }
         input: { type: string, description: 测试项输入（用户消息文本） }
         output: { type: string, description: 被测智能体输出 }
+        error:
+          type: string
+          nullable: true
+          description: |
+            仅当该样本异常时出现（如 CancelledError / IndexError / runner timeout 等），最多保留前 500 字符。
+            正常样本不返回此字段。
 
     V1TaskOutput:
       type: object
@@ -1410,6 +1452,13 @@ components:
         completedTasks: { type: integer }
         totalSamples: { type: integer }
         completedSamples: { type: integer }
+        samplingNotes:
+          type: string
+          nullable: true
+          description: |
+            仅当 \`completedSamples < sampling.count\`（实际产出小于请求量）时出现。
+            常见原因：某个 benchmark 自身数据集小于均摊到它头上的额度。
+            示例："请求 20 条样本，实际完成 18 条；通常是某个 benchmark 本地数据集小于分配额度"。
         tasks:
           type: array
           items: { $ref: '#/components/schemas/V1TaskOutput' }

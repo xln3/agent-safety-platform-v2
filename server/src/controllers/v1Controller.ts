@@ -43,8 +43,11 @@ import { Agent, EvalJob, EvalTask, JudgeModel } from '../models';
 import { runJob } from '../services/evalRunner';
 import { catalogService } from '../services/catalogService';
 import { readEvalSamples } from '../services/resultReader';
+import { sseService } from '../services/sseService';
 import { successResponse, errorResponse } from '../utils/response';
 import logger from '../utils/logger';
+
+const SSE_HEARTBEAT_INTERVAL_MS = 15_000;
 
 const DEFAULT_SAMPLES_PER_TASK = 50;
 const MAX_SAMPLES_PER_TASK = 500;
@@ -416,7 +419,12 @@ async function buildStatusPayload(
     if (task.evalFile) {
       try {
         const result = await readEvalSamples(task.evalFile, 0, samplesPerTask);
-        samples = result.samples.map((s) => ({ id: s.id, input: s.input, output: s.output }));
+        samples = result.samples.map((s) => ({
+          id: s.id,
+          input: s.input,
+          output: s.output,
+          ...(s.error ? { error: s.error } : {}),
+        }));
         total = result.total;
         truncated = total > samples.length;
       } catch (err: any) {
@@ -438,6 +446,25 @@ async function buildStatusPayload(
     });
   }
 
+  // When the user requested random sampling and the actual completed sample
+  // count fell short of what the job planned (job.totalSamples), tell them
+  // why — almost always one benchmark's local dataset is smaller than its
+  // share of `count`. Without this hint, "I asked for 20 but got 18" looks
+  // like a bug.
+  const isTerminal = job.status === 'completed' || job.status === 'failed';
+  const requestedCount =
+    echoSampling && typeof echoSampling === 'object' && (echoSampling as any).count != null
+      ? Number((echoSampling as any).count)
+      : null;
+  const samplingNotes =
+    isTerminal &&
+    requestedCount &&
+    requestedCount > 0 &&
+    aggregateCompletedSamples > 0 &&
+    aggregateCompletedSamples < requestedCount
+      ? `请求 ${requestedCount} 条样本，实际完成 ${aggregateCompletedSamples} 条；通常是某个 benchmark 本地数据集小于分配额度`
+      : null;
+
   return {
     taskId: job.id,
     taskName: echoTaskName,
@@ -455,6 +482,7 @@ async function buildStatusPayload(
     completedTasks: job.completedTasks,
     totalSamples: job.totalSamples,
     completedSamples: aggregateCompletedSamples,
+    ...(samplingNotes ? { samplingNotes } : {}),
     tasks: taskOutputs,
   };
 }
@@ -612,14 +640,9 @@ export const v1Controller = {
         }
       }
 
-      // Sampling -> per-task limit
-      const totalCount = payload.sampling.mode === 'random' ? Number(payload.sampling.count) : 0;
-      const perBenchLimit =
-        payload.sampling.mode === 'random'
-          ? Math.max(1, Math.ceil(totalCount / payload.benchmarks.length))
-          : null;
-
-      // Resolve task list (some benchmarks expand to multi-task)
+      // Resolve task list FIRST (some benchmarks expand to multi-task).
+      // Allocation must be per-task, not per-benchmark, otherwise count=20
+      // across 3 benchmarks where one expands to 2 tasks would over-allocate.
       const allBenchmarks = catalogService.getAllBenchmarks();
       const benchmarkMap = new Map(allBenchmarks.map((b) => [b.name, b]));
       const tasksToCreate: { benchmark: string; taskName: string }[] = [];
@@ -638,6 +661,23 @@ export const v1Controller = {
         res.status(400).json(errorResponse('No valid tasks resolved from benchmarks'));
         return;
       }
+
+      // Sampling → per-task allocation using base+remainder (not ceil), so
+      // Σ samplesTotal == count exactly. Earlier `Math.ceil(count / N) * N`
+      // could over-allocate (count=20, N=3 → 21) and made GET responses confusing.
+      // Tasks are sorted: first `remainder` get base+1, rest get base.
+      const totalCount = payload.sampling.mode === 'random' ? Number(payload.sampling.count) : 0;
+      const numTasks = tasksToCreate.length;
+      const perTaskAllocations =
+        payload.sampling.mode === 'random'
+          ? (() => {
+              const base = Math.floor(totalCount / numTasks);
+              const remainder = totalCount % numTasks;
+              return Array.from({ length: numTasks }, (_, i) =>
+                Math.max(1, i < remainder ? base + 1 : base),
+              );
+            })()
+          : Array.from({ length: numTasks }, () => 0); // mode='all' → no per-task cap
 
       // Create Agent
       const agentTimestamp = Date.now();
@@ -663,8 +703,11 @@ export const v1Controller = {
         modelId = `openai/bridge-${payload.agent.agentType}-${agentRecord.id}`;
       }
 
-      const perTaskTotal = perBenchLimit || 0;
-      const jobTotalSamples = perTaskTotal * tasksToCreate.length;
+      // jobTotalSamples = Σ perTaskAllocations. For random mode this equals
+      // totalCount exactly (base+remainder distribution). For 'all' mode it's
+      // 0 (sentinel meaning "run whole dataset"; actual completion populates
+      // the real numbers as samples land).
+      const jobTotalSamples = perTaskAllocations.reduce((s, n) => s + n, 0);
       const jobName =
         (payload.taskName?.trim() || `v1-${payload.agent.name}`) + `-${agentTimestamp}`;
 
@@ -674,7 +717,9 @@ export const v1Controller = {
         name: jobName,
         benchmarks: payload.benchmarks,
         modelId,
-        limit: perBenchLimit,
+        // limit is now per-task (in EvalTask.samplesTotal); keep job.limit null
+        // so legacy callers that read it know there's no uniform cap.
+        limit: null,
         judgeModel: resolvedJudgeName,
         systemPrompt: payload.systemPrompt ?? null,
         config: {
@@ -703,14 +748,16 @@ export const v1Controller = {
         totalItems: jobTotalSamples,
       });
 
-      for (const taskDef of tasksToCreate) {
+      for (let i = 0; i < tasksToCreate.length; i++) {
+        const taskDef = tasksToCreate[i];
+        const taskLimit = perTaskAllocations[i];
         await EvalTask.create({
           jobId: job.id,
           agentId: agentRecord.id,
           benchmark: taskDef.benchmark,
           taskName: taskDef.taskName,
-          samplesTotal: perTaskTotal,
-          totalSamples: perTaskTotal,
+          samplesTotal: taskLimit,
+          totalSamples: taskLimit,
         });
       }
 
@@ -805,6 +852,62 @@ export const v1Controller = {
       logger.error(`[v1] getStatus failed: ${err.message}`);
       res.status(500).json(errorResponse(err.message));
     }
+  },
+
+  /**
+   * GET /api/v1/evaluate/:taskId/stream — Server-Sent Events feed.
+   *
+   * Emits one initial `status` event with the same payload shape as GET
+   * (so a client can render immediately) then pipes through every
+   * sseService event for this job: sample.start, sample.finish (per-item
+   * progress with output preview), task.start, task.finish, job.finish,
+   * heartbeat (every 15s to keep proxies from dropping the connection).
+   *
+   * Closes the underlying response when the client disconnects.
+   */
+  async getStream(req: Request, res: Response): Promise<void> {
+    const taskId = parseInt(req.params.taskId as string, 10);
+    if (Number.isNaN(taskId)) {
+      res.status(400).json(errorResponse('Invalid taskId'));
+      return;
+    }
+
+    const job = await EvalJob.findByPk(taskId);
+    if (!job) {
+      res.status(404).json(errorResponse('Evaluation task not found'));
+      return;
+    }
+
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache, no-transform');
+    res.setHeader('Connection', 'keep-alive');
+    res.setHeader('X-Accel-Buffering', 'no');
+    res.flushHeaders?.();
+
+    try {
+      const initial = await buildStatusPayload(taskId, DEFAULT_SAMPLES_PER_TASK);
+      if (initial) {
+        res.write(`event: status\ndata: ${JSON.stringify(initial)}\n\n`);
+      }
+    } catch (err: any) {
+      logger.warn(`[v1] stream initial snapshot failed task=${taskId}: ${err.message}`);
+    }
+
+    sseService.subscribe(taskId, res);
+
+    const heartbeat = setInterval(() => {
+      try {
+        res.write(`event: heartbeat\ndata: ${JSON.stringify({ ts: Date.now() })}\n\n`);
+      } catch (err: any) {
+        logger.warn(`[v1] stream heartbeat failed task=${taskId}: ${err.message}`);
+      }
+    }, SSE_HEARTBEAT_INTERVAL_MS);
+
+    req.on('close', () => {
+      clearInterval(heartbeat);
+      sseService.unsubscribe(taskId, res);
+      logger.debug(`[v1] stream client disconnected task=${taskId}`);
+    });
   },
 };
 

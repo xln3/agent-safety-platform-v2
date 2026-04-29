@@ -29,7 +29,7 @@ import json
 import os
 
 import httpx
-from inspect_ai.model import ChatMessageAssistant, ChatMessageTool
+from inspect_ai.model import ChatCompletionChoice, ChatMessageAssistant, ChatMessageTool
 from inspect_ai.solver import Generate, Solver, TaskState, solver
 from inspect_ai.tool import ToolCall, ToolDef
 
@@ -186,8 +186,17 @@ def ts_bridge(agent_id: int = 0) -> Solver:
                     )
                 )
 
-        state.messages.append(ChatMessageAssistant(content=output))
+        # Build the final assistant message and write it everywhere a scorer
+        # might look. Some inspect_evals scorers (b3, assistant_bench, sosbench)
+        # access state.output.message, which is a property that dereferences
+        # state.output.choices[0] — leaving choices empty crashes them with
+        # IndexError mid-eval and cancels every peer sample in the same group.
+        final_msg = ChatMessageAssistant(content=output)
+        state.messages.append(final_msg)
         state.output.completion = output
+        state.output.choices = [
+            ChatCompletionChoice(message=final_msg, stop_reason="stop")
+        ]
         return state
 
     return solve
