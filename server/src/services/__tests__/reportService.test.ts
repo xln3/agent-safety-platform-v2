@@ -95,7 +95,8 @@ describe('escapeHtml (contract test matching reportService implementation)', () 
 //   >= 80 => MINIMAL, >= 60 => LOW, >= 40 => MEDIUM, >= 20 => HIGH, else CRITICAL
 // ---------------------------------------------------------------------------
 
-function getRiskLevel(score: number): string {
+function getRiskLevel(score: number | null): string {
+  if (score == null || Number.isNaN(score)) return 'UNSCORED';
   if (score >= 80) return 'MINIMAL';
   if (score >= 60) return 'LOW';
   if (score >= 40) return 'MEDIUM';
@@ -134,6 +135,11 @@ describe('getRiskLevel (contract test matching reportService implementation)', (
     expect(getRiskLevel(90)).toBe('MINIMAL');
     expect(getRiskLevel(100)).toBe('MINIMAL');
   });
+
+  it('should return UNSCORED for null / NaN scores', () => {
+    expect(getRiskLevel(null)).toBe('UNSCORED');
+    expect(getRiskLevel(Number.NaN)).toBe('UNSCORED');
+  });
 });
 
 // ---------------------------------------------------------------------------
@@ -144,7 +150,8 @@ describe('getRiskLevel (contract test matching reportService implementation)', (
 //   >= 20 => '#f97316', else '#ef4444'
 // ---------------------------------------------------------------------------
 
-function getScoreColor(score: number): string {
+function getScoreColor(score: number | null): string {
+  if (score == null || Number.isNaN(score)) return '#9ca3af';
   if (score >= 80) return '#3b82f6';
   if (score >= 60) return '#22c55e';
   if (score >= 40) return '#eab308';
@@ -172,14 +179,22 @@ describe('getScoreColor (contract test matching reportService implementation)', 
   it('should return blue for scores >= 80', () => {
     expect(getScoreColor(85)).toBe('#3b82f6');
   });
+
+  it('should return neutral grey for null / NaN scores', () => {
+    expect(getScoreColor(null)).toBe('#9ca3af');
+    expect(getScoreColor(Number.NaN)).toBe('#9ca3af');
+  });
 });
 
 // ---------------------------------------------------------------------------
 // Pure-logic contract tests: getScoreBarHtml
 // ---------------------------------------------------------------------------
 
-function getScoreBarHtml(score: number): string {
+function getScoreBarHtml(score: number | null): string {
   const color = getScoreColor(score);
+  if (score == null || Number.isNaN(score)) {
+    return `<div class="score-bar"><div class="score-bar-track"><div class="score-bar-fill" style="width:0%;background:${color}"></div></div><span class="score-bar-value" style="color:${color}">未评分</span></div>`;
+  }
   const pct = Math.max(0, Math.min(100, score));
   return `<div class="score-bar"><div class="score-bar-track"><div class="score-bar-fill" style="width:${pct}%;background:${color}"></div></div><span class="score-bar-value" style="color:${color}">${score.toFixed(1)}</span></div>`;
 }
@@ -203,6 +218,13 @@ describe('getScoreBarHtml (contract test)', () => {
     const html = getScoreBarHtml(90);
     expect(html).toContain('#3b82f6'); // blue for >= 80
   });
+
+  it('should render 未评分 placeholder for null / NaN scores', () => {
+    const html = getScoreBarHtml(null);
+    expect(html).toContain('未评分');
+    expect(html).toContain('width:0%');
+    expect(html).toContain('#9ca3af');
+  });
 });
 
 // ---------------------------------------------------------------------------
@@ -212,6 +234,7 @@ describe('getScoreBarHtml (contract test)', () => {
 function getRiskBadgeHtml(level: string): string {
   const labels: Record<string, string> = {
     CRITICAL: '极危', HIGH: '高危', MEDIUM: '中危', LOW: '低危', MINIMAL: '极低',
+    UNSCORED: '未评分',
   };
   return `<span class="risk-badge risk-${level}">${labels[level] || level}</span>`;
 }
@@ -242,28 +265,58 @@ describe('getRiskBadgeHtml (contract test)', () => {
 //
 // The generateReport method computes averages and pass rates. We verify
 // the arithmetic contract here.
+//
+// Updated: null-safe semantics — null/undefined safetyScore tasks are
+// "unscored" (not 0); they don't contribute to the average. When no tasks are
+// scored at all (e.g. skipJudge=true), overallScore is null and aggregateStatus
+// is 'unscored'.
 // ---------------------------------------------------------------------------
 
 describe('report summary calculation logic (contract test)', () => {
-  function computeSummary(tasks: Array<{ score: number; samplesPassed: number; samplesTotal: number }>) {
+  function computeSummary(
+    tasks: Array<{ score: number | null; samplesPassed: number; samplesTotal: number }>
+  ) {
     let totalScore = 0;
     let taskCount = 0;
+    let scoredTaskCount = 0;
     let allSamplesPassed = 0;
     let allSamplesTotal = 0;
 
     for (const t of tasks) {
-      totalScore += t.score;
       taskCount += 1;
+      if (t.score !== null && t.score !== undefined && !Number.isNaN(t.score)) {
+        totalScore += t.score;
+        scoredTaskCount += 1;
+      }
       allSamplesPassed += t.samplesPassed;
       allSamplesTotal += t.samplesTotal;
     }
 
-    const overallScore = taskCount > 0 ? Number((totalScore / taskCount).toFixed(2)) : 0;
+    const overallScore: number | null = scoredTaskCount > 0
+      ? Number((totalScore / scoredTaskCount).toFixed(2))
+      : null;
     const passRate = allSamplesTotal > 0
       ? Number(((allSamplesPassed / allSamplesTotal) * 100).toFixed(1))
       : 0;
 
-    return { overallScore, totalTasks: taskCount, samplesPassed: allSamplesPassed, samplesTotal: allSamplesTotal, passRate };
+    let aggregateStatus: 'scored' | 'unscored' | 'no_data';
+    if (taskCount === 0) {
+      aggregateStatus = 'no_data';
+    } else if (scoredTaskCount === 0) {
+      aggregateStatus = 'unscored';
+    } else {
+      aggregateStatus = 'scored';
+    }
+
+    return {
+      overallScore,
+      aggregateStatus,
+      totalTasks: taskCount,
+      scoredTasks: scoredTaskCount,
+      samplesPassed: allSamplesPassed,
+      samplesTotal: allSamplesTotal,
+      passRate,
+    };
   }
 
   it('should compute correct average score', () => {
@@ -273,6 +326,8 @@ describe('report summary calculation logic (contract test)', () => {
     ]);
     expect(summary.overallScore).toBe(70);
     expect(summary.totalTasks).toBe(2);
+    expect(summary.scoredTasks).toBe(2);
+    expect(summary.aggregateStatus).toBe('scored');
   });
 
   it('should compute correct pass rate', () => {
@@ -287,7 +342,8 @@ describe('report summary calculation logic (contract test)', () => {
 
   it('should handle empty task list', () => {
     const summary = computeSummary([]);
-    expect(summary.overallScore).toBe(0);
+    expect(summary.overallScore).toBeNull();
+    expect(summary.aggregateStatus).toBe('no_data');
     expect(summary.passRate).toBe(0);
     expect(summary.totalTasks).toBe(0);
   });
@@ -297,6 +353,7 @@ describe('report summary calculation logic (contract test)', () => {
       { score: 95.5, samplesPassed: 100, samplesTotal: 100 },
     ]);
     expect(summary.overallScore).toBe(95.5);
+    expect(summary.aggregateStatus).toBe('scored');
     expect(summary.passRate).toBe(100);
   });
 
@@ -305,6 +362,35 @@ describe('report summary calculation logic (contract test)', () => {
       { score: 50, samplesPassed: 0, samplesTotal: 0 },
     ]);
     expect(summary.passRate).toBe(0);
+  });
+
+  // skipJudge=true scenario: all tasks completed but none have scores.
+  it('should produce overallScore=null + aggregateStatus=unscored when all tasks have null score', () => {
+    const summary = computeSummary([
+      { score: null, samplesPassed: 5, samplesTotal: 5 },
+      { score: null, samplesPassed: 3, samplesTotal: 5 },
+      { score: null, samplesPassed: 0, samplesTotal: 5 },
+    ]);
+    expect(summary.overallScore).toBeNull();
+    expect(summary.aggregateStatus).toBe('unscored');
+    expect(summary.totalTasks).toBe(3);
+    expect(summary.scoredTasks).toBe(0);
+    // Sample-level pass rate is independent of judge scoring; still computed.
+    expect(summary.samplesPassed).toBe(8);
+    expect(summary.samplesTotal).toBe(15);
+  });
+
+  // Mixed: some tasks scored, some null (e.g. some benchmarks failed pre-judge).
+  it('should average only over scored tasks when some tasks have null score', () => {
+    const summary = computeSummary([
+      { score: 80, samplesPassed: 8, samplesTotal: 10 },
+      { score: null, samplesPassed: 0, samplesTotal: 10 },
+      { score: 60, samplesPassed: 6, samplesTotal: 10 },
+    ]);
+    expect(summary.overallScore).toBe(70); // (80 + 60) / 2, NOT (80 + 0 + 60) / 3
+    expect(summary.aggregateStatus).toBe('scored');
+    expect(summary.totalTasks).toBe(3);
+    expect(summary.scoredTasks).toBe(2);
   });
 });
 

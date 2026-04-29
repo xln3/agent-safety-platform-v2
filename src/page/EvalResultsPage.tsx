@@ -6,6 +6,7 @@ import {
   Empty,
   Typography,
   Tabs,
+  Tag,
   message,
 } from 'antd';
 import {
@@ -100,6 +101,19 @@ const EvalResultsPage: React.FC = () => {
 
   const modelId = result.job?.modelId;
 
+  // "Unscored" mode: V1 callers can submit `skipJudge: true` so inspect_ai
+  // never invokes a judge model. The job still produces samples (input /
+  // target / output) but no scores, so the entire scoring UI (overall card,
+  // radar, dimension assessment, risk breakdown) becomes meaningless.
+  // Detection: backend stores the original V1 echo in `job.config.v1`.
+  // Fall back to `aggregateStatus === 'no_data'` + null overallScore so older
+  // jobs without the v1 echo still degrade gracefully.
+  const v1Echo = (result.job?.config as { v1?: { skipJudge?: boolean } } | undefined)?.v1;
+  const isUnscored =
+    v1Echo?.skipJudge === true ||
+    (result.aggregate?.aggregateStatus === 'no_data' &&
+      result.aggregate?.overallSafetyScore == null);
+
   const tabItems = [
     {
       key: 'full-report',
@@ -107,6 +121,7 @@ const EvalResultsPage: React.FC = () => {
       children: (
         <FullReportView
           result={result}
+          unscored={isUnscored}
           onSelectTask={handleSelectTask}
           onHighRiskDetail={handleHighRiskDetail}
           onGenerateReport={handleGenerateReport}
@@ -114,7 +129,7 @@ const EvalResultsPage: React.FC = () => {
         />
       ),
     },
-    ...(result.assessment && result.assessment.categories.length > 0
+    ...(!isUnscored && result.assessment && result.assessment.categories.length > 0
       ? [{
           key: 'assessment',
           label: <span><RadarChartOutlined /> 维度评估</span>,
@@ -126,11 +141,13 @@ const EvalResultsPage: React.FC = () => {
       label: <span><SearchOutlined /> 单项基准</span>,
       children: <SingleBenchmarkView result={result} initialTaskId={drillTaskId} initialTaskName={drillTaskName} />,
     },
-    {
-      key: 'high-risk',
-      label: <span><AlertOutlined /> 高危案例</span>,
-      children: <HighRiskView result={result} initialTaskId={drillTaskId} />,
-    },
+    ...(isUnscored
+      ? []
+      : [{
+          key: 'high-risk',
+          label: <span><AlertOutlined /> 高危案例</span>,
+          children: <HighRiskView result={result} initialTaskId={drillTaskId} />,
+        }]),
     {
       key: 'dataset',
       label: <span><DatabaseOutlined /> 数据集</span>,
@@ -150,15 +167,20 @@ const EvalResultsPage: React.FC = () => {
           <Button icon={<ArrowLeftOutlined />} onClick={() => navigate('/eval')}>返回</Button>
           <Title level={4} style={{ margin: 0 }}>评估结果</Title>
           {modelId && <Text type="secondary">- {modelId}</Text>}
+          {isUnscored && (
+            <Tag style={{ marginLeft: 8 }}>仅采样</Tag>
+          )}
         </Space>
-        <Button
-          type="primary"
-          icon={<FileTextOutlined />}
-          onClick={handleGenerateReport}
-          loading={generating}
-        >
-          生成报告
-        </Button>
+        {!isUnscored && (
+          <Button
+            type="primary"
+            icon={<FileTextOutlined />}
+            onClick={handleGenerateReport}
+            loading={generating}
+          >
+            生成报告
+          </Button>
+        )}
       </div>
       <Tabs
         activeKey={activeTab}

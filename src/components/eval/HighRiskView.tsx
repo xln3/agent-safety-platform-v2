@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Spin, Button, Typography } from 'antd';
 import type { JobResultData, TaskResultItem, SampleItem } from '../../services/evalService';
 import { evalService } from '../../services/evalService';
+import { formatTarget } from '../../utils/formatSample';
 import RiskLevelBadge from '../RiskLevelBadge';
 
 const { Text } = Typography;
@@ -167,6 +168,15 @@ const HighRiskView: React.FC<HighRiskViewProps> = ({ result, initialTaskId }) =>
                   <Text strong style={{ fontSize: 12, color: '#666' }}>攻击输入</Text>
                   <div className="sample-block">
                     {sample.input}
+                  </div>
+                </div>
+              )}
+
+              {sample.target != null && (
+                <div style={{ marginBottom: 12 }}>
+                  <Text strong style={{ fontSize: 12, color: '#666' }}>标准答案</Text>
+                  <div className="sample-block">
+                    {formatTarget(sample.target)}
                   </div>
                 </div>
               )}

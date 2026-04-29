@@ -99,6 +99,12 @@ const EvalNewPage: React.FC = () => {
   const [limit, setLimit] = useState<number | null>(null);
   const [judgeModelId, setJudgeModelId] = useState<number | undefined>(undefined);
   const [systemPrompt, setSystemPrompt] = useState('');
+  /**
+   * 仅采样模式：勾选后跳过裁判模型，只产出样本数据。
+   * 与「裁判模型」字段互斥 —— 勾选时 judgeModelId 强制清空、判定 judgeRequired
+   * 也整体绕过（甲方明确要求快速跑样本）。
+   */
+  const [skipJudge, setSkipJudge] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   /* ---- derived ---- */
@@ -310,7 +316,8 @@ const EvalNewPage: React.FC = () => {
       message.warning('请选择智能体和基准测试');
       return;
     }
-    if (judgeRequired && !judgeModelId) {
+    // 仅采样模式不调用裁判 → 跳过裁判必填校验
+    if (!skipJudge && judgeRequired && !judgeModelId) {
       message.warning(
         `以下 benchmark 需要裁判模型：${benchmarksNeedingJudge.map((b) => b.name).join(', ')}`,
       );
@@ -323,7 +330,7 @@ const EvalNewPage: React.FC = () => {
         agentId: selectedAgentId,
         benchmarks: Array.from(selectedBenchmarks),
         ...(limit ? { limit } : {}),
-        ...(judgeModelId ? { judgeModelId } : {}),
+        ...(skipJudge ? { skipJudge: true } : (judgeModelId ? { judgeModelId } : {})),
         ...(systemPrompt.trim() ? { systemPrompt: systemPrompt.trim() } : {}),
       });
       message.success('评估任务已创建');
@@ -446,30 +453,46 @@ const EvalNewPage: React.FC = () => {
                 />
               </Form.Item>
               <Form.Item
-                label="裁判模型"
-                required={judgeRequired}
-                validateStatus={judgeRequired && !judgeModelId ? 'error' : undefined}
-                help={
-                  judgeRequired ? (
-                    <span style={{ color: '#b91c1c' }}>
-                      已选 benchmark 需要裁判模型：{benchmarksNeedingJudge.map((b) => b.name).join(', ')}
-                    </span>
-                  ) : (
-                    '用于打分的裁判模型（部分 benchmark 必填，未选时不依赖裁判可留空）'
-                  )
-                }
+                label="仅采样模式"
+                help="勾选后跳过裁判模型，只产出 prompt / 标准答案 / 模型输出，节省 token；结果不会有评分 / 风险等级 / 维度评估。"
               >
-                <Select
-                  placeholder={judgeRequired ? '请选择裁判模型（必填）' : '请选择裁判模型（可选）'}
-                  value={judgeModelId}
-                  onChange={(v) => setJudgeModelId(v as number | undefined)}
-                  allowClear
-                  options={judgeModels.map((j) => ({
-                    value: j.id,
-                    label: `${j.name} (${j.modelId})`,
-                  }))}
-                />
+                <Checkbox
+                  checked={skipJudge}
+                  onChange={(e) => {
+                    setSkipJudge(e.target.checked);
+                    if (e.target.checked) setJudgeModelId(undefined);
+                  }}
+                >
+                  仅采样（不调用裁判模型）
+                </Checkbox>
               </Form.Item>
+              {!skipJudge && (
+                <Form.Item
+                  label="裁判模型"
+                  required={judgeRequired}
+                  validateStatus={judgeRequired && !judgeModelId ? 'error' : undefined}
+                  help={
+                    judgeRequired ? (
+                      <span style={{ color: '#b91c1c' }}>
+                        已选 benchmark 需要裁判模型：{benchmarksNeedingJudge.map((b) => b.name).join(', ')}
+                      </span>
+                    ) : (
+                      '用于打分的裁判模型（部分 benchmark 必填，未选时不依赖裁判可留空）'
+                    )
+                  }
+                >
+                  <Select
+                    placeholder={judgeRequired ? '请选择裁判模型（必填）' : '请选择裁判模型（可选）'}
+                    value={judgeModelId}
+                    onChange={(v) => setJudgeModelId(v as number | undefined)}
+                    allowClear
+                    options={judgeModels.map((j) => ({
+                      value: j.id,
+                      label: `${j.name} (${j.modelId})`,
+                    }))}
+                  />
+                </Form.Item>
+              )}
               <Form.Item label="系统提示词" help="可选，会覆盖智能体的默认系统提示词">
                 <Input.TextArea rows={4} placeholder="输入自定义系统提示词..." value={systemPrompt} onChange={(e) => setSystemPrompt(e.target.value)} />
               </Form.Item>
@@ -491,10 +514,16 @@ const EvalNewPage: React.FC = () => {
                   </Space>
                 </Descriptions.Item>
                 {limit && <Descriptions.Item label="样本数限制">{limit}</Descriptions.Item>}
-                {judgeModelId && (
-                  <Descriptions.Item label="裁判模型">
-                    {judgeModels.find((j) => j.id === judgeModelId)?.name || `#${judgeModelId}`}
+                {skipJudge ? (
+                  <Descriptions.Item label="模式">
+                    <Tag>仅采样</Tag>
                   </Descriptions.Item>
+                ) : (
+                  judgeModelId && (
+                    <Descriptions.Item label="裁判模型">
+                      {judgeModels.find((j) => j.id === judgeModelId)?.name || `#${judgeModelId}`}
+                    </Descriptions.Item>
+                  )
                 )}
               </Descriptions>
             </Card>
@@ -519,7 +548,7 @@ const EvalNewPage: React.FC = () => {
             disabled={
               !selectedAgentId ||
               selectedBenchmarks.size === 0 ||
-              (judgeRequired && !judgeModelId)
+              (!skipJudge && judgeRequired && !judgeModelId)
             }
             onClick={handleSubmit}
           >

@@ -333,8 +333,11 @@ async function spawnTaskProcess(
   }
 
   // 4. Resolve judge model override (DB JudgeModel takes precedence over legacy string)
+  // If V1 caller asked to skipJudge entirely, bypass override resolution — the
+  // grader role + judge env vars stay unset so inspect_ai never invokes a judge.
+  const skipJudgeMode = (job.config as any)?.v1?.skipJudge === true;
   let judgeModelOverride: JudgeModelOverride | null = null;
-  if (job.judgeModelId) {
+  if (!skipJudgeMode && job.judgeModelId) {
     const judgeRecord = await JudgeModel.findByPk(job.judgeModelId);
     if (judgeRecord) {
       judgeModelOverride = {
@@ -348,7 +351,7 @@ async function spawnTaskProcess(
   }
 
   // 5. Build environment variables
-  const { env, effectiveJudge } = buildEnvironment({
+  let { env, effectiveJudge } = buildEnvironment({
     benchmarkName: task.benchmark,
     model: job.modelId,
     // For non-openai_compat agents the solver intercepts the call; pass dummy creds
@@ -369,6 +372,13 @@ async function spawnTaskProcess(
       timeoutSec: 180,
     },
   });
+
+  // V1 skipJudge: force the grader role to null so commandBuilder skips
+  // emitting --model-role grader=... and the judgeParam -T flag entirely.
+  // Combined with --no-score below, inspect_ai never calls a judge.
+  if (skipJudgeMode) {
+    effectiveJudge = null;
+  }
 
   // Ensure results directory exists
   const resultsDir = env.INSPECT_LOG_DIR;
@@ -414,6 +424,7 @@ async function spawnTaskProcess(
     catalogModels,
     solverPath,
     solverArgs: { agent_id: agent.id },
+    noScore: skipJudgeMode,
   });
 
   // 7. Docker lifecycle

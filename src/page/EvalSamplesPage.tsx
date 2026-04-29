@@ -14,6 +14,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import type { ColumnsType } from 'antd/es/table';
 import { evalService } from '../services/evalService';
 import type { SampleItem } from '../services/evalService';
+import { formatTarget } from '../utils/formatSample';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -236,6 +237,24 @@ const EvalSamplesPage: React.FC = () => {
                     {record.input || '-'}
                   </Paragraph>
                 </div>
+                {record.target != null && (
+                  <div style={{ marginBottom: 12 }}>
+                    <Text strong>标准答案：</Text>
+                    <Paragraph
+                      style={{
+                        whiteSpace: 'pre-wrap',
+                        background: '#fafafa',
+                        padding: 12,
+                        borderRadius: 6,
+                        marginTop: 4,
+                        maxHeight: 300,
+                        overflow: 'auto',
+                      }}
+                    >
+                      {formatTarget(record.target)}
+                    </Paragraph>
+                  </div>
+                )}
                 <div style={{ marginBottom: 12 }}>
                   <Text strong>模型输出：</Text>
                   <Paragraph

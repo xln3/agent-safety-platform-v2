@@ -43,7 +43,16 @@ export interface EvalHeader {
 export interface EvalSample {
   id: string;
   input: string;
-  target?: string;
+  /**
+   * Original benchmark target — preserved as-is, no flattening / stringify.
+   * Possible shapes (depends on benchmark):
+   *   - string         e.g. "Paris"
+   *   - string[]       e.g. ["A", "B"]            (multi-answer MCQ)
+   *   - object         e.g. { idx: 2 }            (BBQ structured target)
+   *   - null           when the upstream sample has no target
+   * Caller is responsible for switching on shape.
+   */
+  target?: unknown;
   output: string;
   score: number | null;
   metadata?: Record<string, any>;
@@ -506,7 +515,10 @@ function normalizeSample(raw: any, fallbackId: string): EvalSample {
   return {
     id: raw.id ?? fallbackId,
     input: extractInputText(raw.input),
-    target: raw.target != null ? String(raw.target) : undefined,
+    // Preserve the upstream target as-is — strings, arrays, objects all
+    // pass through unchanged; missing/null both collapse to `null` so the
+    // field stays present in JSON output instead of disappearing.
+    target: raw.target ?? null,
     output,
     score: extractSampleScore(raw.scores),
     metadata: raw.metadata ?? undefined,

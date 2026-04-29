@@ -149,7 +149,12 @@ export interface SamplesResponseData {
 export interface SampleItem {
   id: string;
   input: string;
-  target?: string;
+  /**
+   * Sample target — used to be `string`, now widened to `unknown` to match
+   * inspect_ai eval logs which surface arrays / objects / nulls (per-dataset).
+   * Use `formatTarget()` from `src/utils/formatSample.ts` to render.
+   */
+  target?: unknown;
   output: string;
   score: number | null;
   metadata?: Record<string, any>;
@@ -181,6 +186,11 @@ export interface CreateJobPayload {
   /** ID of a JudgeModel DB row — preferred over the legacy string. */
   judgeModelId?: number;
   systemPrompt?: string;
+  /**
+   * 仅采样模式：勾选后后端跳过裁判模型，只产出 prompt / target / output。
+   * 节省 token，但结果不会有评分 / 风险等级 / 维度评估。
+   */
+  skipJudge?: boolean;
 }
 
 /* ------------------------------------------------------------------ */

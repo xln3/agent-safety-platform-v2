@@ -29,7 +29,14 @@ export const evalController = {
         systemPrompt,
         concurrency,
         samplingMode,
+        skipJudge,
       } = req.body;
+
+      if (skipJudge !== undefined && typeof skipJudge !== 'boolean') {
+        res.status(400).json(errorResponse('skipJudge must be a boolean'));
+        return;
+      }
+      const skipJudgeFlag = skipJudge === true;
 
       if (!agentId) {
         res.status(400).json(errorResponse('Missing required field: agentId'));
@@ -98,7 +105,7 @@ export const evalController = {
       const judgeSupplied =
         (resolvedJudgeName && resolvedJudgeName.length > 0) ||
         (typeof judgeModel === 'string' && judgeModel.trim().length > 0);
-      if (!judgeSupplied) {
+      if (!judgeSupplied && !skipJudgeFlag) {
         const benchmarksNeedingJudge = (benchmarks as string[]).filter((name) => {
           const info = catalogService.getAllBenchmarks().find((b) => b.name === name);
           return info?.judgeModel && info.judgeModel.length > 0;
@@ -193,7 +200,7 @@ export const evalController = {
         // Persist resolved judge name when JudgeModel was used; fall back to legacy string.
         judgeModel: resolvedJudgeName || judgeModel || null,
         systemPrompt: systemPrompt ?? null,
-        config: null,
+        config: skipJudgeFlag ? { v1: { skipJudge: true } } : null,
         concurrency: concurrencyValue,
         samplingMode: samplingModeValue,
         totalTasks: tasksToCreate.length,

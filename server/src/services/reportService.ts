@@ -19,7 +19,11 @@ function getCategoryInfo(key: string): { name: string; nameEn: string } {
     : { name: key, nameEn: key };
 }
 
-function getRiskLevel(score: number): string {
+function getRiskLevel(score: number | null): string {
+  // null score = no judge ran (skipJudge=true) or all samples failed pre-judge.
+  // Surface as 'UNSCORED' so the UI can render a neutral placeholder instead
+  // of mapping a missing value to CRITICAL (which it would on getRiskLevel(0)).
+  if (score == null || Number.isNaN(score)) return 'UNSCORED';
   if (score >= 80) return 'MINIMAL';
   if (score >= 60) return 'LOW';
   if (score >= 40) return 'MEDIUM';
@@ -27,7 +31,9 @@ function getRiskLevel(score: number): string {
   return 'CRITICAL';
 }
 
-function getScoreColor(score: number): string {
+function getScoreColor(score: number | null): string {
+  // null → neutral grey (matches UNSCORED risk level in getRiskLevel above).
+  if (score == null || Number.isNaN(score)) return '#9ca3af';
   if (score >= 80) return '#3b82f6';
   if (score >= 60) return '#22c55e';
   if (score >= 40) return '#eab308';
@@ -38,12 +44,17 @@ function getScoreColor(score: number): string {
 function getRiskBadgeHtml(level: string): string {
   const labels: Record<string, string> = {
     CRITICAL: '极危', HIGH: '高危', MEDIUM: '中危', LOW: '低危', MINIMAL: '极低',
+    UNSCORED: '未评分',
   };
   return `<span class="risk-badge risk-${level}">${labels[level] || level}</span>`;
 }
 
-function getScoreBarHtml(score: number): string {
+function getScoreBarHtml(score: number | null): string {
   const color = getScoreColor(score);
+  // Null score → empty bar with literal "未评分" so the row is still rendered.
+  if (score == null || Number.isNaN(score)) {
+    return `<div class="score-bar"><div class="score-bar-track"><div class="score-bar-fill" style="width:0%;background:${color}"></div></div><span class="score-bar-value" style="color:${color}">未评分</span></div>`;
+  }
   const pct = Math.max(0, Math.min(100, score));
   return `<div class="score-bar"><div class="score-bar-track"><div class="score-bar-fill" style="width:${pct}%;background:${color}"></div></div><span class="score-bar-value" style="color:${color}">${score.toFixed(1)}</span></div>`;
 }
@@ -154,11 +165,17 @@ export const reportService = {
         order: [['benchmark', 'ASC'], ['taskName', 'ASC']],
       });
 
+      // categoryData tracks per-category state. We separate `taskCount` (every
+      // task in the category, used for display) from `scoredTaskCount` (only
+      // tasks with non-null safetyScore, used for averaging). Without this
+      // split, skipJudge=true jobs would inject 0s into the average and look
+      // catastrophically failing instead of "unscored".
       const categoryData: Record<string, {
         info: { name: string; nameEn: string };
         tasks: any[];
         totalScore: number;
         taskCount: number;
+        scoredTaskCount: number;
         samplesPassed: number;
         samplesTotal: number;
       }> = {};
@@ -171,12 +188,18 @@ export const reportService = {
             tasks: [],
             totalScore: 0,
             taskCount: 0,
+            scoredTaskCount: 0,
             samplesPassed: 0,
             samplesTotal: 0,
           };
         }
 
-        const taskScore = task.safetyScore !== null ? Number(task.safetyScore) : 0;
+        // Treat null/NaN safetyScore as "unscored" rather than 0; only scored
+        // tasks contribute to totalScore + scoredTaskCount.
+        const rawScore = task.safetyScore;
+        const isScored = rawScore !== null && rawScore !== undefined && !Number.isNaN(Number(rawScore));
+        const taskScore: number | null = isScored ? Number(rawScore) : null;
+
         categoryData[cat].tasks.push({
           taskName: task.taskName,
           status: task.status,
@@ -187,24 +210,43 @@ export const reportService = {
           samplesPassed: task.samplesPassed,
           errorMessage: task.errorMessage,
         });
-        categoryData[cat].totalScore += taskScore;
+        if (isScored && taskScore !== null) {
+          categoryData[cat].totalScore += taskScore;
+          categoryData[cat].scoredTaskCount += 1;
+        }
         categoryData[cat].taskCount += 1;
         categoryData[cat].samplesPassed += task.samplesPassed;
         categoryData[cat].samplesTotal += task.samplesTotal;
       }
 
-      const radarData: Record<string, number> = {};
+      // Per-category radar score: null when no scored task contributed.
+      const radarData: Record<string, number | null> = {};
       for (const [cat, data] of Object.entries(categoryData)) {
-        radarData[cat] = data.taskCount > 0
-          ? Number((data.totalScore / data.taskCount).toFixed(2))
-          : 0;
+        radarData[cat] = data.scoredTaskCount > 0
+          ? Number((data.totalScore / data.scoredTaskCount).toFixed(2))
+          : null;
       }
 
       const allTaskCount = Object.values(categoryData).reduce((s, d) => s + d.taskCount, 0);
+      const allScoredTaskCount = Object.values(categoryData).reduce((s, d) => s + d.scoredTaskCount, 0);
       const allTotalScore = Object.values(categoryData).reduce((s, d) => s + d.totalScore, 0);
-      const overallScore = allTaskCount > 0 ? Number((allTotalScore / allTaskCount).toFixed(2)) : 0;
+      const overallScore: number | null = allScoredTaskCount > 0
+        ? Number((allTotalScore / allScoredTaskCount).toFixed(2))
+        : null;
       const allSamplesPassed = Object.values(categoryData).reduce((s, d) => s + d.samplesPassed, 0);
       const allSamplesTotal = Object.values(categoryData).reduce((s, d) => s + d.samplesTotal, 0);
+
+      // Aggregate status: 'unscored' when there's at least one task but none
+      // produced a score (skipJudge=true mode); 'no_data' when the job has no
+      // tasks at all; otherwise 'scored'.
+      let aggregateStatus: 'scored' | 'unscored' | 'no_data';
+      if (allTaskCount === 0) {
+        aggregateStatus = 'no_data';
+      } else if (allScoredTaskCount === 0) {
+        aggregateStatus = 'unscored';
+      } else {
+        aggregateStatus = 'scored';
+      }
 
       const categories = Object.entries(radarData).map(([key, value]) => {
         const info = getCategoryInfo(key);
@@ -212,24 +254,32 @@ export const reportService = {
       });
 
       const categoryDetails = Object.fromEntries(
-        Object.entries(categoryData).map(([cat, data]) => [
-          cat,
-          {
-            name: data.info.name,
-            nameEn: data.info.nameEn,
-            avgScore: data.taskCount > 0 ? Number((data.totalScore / data.taskCount).toFixed(2)) : 0,
-            riskLevel: getRiskLevel(data.taskCount > 0 ? data.totalScore / data.taskCount : 0),
-            taskCount: data.taskCount,
-            samplesPassed: data.samplesPassed,
-            samplesTotal: data.samplesTotal,
-            tasks: data.tasks,
-          },
-        ])
+        Object.entries(categoryData).map(([cat, data]) => {
+          const avgScore: number | null = data.scoredTaskCount > 0
+            ? Number((data.totalScore / data.scoredTaskCount).toFixed(2))
+            : null;
+          return [
+            cat,
+            {
+              name: data.info.name,
+              nameEn: data.info.nameEn,
+              avgScore,
+              riskLevel: getRiskLevel(avgScore),
+              taskCount: data.taskCount,
+              scoredTaskCount: data.scoredTaskCount,
+              samplesPassed: data.samplesPassed,
+              samplesTotal: data.samplesTotal,
+              tasks: data.tasks,
+            },
+          ];
+        })
       );
 
       const summary = {
         overallScore,
+        aggregateStatus,
         totalTasks: allTaskCount,
+        scoredTasks: allScoredTaskCount,
         samplesPassed: allSamplesPassed,
         samplesTotal: allSamplesTotal,
         passRate: allSamplesTotal > 0 ? Number(((allSamplesPassed / allSamplesTotal) * 100).toFixed(1)) : 0,
@@ -271,7 +321,11 @@ function buildReportHtml(
 
   let categorySectionsHtml = '';
   for (const [, data] of Object.entries(categoryData)) {
-    const avgScore = data.taskCount > 0 ? data.totalScore / data.taskCount : 0;
+    // Per-category average uses scoredTaskCount (non-null tasks only).
+    // When zero scored tasks fed in, avgScore is null (unscored).
+    const avgScore: number | null = data.scoredTaskCount > 0
+      ? data.totalScore / data.scoredTaskCount
+      : null;
     const catRisk = getRiskLevel(avgScore);
 
     let taskRowsHtml = '';
@@ -289,6 +343,7 @@ function buildReportHtml(
           </tr>`;
     }
 
+    const avgScoreLabel = avgScore == null ? '未评分' : avgScore.toFixed(1);
     categorySectionsHtml += `
       <div class="category-section">
         <div class="category-header">
@@ -298,7 +353,7 @@ function buildReportHtml(
             ${getRiskBadgeHtml(catRisk)}
           </div>
           <div class="category-stats">
-            <span>平均分：<strong>${avgScore.toFixed(1)}</strong></span>
+            <span>平均分：<strong>${avgScoreLabel}</strong></span>
             <span>任务：<strong>${data.taskCount}</strong></span>
             <span>样本通过：<strong>${data.samplesPassed}/${data.samplesTotal}</strong></span>
           </div>
@@ -321,7 +376,9 @@ function buildReportHtml(
       </div>`;
   }
 
-  // High risk analysis section
+  // High risk analysis section. Tasks with score=null don't have a riskLevel
+  // sourced from the mapper either, so they naturally won't match CRITICAL/HIGH;
+  // the toFixed call below is therefore safe — but guard anyway for robustness.
   const highRiskTasks: any[] = [];
   for (const [, data] of Object.entries(categoryData)) {
     for (const task of data.tasks) {
@@ -335,11 +392,14 @@ function buildReportHtml(
   if (highRiskTasks.length > 0) {
     let riskCardsHtml = '';
     for (const task of highRiskTasks) {
+      const scoreLabel = task.score == null || Number.isNaN(task.score)
+        ? '未评分'
+        : task.score.toFixed(1);
       riskCardsHtml += `
         <div class="risk-card">
           <div class="risk-card-info">
             <div class="risk-card-name">${escapeHtml(task.taskName)}</div>
-            <div class="risk-card-meta">${escapeHtml(task.categoryName)} · 评分 ${task.score.toFixed(1)}${task.interpretation ? ` · ${escapeHtml(task.interpretation)}` : ''}</div>
+            <div class="risk-card-meta">${escapeHtml(task.categoryName)} · 评分 ${scoreLabel}${task.interpretation ? ` · ${escapeHtml(task.interpretation)}` : ''}</div>
           </div>
           ${getRiskBadgeHtml(task.riskLevel)}
         </div>`;
@@ -375,6 +435,7 @@ function buildReportHtml(
     .risk-MEDIUM { background: #fefce8; color: #854d0e; border: 1px solid #fef08a; }
     .risk-LOW { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
     .risk-MINIMAL { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
+    .risk-UNSCORED { background: #f5f5f5; color: #6b7280; border: 1px solid #e5e7eb; }
     .score-bar { display: flex; align-items: center; gap: 8px; }
     .score-bar-track { flex: 1; height: 8px; background: #f3f4f6; border-radius: 4px; overflow: hidden; }
     .score-bar-fill { height: 100%; border-radius: 4px; }
@@ -421,7 +482,7 @@ function buildReportHtml(
 
     <div class="summary-grid">
       <div class="summary-card" style="border-top-color:${overallColor}">
-        <div class="summary-value" style="color:${overallColor}">${summary.overallScore.toFixed(1)}</div>
+        <div class="summary-value" style="color:${overallColor}">${summary.overallScore == null ? '未评分' : summary.overallScore.toFixed(1)}</div>
         <div class="summary-label">综合安全评分</div>
         <div style="margin-top:6px">${getRiskBadgeHtml(overallRisk)}</div>
       </div>

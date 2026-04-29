@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Button, Row, Col } from 'antd';
+import { Card, Button, Row, Col, Tag } from 'antd';
 import type { JobResultData, TaskResultItem } from '../../services/evalService';
 import EvalRadarChart from '../EvalRadarChart';
 import AssessmentSummary from './AssessmentSummary';
@@ -17,6 +17,12 @@ interface BenchmarkSummary {
 
 interface FullReportViewProps {
   result: JobResultData;
+  /**
+   * 仅采样模式 — V1 `skipJudge=true` 提交的 job 不调裁判，因此没有 score。
+   * 这种模式下隐藏综合分卡片、雷达图、基准评分、改进项等评分相关 UI，
+   * 只保留任务列表和样本入口。
+   */
+  unscored?: boolean;
   onSelectTask: (taskId: number, taskName: string) => void;
   onHighRiskDetail: (taskId: number, taskName: string) => void;
   onGenerateReport: () => void;
@@ -43,6 +49,7 @@ const getOverallRisk = (dist: Record<string, number>): string => {
 
 const FullReportView: React.FC<FullReportViewProps> = ({
   result,
+  unscored = false,
   onSelectTask,
   onHighRiskDetail,
   onGenerateReport,
@@ -109,55 +116,74 @@ const FullReportView: React.FC<FullReportViewProps> = ({
 
   return (
     <div>
-      {/* Overview Section */}
-      <div className="eval-section">
-        <div className="eval-section-title">概览</div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
-          <AssessmentSummary
-            score={overallScore}
-            riskLevel={overallRisk}
-            tierOverride={tierOverride}
-            caption={
-              <>
-                <div>
-                  {result.aggregate.scoredTaskCount} / {result.aggregate.totalTaskCount} 个任务已产出结论
-                </div>
-                {failedTaskCount > 0 && (
-                  <div style={{ color: '#b91c1c', marginTop: 2 }}>
-                    {failedTaskCount} 个任务未出分（请检查裁判模型 / JUDGE_MODEL_NAME 配置）
-                  </div>
-                )}
-              </>
-            }
-          />
-          <div>
-            {showStars ? (
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
-                <span className="star-rating" aria-hidden>
-                  {'★'.repeat(stars)}
-                  <span className="star-empty">{'★'.repeat(5 - stars)}</span>
-                </span>
-                <span style={{ fontSize: 12, color: '#64748b' }}>评级强度（5 星制）</span>
-              </div>
-            ) : (
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
-                <span style={{ fontSize: 13, color: '#b91c1c', fontWeight: 600 }}>
-                  ⚠ 数据覆盖率 {Math.round((result.aggregate.coverage ?? 0) * 100)}% — 暂不评定星级
-                </span>
-              </div>
-            )}
-            <div style={{ fontSize: 13, color: '#666' }}>
-              {result.job?.createdAt && (
-                <span>
-                  评估时间：{new Date(result.job.createdAt).toLocaleString('zh-CN')}
-                </span>
-              )}
+      {/* Overview Section — 仅采样模式下没有综合分，改成基本信息提示卡 */}
+      {unscored ? (
+        <div className="eval-section">
+          <div className="eval-section-title">
+            概览 <Tag style={{ marginLeft: 8 }}>仅采样</Tag>
+          </div>
+          <div style={{ fontSize: 13, color: '#475569', lineHeight: 1.8 }}>
+            <div>
+              本次评估以「仅采样」模式运行，未调用裁判模型，因此没有综合分 / 风险分布 / 维度评估。
+            </div>
+            <div>
+              共 {result.aggregate.totalTaskCount} 个任务{result.job?.createdAt
+                ? `，评估时间 ${new Date(result.job.createdAt).toLocaleString('zh-CN')}`
+                : ''}。可通过下方任务列表进入「单项基准」查看 prompt / 标准答案 / 模型输出。
             </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div className="eval-section">
+          <div className="eval-section-title">概览</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
+            <AssessmentSummary
+              score={overallScore}
+              riskLevel={overallRisk}
+              tierOverride={tierOverride}
+              caption={
+                <>
+                  <div>
+                    {result.aggregate.scoredTaskCount} / {result.aggregate.totalTaskCount} 个任务已产出结论
+                  </div>
+                  {failedTaskCount > 0 && (
+                    <div style={{ color: '#b91c1c', marginTop: 2 }}>
+                      {failedTaskCount} 个任务未出分（请检查裁判模型 / JUDGE_MODEL_NAME 配置）
+                    </div>
+                  )}
+                </>
+              }
+            />
+            <div>
+              {showStars ? (
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
+                  <span className="star-rating" aria-hidden>
+                    {'★'.repeat(stars)}
+                    <span className="star-empty">{'★'.repeat(5 - stars)}</span>
+                  </span>
+                  <span style={{ fontSize: 12, color: '#64748b' }}>评级强度（5 星制）</span>
+                </div>
+              ) : (
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
+                  <span style={{ fontSize: 13, color: '#b91c1c', fontWeight: 600 }}>
+                    ⚠ 数据覆盖率 {Math.round((result.aggregate.coverage ?? 0) * 100)}% — 暂不评定星级
+                  </span>
+                </div>
+              )}
+              <div style={{ fontSize: 13, color: '#666' }}>
+                {result.job?.createdAt && (
+                  <span>
+                    评估时间：{new Date(result.job.createdAt).toLocaleString('zh-CN')}
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
-      {/* Radar Chart + Benchmark Cards */}
+      {/* Radar Chart + Benchmark Cards — 仅采样模式无评分可展示 */}
+      {!unscored && (
       <Row gutter={16} style={{ marginBottom: 16 }}>
         <Col xs={24} lg={12}>
           <Card title="评估维度雷达图" size="small">
@@ -190,10 +216,13 @@ const FullReportView: React.FC<FullReportViewProps> = ({
           </Card>
         </Col>
       </Row>
+      )}
 
-      {/* Score Table — grouped by benchmark */}
+      {/* Score Table — grouped by benchmark. In 仅采样 mode the score / risk
+          columns become a single "仅采样" tag and 样本数 turns into a flat
+          sample count (no passed/total ratio because there is no judge). */}
       <div className="eval-section">
-        <div className="eval-section-title">评分详情</div>
+        <div className="eval-section-title">{unscored ? '任务列表' : '评分详情'}</div>
         <div style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', fontSize: 13, borderCollapse: 'collapse' }}>
             <thead>
@@ -201,11 +230,13 @@ const FullReportView: React.FC<FullReportViewProps> = ({
                 <th style={{ textAlign: 'left', padding: '8px 12px', fontWeight: 600, color: '#666' }}>
                   任务名称
                 </th>
-                <th style={{ textAlign: 'right', padding: '8px 12px', fontWeight: 600, color: '#666', width: 160 }}>
-                  评估趋势
-                </th>
+                {!unscored && (
+                  <th style={{ textAlign: 'right', padding: '8px 12px', fontWeight: 600, color: '#666', width: 160 }}>
+                    评估趋势
+                  </th>
+                )}
                 <th style={{ textAlign: 'center', padding: '8px 12px', fontWeight: 600, color: '#666', width: 96 }}>
-                  评估等级
+                  {unscored ? '状态' : '评估等级'}
                 </th>
                 <th style={{ textAlign: 'right', padding: '8px 12px', fontWeight: 600, color: '#666', width: 80 }}>
                   样本数
@@ -217,7 +248,7 @@ const FullReportView: React.FC<FullReportViewProps> = ({
                 <React.Fragment key={benchmark}>
                   <tr>
                     <td
-                      colSpan={4}
+                      colSpan={unscored ? 3 : 4}
                       style={{ paddingTop: 12, paddingBottom: 4 }}
                     >
                       <div className="group-header-label">
@@ -242,19 +273,23 @@ const FullReportView: React.FC<FullReportViewProps> = ({
                       <td style={{ padding: '8px 12px 8px 24px', color: '#1677ff' }}>
                         {task.taskName}
                       </td>
-                      <td style={{ padding: '8px 12px', textAlign: 'right' }}>
-                        {task.safetyScore !== null ? (
-                          <AssessmentBar
-                            score={task.safetyScore}
-                            riskLevel={task.riskLevel}
-                            maxWidth="160px"
-                          />
-                        ) : (
-                          <span style={{ color: '#999' }}>-</span>
-                        )}
-                      </td>
+                      {!unscored && (
+                        <td style={{ padding: '8px 12px', textAlign: 'right' }}>
+                          {task.safetyScore !== null ? (
+                            <AssessmentBar
+                              score={task.safetyScore}
+                              riskLevel={task.riskLevel}
+                              maxWidth="160px"
+                            />
+                          ) : (
+                            <span style={{ color: '#999' }}>-</span>
+                          )}
+                        </td>
+                      )}
                       <td style={{ padding: '8px 12px', textAlign: 'center' }}>
-                        {task.riskLevel ? (
+                        {unscored ? (
+                          <Tag>仅采样</Tag>
+                        ) : task.riskLevel ? (
                           <AssessmentBadge riskLevel={task.riskLevel} size="small" />
                         ) : (
                           <span style={{ color: '#999' }}>-</span>
@@ -267,7 +302,9 @@ const FullReportView: React.FC<FullReportViewProps> = ({
                           color: '#666',
                         }}
                       >
-                        {task.samplesPassed}/{task.samplesTotal}
+                        {unscored
+                          ? task.samplesTotal
+                          : `${task.samplesPassed}/${task.samplesTotal}`}
                       </td>
                     </tr>
                   ))}
@@ -279,8 +316,9 @@ const FullReportView: React.FC<FullReportViewProps> = ({
       </div>
 
       {/* Improvement queue (formerly "高危任务"). Wording softened so the badge
-          drives prioritisation, not a "高危" label. */}
-      {highRiskTasks.length > 0 && (
+          drives prioritisation, not a "高危" label. Hidden in 仅采样 mode where
+          there is no riskLevel to prioritize. */}
+      {!unscored && highRiskTasks.length > 0 && (
         <div className="eval-section">
           <div className="eval-section-title">
             重点改进项（{highRiskTasks.length} 项需优先处理）
@@ -310,12 +348,14 @@ const FullReportView: React.FC<FullReportViewProps> = ({
         </div>
       )}
 
-      {/* Generate Report */}
-      <div style={{ marginTop: 16 }}>
-        <Button type="primary" onClick={onGenerateReport} loading={generating}>
-          {generating ? '正在生成报告...' : '生成评估报告'}
-        </Button>
-      </div>
+      {/* Generate Report — 仅采样模式没有可生成的报告 */}
+      {!unscored && (
+        <div style={{ marginTop: 16 }}>
+          <Button type="primary" onClick={onGenerateReport} loading={generating}>
+            {generating ? '正在生成报告...' : '生成评估报告'}
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

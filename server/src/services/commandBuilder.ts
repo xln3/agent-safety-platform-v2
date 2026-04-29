@@ -44,6 +44,11 @@ export interface CommandBuildOptions {
   solverPath?: string;
   /** Args forwarded to the solver via -S key=value. */
   solverArgs?: Record<string, string | number>;
+  /**
+   * When true, skip emitting any judge/grader flags and append `--no-score`
+   * so inspect_ai never invokes a scorer. Used by V1 skipJudge mode.
+   */
+  noScore?: boolean;
 }
 
 // ---------------------------------------------------------------------------
@@ -97,6 +102,7 @@ export function buildInspectCommand(options: CommandBuildOptions): string[] {
     catalogModels,
     solverPath,
     solverArgs,
+    noScore,
   } = options;
 
   const cmd: string[] = [inspectPath, 'eval', taskSpec, '--model', modelForInspect];
@@ -158,22 +164,24 @@ export function buildInspectCommand(options: CommandBuildOptions): string[] {
     cmd.push('--epochs', '1');
   }
 
-  // Judge model
-  if (effectiveJudge) {
-    if (judgeOverride && (judgeOverride.apiBase || judgeOverride.apiKey)) {
-      // inspect_ai parses --model-role JSON via parse_model_role_cli_args:
-      // it pops "model" + "model_args"; "model_args" is forwarded to the
-      // provider's get_model() (so base_url + api_key live there).
-      const modelArgs: Record<string, unknown> = {};
-      if (judgeOverride.apiBase) modelArgs.base_url = judgeOverride.apiBase;
-      if (judgeOverride.apiKey) modelArgs.api_key = judgeOverride.apiKey;
-      const roleSpec: Record<string, unknown> = { model: effectiveJudge, model_args: modelArgs };
-      cmd.push('--model-role', `grader=${JSON.stringify(roleSpec)}`);
-    } else {
-      cmd.push('--model-role', `grader=${effectiveJudge}`);
-    }
-    if (judgeParam) {
-      cmd.push('-T', `${judgeParam}=${effectiveJudge}`);
+  // Judge model — V1 skipJudge skips this entire block (also no judgeParam -T flag).
+  if (!noScore) {
+    if (effectiveJudge) {
+      if (judgeOverride && (judgeOverride.apiBase || judgeOverride.apiKey)) {
+        // inspect_ai parses --model-role JSON via parse_model_role_cli_args:
+        // it pops "model" + "model_args"; "model_args" is forwarded to the
+        // provider's get_model() (so base_url + api_key live there).
+        const modelArgs: Record<string, unknown> = {};
+        if (judgeOverride.apiBase) modelArgs.base_url = judgeOverride.apiBase;
+        if (judgeOverride.apiKey) modelArgs.api_key = judgeOverride.apiKey;
+        const roleSpec: Record<string, unknown> = { model: effectiveJudge, model_args: modelArgs };
+        cmd.push('--model-role', `grader=${JSON.stringify(roleSpec)}`);
+      } else {
+        cmd.push('--model-role', `grader=${effectiveJudge}`);
+      }
+      if (judgeParam) {
+        cmd.push('-T', `${judgeParam}=${effectiveJudge}`);
+      }
     }
   }
 
@@ -209,6 +217,11 @@ export function buildInspectCommand(options: CommandBuildOptions): string[] {
   }
   if (reasoningTokens) {
     cmd.push('--reasoning-tokens', String(reasoningTokens));
+  }
+
+  // V1 skipJudge: tell inspect_ai to skip scoring entirely.
+  if (noScore) {
+    cmd.push('--no-score');
   }
 
   // Concurrency parameters

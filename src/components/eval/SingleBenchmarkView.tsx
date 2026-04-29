@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Spin, Button, Tag, Typography, Card, Descriptions } from 'antd';
 import type { JobResultData, TaskResultItem, SampleItem } from '../../services/evalService';
 import { evalService } from '../../services/evalService';
+import { formatTarget } from '../../utils/formatSample';
 import AssessmentBadge from './AssessmentBadge';
 import AssessmentSummary from './AssessmentSummary';
 
@@ -283,6 +284,9 @@ const SingleBenchmarkView: React.FC<SingleBenchmarkViewProps> = ({
                         输入
                       </th>
                       <th style={{ textAlign: 'left', padding: '8px', color: '#666', fontWeight: 600 }}>
+                        标准答案
+                      </th>
+                      <th style={{ textAlign: 'left', padding: '8px', color: '#666', fontWeight: 600 }}>
                         输出
                       </th>
                     </tr>
@@ -340,6 +344,23 @@ const SingleBenchmarkView: React.FC<SingleBenchmarkViewProps> = ({
                               }}
                             >
                               {sample.input || '-'}
+                            </div>
+                          </td>
+                          <td style={{ padding: '8px', maxWidth: 200 }}>
+                            <div
+                              style={{
+                                fontSize: 12,
+                                color: '#555',
+                                ...(isExpanded
+                                  ? { whiteSpace: 'pre-wrap', wordBreak: 'break-word' }
+                                  : {
+                                      overflow: 'hidden',
+                                      textOverflow: 'ellipsis',
+                                      whiteSpace: 'nowrap',
+                                    }),
+                              }}
+                            >
+                              {formatTarget(sample.target)}
                             </div>
                           </td>
                           <td style={{ padding: '8px', maxWidth: 250 }}>

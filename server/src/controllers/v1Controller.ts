@@ -102,6 +102,11 @@ interface V1SubmitPayload {
   judgeModel?: V1JudgeModelInline;
   concurrency?: number;
   systemPrompt?: string;
+  /**
+   * 仅采样模式：跳过裁判模型调用。设为 true 时不再强制要求
+   * judgeModelId/judgeModel，inspect_ai 子进程也不会调 grader（节省 token + 时间）。
+   */
+  skipJudge?: boolean;
 }
 
 /**
@@ -247,6 +252,13 @@ function validateSubmit(body: any): { error: string | null; payload: V1SubmitPay
     }
   }
 
+  // skipJudge — 仅采样模式开关，必须是 boolean
+  if (body.skipJudge !== undefined && body.skipJudge !== null) {
+    if (typeof body.skipJudge !== 'boolean') {
+      return { error: 'skipJudge must be a boolean', payload: null };
+    }
+  }
+
   // Build the cleaned, type-safe payload
   const cleanAgent: V1AgentPayload = {
     name: agent.name.trim(),
@@ -288,6 +300,7 @@ function validateSubmit(body: any): { error: string | null; payload: V1SubmitPay
         : undefined,
       concurrency: body.concurrency != null ? Number(body.concurrency) : undefined,
       systemPrompt: typeof body.systemPrompt === 'string' ? body.systemPrompt : undefined,
+      skipJudge: body.skipJudge === true,
     },
   };
 }
@@ -403,6 +416,7 @@ async function buildStatusPayload(
   const echoTaskName = v1Echo.taskName ?? job.name;
   const echoSampling = v1Echo.sampling ?? { mode: job.samplingMode, count: null };
   const echoJudgeInline = v1Echo.judgeModelInline ?? null;
+  const echoSkipJudge = v1Echo.skipJudge === true;
 
   const tasks = ((job as any).tasks ?? []) as EvalTask[];
   const sortedTasks = [...tasks].sort((a, b) => {
@@ -473,6 +487,7 @@ async function buildStatusPayload(
     ...(echoJudgeInline
       ? { judgeModel: { ...echoJudgeInline, apiKey: '***' } }
       : {}),
+    ...(echoSkipJudge ? { skipJudge: true } : {}),
     startedAt: (job.startedAt ?? job.createdAt)?.toISOString() ?? null,
     completedAt: job.completedAt?.toISOString() ?? null,
     status: job.status,
@@ -624,7 +639,7 @@ export const v1Controller = {
         resolvedJudgeId = judgeRec.id;
         resolvedJudgeName = judgeRec.modelId;
       }
-      if (!resolvedJudgeName) {
+      if (!resolvedJudgeName && !payload.skipJudge) {
         const allBenchmarks = catalogService.getAllBenchmarks();
         const benchmarksNeedingJudge = payload.benchmarks.filter((name) => {
           const info = allBenchmarks.find((b) => b.name === name);
@@ -727,6 +742,7 @@ export const v1Controller = {
             taskName: payload.taskName ?? null,
             agent: echoAgent(payload.agent),
             sampling: { mode: payload.sampling.mode, count: totalCount || null },
+            skipJudge: payload.skipJudge === true,
             ...(payload.judgeModel
               ? {
                   judgeModelInline: {
@@ -809,6 +825,7 @@ export const v1Controller = {
             ...(payload.judgeModel
               ? { judgeModel: echoJudgeModelInline(payload.judgeModel) }
               : {}),
+            ...(payload.skipJudge ? { skipJudge: true } : {}),
             startedAt: job.createdAt?.toISOString() ?? new Date().toISOString(),
             status: job.status,
             benchmarks: payload.benchmarks,
@@ -821,6 +838,113 @@ export const v1Controller = {
       );
     } catch (err: any) {
       logger.error(`[v1] submit failed: ${err.message}`);
+      res.status(500).json(errorResponse(err.message));
+    }
+  },
+
+  /**
+   * GET /api/v1/evaluate/:jobId/samples — flat raw-sample feed.
+   *
+   * Returns one row per sample across every task of the job, each row carrying
+   * only the original three fields (input/target/output) plus benchmark/taskName
+   * for context. Useful for downstream "I just want the raw data" use cases
+   * and for any caller that wants to inspect targets in their native shape
+   * (target is `unknown`: string | string[] | object | null).
+   *
+   * Query params:
+   *   page       (default 1, min 1)
+   *   pageSize   (default 50, min 1, max 200)
+   *   benchmark  (optional, exact match on task.benchmark)
+   *   taskName   (optional, exact match on task.taskName)
+   *
+   * NOTE: simple implementation reads every matching task's samples into
+   * memory then paginates the flattened list. Adequate for current job
+   * sizes; revisit if a single job ever ships >100k samples.
+   * TODO: optimize for very large jobs (read header for sample count first,
+   * skip whole task files that fall entirely outside the page window).
+   */
+  async getJobSamples(req: Request, res: Response): Promise<void> {
+    try {
+      const jobId = parseInt(req.params.jobId as string, 10);
+      if (Number.isNaN(jobId)) {
+        res.status(400).json(errorResponse('Invalid jobId'));
+        return;
+      }
+
+      const job = await EvalJob.findByPk(jobId);
+      if (!job) {
+        res.status(404).json(errorResponse('Evaluation task not found'));
+        return;
+      }
+
+      const page = Math.max(1, parseInt(req.query.page as string, 10) || 1);
+      const pageSize = Math.max(
+        1,
+        Math.min(200, parseInt(req.query.pageSize as string, 10) || 50),
+      );
+      const benchmarkFilter =
+        typeof req.query.benchmark === 'string' && req.query.benchmark.trim()
+          ? String(req.query.benchmark).trim()
+          : null;
+      const taskNameFilter =
+        typeof req.query.taskName === 'string' && req.query.taskName.trim()
+          ? String(req.query.taskName).trim()
+          : null;
+
+      const taskWhere: Record<string, unknown> = { jobId };
+      if (benchmarkFilter) taskWhere.benchmark = benchmarkFilter;
+      if (taskNameFilter) taskWhere.taskName = taskNameFilter;
+
+      const tasks = await EvalTask.findAll({
+        where: taskWhere,
+        order: [
+          ['benchmark', 'ASC'],
+          ['taskName', 'ASC'],
+        ],
+      });
+
+      // Flatten samples across all matching tasks. Skip tasks that haven't
+      // produced an .eval/.json yet (running / failed-before-write cases).
+      const flat: Array<{
+        benchmark: string;
+        taskName: string;
+        sampleId: string;
+        input: string;
+        target: unknown;
+        output: string;
+      }> = [];
+      for (const task of tasks) {
+        if (!task.evalFile) continue;
+        try {
+          const result = await readEvalSamples(task.evalFile, 0, Number.MAX_SAFE_INTEGER);
+          for (const s of result.samples) {
+            flat.push({
+              benchmark: task.benchmark,
+              taskName: task.taskName,
+              sampleId: s.id,
+              input: s.input,
+              target: s.target ?? null,
+              output: s.output,
+            });
+          }
+        } catch (err: any) {
+          logger.warn(`[v1] getJobSamples read fail task=${task.id}: ${err.message}`);
+        }
+      }
+
+      const total = flat.length;
+      const totalPages = total === 0 ? 0 : Math.ceil(total / pageSize);
+      const offset = (page - 1) * pageSize;
+      const pageSlice = flat.slice(offset, offset + pageSize);
+
+      res.json(
+        successResponse({
+          samples: pageSlice,
+          pagination: { page, pageSize, total, totalPages },
+        }),
+      );
+    } catch (err: any) {
+      logger.error(`[v1] getJobSamples failed: ${err.message}`);
       res.status(500).json(errorResponse(err.message));
     }
   },

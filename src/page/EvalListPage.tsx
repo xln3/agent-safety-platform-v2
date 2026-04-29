@@ -114,13 +114,19 @@ const EvalListPage: React.FC = () => {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
-      width: 120,
-      render: (status: string) => {
+      width: 160,
+      render: (status: string, record: EvalJob) => {
         const cfg = STATUS_MAP[status] || STATUS_MAP.pending;
+        // V1 提交时如果 skipJudge=true，原始字段会回显在 job.config.v1
+        const v1Echo = (record.config as { v1?: { skipJudge?: boolean } } | undefined)?.v1;
+        const isUnscored = v1Echo?.skipJudge === true;
         return (
-          <Tag color={cfg.color} icon={cfg.icon}>
-            {cfg.label}
-          </Tag>
+          <Space size={4} wrap>
+            <Tag color={cfg.color} icon={cfg.icon}>
+              {cfg.label}
+            </Tag>
+            {isUnscored && <Tag>仅采样</Tag>}
+          </Space>
         );
       },
     },
