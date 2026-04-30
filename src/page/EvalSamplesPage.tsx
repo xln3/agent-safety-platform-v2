@@ -69,7 +69,7 @@ const EvalSamplesPage: React.FC = () => {
       );
       const displaySamples = (data.samples || []).map((s) => ({
         ...s,
-        passed: s.score !== null && s.score >= 0.5,
+        passed: s.score != null && s.score >= 0.5,
       }));
       setSamples(displaySamples);
       setTotal(data.pagination?.total || 0);
@@ -147,8 +147,8 @@ const EvalSamplesPage: React.FC = () => {
     },
   ];
 
-  const getScoreColor = (score: number | null): string => {
-    if (score === null) return '#999';
+  const getScoreColor = (score: number | null | undefined): string => {
+    if (score == null) return '#999';
     if (score >= 80) return '#52c41a';
     if (score >= 60) return '#faad14';
     return '#ff4d4f';

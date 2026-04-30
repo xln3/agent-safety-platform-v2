@@ -156,7 +156,9 @@ export interface SampleItem {
    */
   target?: unknown;
   output: string;
-  score: number | null;
+  score?: number | null;
+  status?: 'pending' | 'running' | 'success' | 'failed';
+  error?: string;
   metadata?: Record<string, any>;
 }
 

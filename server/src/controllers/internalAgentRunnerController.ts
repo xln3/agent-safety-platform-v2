@@ -176,6 +176,7 @@ export const internalAgentRunnerController = {
             taskName: active.taskName,
             sampleId: input.sampleId,
             itemId: item.id,
+            target: input.target ?? null,
             startedAt: item.startedAt,
           });
         } catch (persistErr: any) {
@@ -222,6 +223,7 @@ export const internalAgentRunnerController = {
               sampleId: input.sampleId,
               itemId: item.id,
               status: 'success',
+              target: input.target ?? null,
               latencyMs: result.latencyMs,
               outputPreview: typeof result.output === 'string'
                 ? result.output.slice(0, 240)
@@ -273,6 +275,7 @@ export const internalAgentRunnerController = {
           sampleId: input.sampleId,
           itemId: item.id,
           status: 'failed',
+          target: input.target ?? null,
           errorMessage: errMsg.slice(0, 240),
           finishedAt: new Date().toISOString(),
         });

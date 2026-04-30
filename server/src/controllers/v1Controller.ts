@@ -21,10 +21,15 @@
  *                   内联：内部 sha256 去重 upsert 到 judge_models 表
  *
  * 输入/输出语义保证：
- *   GET /api/v1/evaluate/:taskId 返回的 tasks[].samples[].input 是 inspect_ai
- *   注入到 Agent 的原始 prompt，output 是 Agent 的完整文本响应。判官交互
- *   (judge model 调用、scoring explanation) 不会出现在 input/output 字段，
- *   仅判官给出的最终数值分会反映到 task 级 safetyScore 上。
+ *   GET /api/v1/evaluate/:taskId 返回的 tasks[].samples[] 优先从 EvalItem 表实时读，
+ *   每条 sample 完成立刻可见（轮询 GET 即可拿到一条一条增长的明细），
+ *   字段三件套：
+ *     - input  注入到 Agent 的原始 prompt（用户消息文本）
+ *     - target 上游 benchmark 的参考答案，保真透传 string/array/object/null
+ *     - output Agent 的完整文本响应
+ *   判官交互（judge model 调用、scoring explanation）不会出现在 input/output 字段，
+ *   仅判官给出的最终数值分会反映到 task 级 safetyScore + sample 级 score 上。
+ *   旧 job（无 EvalItem 行）回退读 inspect_ai .json/.eval 日志，target 同样保真。
  *
  * 安全：所有响应中的 apiKey/key 字段固定屏蔽为 "***"（请求中传入的真实
  *   值仅入库 + 调用上游使用，不回显给调用方——他自己手里就有原值）。
@@ -32,18 +37,26 @@
  * 实现要点：
  *   - 每次提交都创建新 Agent（name 加时间戳后缀避免唯一约束碰撞）。
  *   - 原始甲方字段存入 EvalJob.config.v1，GET 时按原样回显。
- *   - sampling.mode='random' 时 perTaskLimit = ceil(count / benchmarks.length)。
+ *   - sampling.mode='random' 时 per-task 分配走 base+remainder（Σ == count 严格相等），
+ *     count < resolved-task 数会被 400 拒绝（防止某 task 拿 0 条样本造成类别覆盖缺口）。
  *   - 非 openai_compat 走 ts_bridge_solver 路径（modelId = `openai/bridge-<type>-<id>`）。
  *   - 同步模式：2s 间隔轮询 EvalJob.status；客户端断开立刻 return（job 继续跑）。
  */
 
 import * as crypto from 'crypto';
 import { Request, Response } from 'express';
-import { Agent, EvalJob, EvalTask, JudgeModel } from '../models';
+import { Op } from 'sequelize';
+import { Agent, EvalJob, EvalItem, EvalTask, JudgeModel } from '../models';
 import { runJob } from '../services/evalRunner';
 import { catalogService } from '../services/catalogService';
 import { readEvalSamples } from '../services/resultReader';
 import { sseService } from '../services/sseService';
+import {
+  allocateSamples,
+  evalItemToV1Sample,
+  logSampleToV1Sample,
+  toV1RawSample,
+} from '../services/v1SampleShape';
 import { successResponse, errorResponse } from '../utils/response';
 import logger from '../utils/logger';
 
@@ -426,26 +439,51 @@ async function buildStatusPayload(
 
   const taskOutputs: any[] = [];
   let aggregateCompletedSamples = 0;
+  let aggregateFailedSamples = 0;
   for (const task of sortedTasks) {
     let samples: any[] = [];
     let total = 0;
     let truncated = false;
-    if (task.evalFile) {
+    let source: 'eval_items' | 'log_file' | 'none' = 'none';
+
+    // Prefer EvalItem table — populated in real-time by ts_bridge_solver
+    // callbacks, so polling GET picks up samples one-by-one as they finish
+    // (instead of waiting for inspect_ai to flush the whole .json log at
+    // task end). Each row carries inputJson.target, so the v1 sample shape
+    // can include the original reference answer, not just input/output.
+    let itemRows: EvalItem[] = [];
+    try {
+      itemRows = await EvalItem.findAll({
+        where: { taskId: task.id },
+        order: [['createdAt', 'ASC']],
+        limit: samplesPerTask,
+      });
+      total = await EvalItem.count({ where: { taskId: task.id } });
+    } catch (err: any) {
+      logger.warn(`[v1] EvalItem read failed task=${task.id}: ${err.message}`);
+    }
+
+    if (itemRows.length > 0) {
+      source = 'eval_items';
+      samples = itemRows.map(evalItemToV1Sample);
+      truncated = total > samples.length;
+    } else if (task.evalFile) {
+      // Fallback: jobs that ran before the EvalItem persistence path (or
+      // edge cases where the bridge never fired) — read directly from the
+      // inspect_ai .json/.eval log. resultReader already preserves target.
       try {
         const result = await readEvalSamples(task.evalFile, 0, samplesPerTask);
-        samples = result.samples.map((s) => ({
-          id: s.id,
-          input: s.input,
-          output: s.output,
-          ...(s.error ? { error: s.error } : {}),
-        }));
+        samples = result.samples.map(logSampleToV1Sample);
         total = result.total;
         truncated = total > samples.length;
+        source = 'log_file';
       } catch (err: any) {
         logger.warn(`[v1] read samples failed task=${task.id}: ${err.message}`);
       }
     }
+
     aggregateCompletedSamples += task.completedSamples;
+    aggregateFailedSamples += task.failedSamples;
     taskOutputs.push({
       benchmark: task.benchmark,
       taskName: task.taskName,
@@ -455,29 +493,49 @@ async function buildStatusPayload(
       failedSamples: task.failedSamples,
       samplesShown: samples.length,
       samplesTruncated: truncated,
+      samplesSource: source,
       errorMessage: task.errorMessage,
       samples,
     });
   }
 
-  // When the user requested random sampling and the actual completed sample
-  // count fell short of what the job planned (job.totalSamples), tell them
-  // why — almost always one benchmark's local dataset is smaller than its
-  // share of `count`. Without this hint, "I asked for 20 but got 18" looks
-  // like a bug.
+  // When the user requested random sampling and the actual count diverged
+  // from what they asked for, explain why. Two distinct causes get conflated
+  // ("I asked for 20 but got 19"):
+  //   1. dataset shortage — a per-task allocation exceeds the local dataset
+  //      size, so inspect_ai runs fewer samples than the cap;
+  //   2. sample failures — agent/network errors on individual samples.
+  // We split the explanation accordingly so the user knows whether to look
+  // at sample errors or dataset coverage.
   const isTerminal = job.status === 'completed' || job.status === 'failed';
   const requestedCount =
     echoSampling && typeof echoSampling === 'object' && (echoSampling as any).count != null
       ? Number((echoSampling as any).count)
       : null;
-  const samplingNotes =
+  let samplingNotes: string | null = null;
+  if (
     isTerminal &&
     requestedCount &&
     requestedCount > 0 &&
-    aggregateCompletedSamples > 0 &&
     aggregateCompletedSamples < requestedCount
-      ? `请求 ${requestedCount} 条样本，实际完成 ${aggregateCompletedSamples} 条；通常是某个 benchmark 本地数据集小于分配额度`
-      : null;
+  ) {
+    const shortfall = requestedCount - aggregateCompletedSamples;
+    const parts: string[] = [
+      `请求 ${requestedCount} 条样本，实际完成 ${aggregateCompletedSamples} 条`,
+    ];
+    if (aggregateFailedSamples > 0) {
+      parts.push(
+        `其中 ${aggregateFailedSamples} 条 Agent 调用失败（详见 tasks[].samples[].error）`,
+      );
+    }
+    const datasetShortfall = shortfall - aggregateFailedSamples;
+    if (datasetShortfall > 0) {
+      parts.push(
+        `还差 ${datasetShortfall} 条来自数据集本地容量不足 — 某 benchmark 数据集小于分配额度`,
+      );
+    }
+    samplingNotes = parts.join('；');
+  }
 
   return {
     taskId: job.id,
@@ -497,6 +555,7 @@ async function buildStatusPayload(
     completedTasks: job.completedTasks,
     totalSamples: job.totalSamples,
     completedSamples: aggregateCompletedSamples,
+    failedSamples: aggregateFailedSamples,
     ...(samplingNotes ? { samplingNotes } : {}),
     tasks: taskOutputs,
   };
@@ -677,21 +736,37 @@ export const v1Controller = {
         return;
       }
 
-      // Sampling → per-task allocation using base+remainder (not ceil), so
-      // Σ samplesTotal == count exactly. Earlier `Math.ceil(count / N) * N`
-      // could over-allocate (count=20, N=3 → 21) and made GET responses confusing.
-      // Tasks are sorted: first `remainder` get base+1, rest get base.
+      // count 必须 ≥ 解析后的 task 数。每个 task 至少分配 1 条样本是平台
+      // 全类别覆盖原则的前置条件——某 task 拿 0 条会让那个类别静默缺席，
+      // 比"拒绝请求"危险得多（项目记忆 feedback_full_coverage）。错误信息
+      // 暴露 task 展开列表，正好把"benchmarks 数 ≠ resolved tasks 数"这条
+      // 隐含规则告诉调用方（一个 benchmark 可能展开成多个 sub-task）。
+      if (payload.sampling.mode === 'random') {
+        const requestedCount = Number(payload.sampling.count);
+        if (requestedCount < tasksToCreate.length) {
+          const taskList = tasksToCreate
+            .map((t) => `${t.benchmark}/${t.taskName}`)
+            .join(', ');
+          res.status(400).json(
+            errorResponse(
+              `sampling.count (${requestedCount}) 小于解析后任务数 (${tasksToCreate.length})。` +
+                `请求的 benchmarks 展开为 ${tasksToCreate.length} 个 task：[${taskList}]。` +
+                `每个 task 至少需要 1 条样本以保证类别全覆盖，请将 sampling.count 调整为 >= ${tasksToCreate.length}（或减少 benchmarks）。`,
+            ),
+          );
+          return;
+        }
+      }
+
+      // Sampling → per-task allocation using base+remainder, so
+      // Σ samplesTotal == count exactly. count >= numTasks is enforced above
+      // so base >= 1 and no task is left with 0 samples (full-category-coverage
+      // contract). First `remainder` tasks get base+1, rest get base.
       const totalCount = payload.sampling.mode === 'random' ? Number(payload.sampling.count) : 0;
       const numTasks = tasksToCreate.length;
       const perTaskAllocations =
         payload.sampling.mode === 'random'
-          ? (() => {
-              const base = Math.floor(totalCount / numTasks);
-              const remainder = totalCount % numTasks;
-              return Array.from({ length: numTasks }, (_, i) =>
-                Math.max(1, i < remainder ? base + 1 : base),
-              );
-            })()
+          ? allocateSamples(totalCount, numTasks)
           : Array.from({ length: numTasks }, () => 0); // mode='all' → no per-task cap
 
       // Create Agent
@@ -903,29 +978,75 @@ export const v1Controller = {
         ],
       });
 
-      // Flatten samples across all matching tasks. Skip tasks that haven't
-      // produced an .eval/.json yet (running / failed-before-write cases).
-      const flat: Array<{
-        benchmark: string;
-        taskName: string;
-        sampleId: string;
-        input: string;
-        target: unknown;
-        output: string;
-      }> = [];
+      if (tasks.length === 0) {
+        res.json(
+          successResponse({
+            samples: [],
+            pagination: { page, pageSize, total: 0, totalPages: 0 },
+            source: 'none',
+          }),
+        );
+        return;
+      }
+
+      const offset = (page - 1) * pageSize;
+      const taskIds = tasks.map((t) => t.id);
+      const taskById = new Map(tasks.map((t) => [t.id, t]));
+
+      // Prefer EvalItem rows — populated per-sample by the bridge solver, so
+      // the list updates one row at a time during a live run (instead of
+      // staying empty until inspect_ai flushes the .json log at task end).
+      // Mirrors the dual-source pattern in buildStatusPayload.
+      const evalItemTotal = await EvalItem.count({
+        where: { taskId: { [Op.in]: taskIds } },
+      });
+
+      if (evalItemTotal > 0) {
+        const items = await EvalItem.findAll({
+          where: { taskId: { [Op.in]: taskIds } },
+          order: [
+            ['taskId', 'ASC'],
+            ['createdAt', 'ASC'],
+          ],
+          offset,
+          limit: pageSize,
+        });
+        const samples = items.map((item) => {
+          const t = taskById.get(item.taskId);
+          return toV1RawSample(evalItemToV1Sample(item), {
+            benchmark: t?.benchmark ?? '',
+            taskName: t?.taskName ?? '',
+          });
+        });
+        res.json(
+          successResponse({
+            samples,
+            pagination: {
+              page,
+              pageSize,
+              total: evalItemTotal,
+              totalPages: Math.ceil(evalItemTotal / pageSize),
+            },
+            source: 'eval_items',
+          }),
+        );
+        return;
+      }
+
+      // Fallback: jobs that ran before the EvalItem persistence path (or
+      // edge cases where the bridge never fired) — flatten log files.
+      const flat: ReturnType<typeof toV1RawSample>[] = [];
       for (const task of tasks) {
         if (!task.evalFile) continue;
         try {
           const result = await readEvalSamples(task.evalFile, 0, Number.MAX_SAFE_INTEGER);
           for (const s of result.samples) {
-            flat.push({
-              benchmark: task.benchmark,
-              taskName: task.taskName,
-              sampleId: s.id,
-              input: s.input,
-              target: s.target ?? null,
-              output: s.output,
-            });
+            flat.push(
+              toV1RawSample(logSampleToV1Sample(s), {
+                benchmark: task.benchmark,
+                taskName: task.taskName,
+              }),
+            );
           }
         } catch (err: any) {
           logger.warn(`[v1] getJobSamples read fail task=${task.id}: ${err.message}`);
@@ -934,13 +1055,13 @@ export const v1Controller = {
 
       const total = flat.length;
       const totalPages = total === 0 ? 0 : Math.ceil(total / pageSize);
-      const offset = (page - 1) * pageSize;
       const pageSlice = flat.slice(offset, offset + pageSize);
 
       res.json(
         successResponse({
           samples: pageSlice,
           pagination: { page, pageSize, total, totalPages },
+          source: total > 0 ? 'log_file' : 'none',
         }),
       );
     } catch (err: any) {

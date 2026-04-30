@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
-import { EvalJob, EvalTask, Agent } from '../models';
+import { EvalJob, EvalTask, EvalItem, Agent } from '../models';
 import { readEvalSamples } from '../services/resultReader';
 import { aggregateDimensions, TaskResultRow } from '../services/dimensionAggregator';
+import { evalItemToV1Sample, logSampleToV1Sample } from '../services/v1SampleShape';
 import { successResponse, errorResponse } from '../utils/response';
 import logger from '../utils/logger';
 
@@ -118,6 +119,11 @@ export const resultController = {
   /**
    * GET /api/results/by-job/:jobId/tasks/:taskId/samples — Paginated sample details.
    *
+   * Prefers EvalItem rows (real-time, written per-sample by the bridge solver)
+   * over the inspect_ai .json log (only flushed at task completion). The DB
+   * path lets the frontend show samples one-by-one during a live run; the log
+   * fallback covers older jobs where EvalItem rows were never written.
+   *
    * Query params: page (default 1), pageSize (default 20)
    */
   async getTaskSamples(req: Request, res: Response): Promise<void> {
@@ -139,14 +145,43 @@ export const resultController = {
         return;
       }
 
+      const page = Math.max(1, parseInt(req.query.page as string, 10) || 1);
+      const pageSize = Math.max(1, Math.min(100, parseInt(req.query.pageSize as string, 10) || 20));
+      const offset = (page - 1) * pageSize;
+
+      const evalItemTotal = await EvalItem.count({ where: { taskId: task.id } });
+
+      if (evalItemTotal > 0) {
+        const items = await EvalItem.findAll({
+          where: { taskId: task.id },
+          order: [['createdAt', 'ASC']],
+          offset,
+          limit: pageSize,
+        });
+        res.json(
+          successResponse({
+            task: {
+              id: task.id,
+              benchmark: task.benchmark,
+              taskName: task.taskName,
+            },
+            samples: items.map(evalItemToV1Sample),
+            pagination: {
+              page,
+              pageSize,
+              total: evalItemTotal,
+              totalPages: Math.ceil(evalItemTotal / pageSize),
+            },
+            source: 'eval_items',
+          }),
+        );
+        return;
+      }
+
       if (!task.evalFile) {
         res.status(404).json(errorResponse('No eval result file available for this task'));
         return;
       }
-
-      const page = Math.max(1, parseInt(req.query.page as string, 10) || 1);
-      const pageSize = Math.max(1, Math.min(100, parseInt(req.query.pageSize as string, 10) || 20));
-      const offset = (page - 1) * pageSize;
 
       const { samples, total } = await readEvalSamples(task.evalFile, offset, pageSize);
 
@@ -157,13 +192,14 @@ export const resultController = {
             benchmark: task.benchmark,
             taskName: task.taskName,
           },
-          samples,
+          samples: samples.map(logSampleToV1Sample),
           pagination: {
             page,
             pageSize,
             total,
             totalPages: Math.ceil(total / pageSize),
           },
+          source: 'log_file',
         }),
       );
     } catch (error: any) {

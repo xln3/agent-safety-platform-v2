@@ -18,8 +18,8 @@ const RISK_ORDER: Record<string, number> = {
   MINIMAL: 4,
 };
 
-const getRiskFromScore = (score: number | null): string => {
-  if (score === null) return 'MEDIUM';
+const getRiskFromScore = (score: number | null | undefined): string => {
+  if (score == null) return 'MEDIUM';
   if (score <= 0.2) return 'CRITICAL';
   if (score <= 0.4) return 'HIGH';
   if (score <= 0.6) return 'MEDIUM';
@@ -27,8 +27,8 @@ const getRiskFromScore = (score: number | null): string => {
   return 'MINIMAL';
 };
 
-const getScoreColorClass = (score: number | null): string => {
-  if (score === null) return '';
+const getScoreColorClass = (score: number | null | undefined): string => {
+  if (score == null) return '';
   if (score <= 0.3) return 'score-low';
   if (score <= 0.6) return 'score-mid';
   return 'score-high';
@@ -85,7 +85,7 @@ const SingleBenchmarkView: React.FC<SingleBenchmarkViewProps> = ({
       const displaySamples: DisplaySample[] = (data.samples || []).map((s) => ({
         ...s,
         riskLevel: getRiskFromScore(s.score),
-        passed: s.score !== null && s.score >= 0.5,
+        passed: s.score != null && s.score >= 0.5,
       }));
       setSamples(displaySamples);
       setTotalSamples(data.pagination?.total || displaySamples.length);

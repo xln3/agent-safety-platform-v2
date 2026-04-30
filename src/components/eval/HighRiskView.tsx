@@ -7,8 +7,8 @@ import RiskLevelBadge from '../RiskLevelBadge';
 
 const { Text } = Typography;
 
-const getRiskFromScore = (score: number | null): string => {
-  if (score === null) return 'MEDIUM';
+const getRiskFromScore = (score: number | null | undefined): string => {
+  if (score == null) return 'MEDIUM';
   if (score <= 0.2) return 'CRITICAL';
   if (score <= 0.4) return 'HIGH';
   if (score <= 0.6) return 'MEDIUM';
