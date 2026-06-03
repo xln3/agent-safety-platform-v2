@@ -1598,13 +1598,17 @@ components:
         input: { type: string, description: 注入到 agent 的原始 prompt（用户消息文本） }
         target:
           description: |
-            上游 benchmark 原始 target（参考答案），**保真透传**，不做 String() 强制转换。
-            可能形态：
-              - string         如 "Paris"
-              - string[]       如 ["red","yellow","blue"]（多答案 MCQ）
-              - object         如 { idx: 2, label: "C" }（BBQ 等结构化）
-              - null           样本无 target 时
-            调用方需自行按 typeof / Array.isArray 判断结构。
+            上游 benchmark 原始 target（即"原始答案/参考答案"），**保真透传**，不做 String() 强制转换。
+            ⚠️ target 的"含义"由各 benchmark 自身定义——并非所有题型都有"标准答案"，这就是
+            为什么看起来"只有选择题才有原始答案"：
+              - 选择/问答类（truthfulqa、bbq、mind2web…）：target = 正确选项/标准答案，
+                如 "B" / ["B"] / "B. Action: CLICK"(mind2web 动作) / { idx:2, label:"C" }——即甲方说的"原始答案"。
+              - 拒答/安全类（strong_reject 等）：无单一正确文本，target 为占位（如 "N/A"）；
+                通过与否取决于"模型是否拒答"，须由外部裁判按 input+output 评判。
+              - 行为/agentic 类（agentdojo 等）：无文本答案，target 为 null/空；
+                是否通过取决于"用户任务是否完成 / 是否被注入劫持"这类程序化判定。
+              - 工具调用类（bfcl）：AST 类 target = ground-truth 函数调用串；relevance 类 target = ""。
+            可能形态：string | string[] | object | null——调用方按 typeof / Array.isArray 判断。
           oneOf:
             - { type: string }
             - { type: array, items: {} }
@@ -1641,13 +1645,13 @@ components:
         input: { type: string, description: 注入到 agent 的原始 prompt（用户消息文本） }
         target:
           description: |
-            上游 benchmark 原始 target，**保真透传**，不做 String() 强制转换。
-            可能形态：
-              - string         如 "Paris"
-              - string[]       如 ["red","yellow","blue"]（多答案 MCQ）
-              - object         如 { idx: 2, label: "C" }（BBQ 等结构化）
-              - null           样本无 target 时
-            调用方需自行按 typeof / Array.isArray 判断结构。
+            上游 benchmark 原始 target（"原始答案/参考答案"），**保真透传**，不做 String() 强制转换。
+            含义因 benchmark 而异（这解释了"为何只有选择题才像是原始答案"）：
+              - 选择/问答类（truthfulqa、bbq、mind2web…）：target = 正确选项/标准答案。
+              - 拒答/安全类（strong_reject 等）：无标准答案，target 为占位（如 "N/A"），靠外部裁判看模型是否拒答。
+              - 行为/agentic 类（agentdojo 等）：无文本答案，target 为 null/空，靠程序化判定任务是否完成/被劫持。
+              - 工具调用类（bfcl）：AST 类为 ground-truth 调用串；relevance 类为 ""。
+            可能形态：string | string[] | object | null——调用方按 typeof / Array.isArray 判断。
           oneOf:
             - { type: string }
             - { type: array, items: {} }

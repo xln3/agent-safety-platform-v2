@@ -698,21 +698,31 @@ export const v1Controller = {
         resolvedJudgeId = judgeRec.id;
         resolvedJudgeName = judgeRec.modelId;
       }
+      // 甲方既定工作流：本平台只负责"测试题输入 → 智能体输出 → 原始答案(target)"，
+      // 判定 pass/fail 由甲方用自己的 proai 裁判模型在外部完成。因此当某些 benchmark
+      // 标注了 needs-judge 却没传 judgeModelId/judgeModel 时，不再硬性 400 拦截，而是
+      // 自动降级为"仅采样模式"(skipJudge)：照常产出 input/output/target，跳过内置裁判，
+      // 并在响应里给出 warning 说明（绝不静默给假分——这正是 2026-04-28 审计要防的）。
+      let autoSkippedJudge: string[] = [];
       if (!resolvedJudgeName && !payload.skipJudge) {
         const allBenchmarks = catalogService.getAllBenchmarks();
-        const benchmarksNeedingJudge = payload.benchmarks.filter((name) => {
+        autoSkippedJudge = payload.benchmarks.filter((name) => {
           const info = allBenchmarks.find((b) => b.name === name);
           return info?.judgeModel && info.judgeModel.length > 0;
         });
-        if (benchmarksNeedingJudge.length > 0) {
-          res.status(400).json(
-            errorResponse(
-              `以下 benchmark 需要裁判模型但未提供 judgeModelId/judgeModel: ${benchmarksNeedingJudge.join(', ')}`,
-            ),
+        if (autoSkippedJudge.length > 0) {
+          payload.skipJudge = true;
+          logger.info(
+            `[v1] no judge supplied for [${autoSkippedJudge.join(', ')}] — auto skipJudge (sample-only, scoring omitted)`,
           );
-          return;
         }
       }
+      const judgeWarning =
+        autoSkippedJudge.length > 0
+          ? `未提供裁判模型，以下 benchmark 已自动切换为"仅采样模式"(skipJudge)：` +
+            `${autoSkippedJudge.join(', ')}。系统只产出 input/output/target，不做内置打分；` +
+            `请用外部裁判模型自行判定，或传 judgeModelId/judgeModel 启用内置打分。`
+          : null;
 
       // Resolve task list FIRST (some benchmarks expand to multi-task).
       // Allocation must be per-task, not per-benchmark, otherwise count=20
@@ -880,6 +890,9 @@ export const v1Controller = {
         if (result === 'timeout') {
           (payloadOut as any).status = 'timeout';
         }
+        if (judgeWarning) {
+          (payloadOut as any).warning = judgeWarning;
+        }
         res.status(200).json(
           successResponse(
             payloadOut,
@@ -901,6 +914,7 @@ export const v1Controller = {
               ? { judgeModel: echoJudgeModelInline(payload.judgeModel) }
               : {}),
             ...(payload.skipJudge ? { skipJudge: true } : {}),
+            ...(judgeWarning ? { warning: judgeWarning } : {}),
             startedAt: job.createdAt?.toISOString() ?? new Date().toISOString(),
             status: job.status,
             benchmarks: payload.benchmarks,
@@ -908,7 +922,7 @@ export const v1Controller = {
             totalTasks: tasksToCreate.length,
             totalSamples: jobTotalSamples,
           },
-          'Evaluation submitted',
+          judgeWarning ? `Evaluation submitted (${judgeWarning})` : 'Evaluation submitted',
         ),
       );
     } catch (err: any) {

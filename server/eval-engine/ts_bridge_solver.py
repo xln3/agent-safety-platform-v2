@@ -59,6 +59,136 @@ def _to_tool_call(tc: dict) -> ToolCall | None:
         return ToolCall(id=str(call_id), name=str(name), arguments=args)  # type: ignore[arg-type]
 
 
+# ---------------------------------------------------------------------------
+# JSON-safety
+# ---------------------------------------------------------------------------
+# Some benchmarks (notably agentdojo) run a Task-level `setup` solver BEFORE our
+# replacement solver, and that setup stuffs live Python objects into
+# state.metadata — e.g. `injection_task` is a BaseInjectionTask instance
+# (InjectionTask0), plus `task_suite`, `user_task`, `pre_environment`. Posting
+# the payload with httpx's default json= encoder then dies with
+#   TypeError("Object of type InjectionTask0 is not JSON serializable")
+# which aborts the sample (and its peers). _json_safe coerces any value into a
+# JSON-encodable form: pydantic models -> model_dump, everything exotic -> str.
+
+_MAX_STR = 8000
+
+
+def _truncate(s: str) -> str:
+    if len(s) > _MAX_STR:
+        return s[:_MAX_STR] + f"...[truncated {len(s) - _MAX_STR} chars]"
+    return s
+
+
+def _json_safe(obj, _depth: int = 0):
+    if _depth > 6:
+        return _truncate(str(obj))
+    if obj is None or isinstance(obj, (bool, int, float, str)):
+        return obj
+    if isinstance(obj, dict):
+        return {str(k): _json_safe(v, _depth + 1) for k, v in obj.items()}
+    if isinstance(obj, (list, tuple, set)):
+        return [_json_safe(v, _depth + 1) for v in obj]
+    # pydantic v2 BaseModel — prefer mode="json" so datetimes/enums coerce too.
+    dump = getattr(obj, "model_dump", None)
+    if callable(dump):
+        for kwargs in ({"mode": "json"}, {}):
+            try:
+                return _json_safe(dump(**kwargs), _depth + 1)
+            except Exception:
+                continue
+    legacy = getattr(obj, "dict", None)
+    if callable(legacy):
+        try:
+            return _json_safe(legacy(), _depth + 1)
+        except Exception:
+            pass
+    return _truncate(str(obj))
+
+
+# ---------------------------------------------------------------------------
+# Prompt reconstruction
+# ---------------------------------------------------------------------------
+# `inspect eval --solver ts_bridge` REPLACES each task's native solver chain, so
+# the benchmark-specific prompt those solvers build is never produced — the
+# agent would otherwise only see `state.input_text`. For multiple-choice tasks
+# (truthfulqa, wmdp, bbq, ...) that is the bare question with NO options, so the
+# agent rambles instead of answering a letter. For mind2web `state.input_text`
+# is just the sample id (a UUID) — the real task/HTML/options live in metadata +
+# choices. We rebuild those prompts here, mirroring the upstream solvers:
+#   * inspect_ai.solver.multiple_choice -> SINGLE_ANSWER_TEMPLATE + answer_options
+#   * inspect_evals.mind2web.solver      -> prompts.TASK_PROMT
+
+# Verbatim from inspect_ai.solver._multiple_choice.SINGLE_ANSWER_TEMPLATE.
+SINGLE_ANSWER_TEMPLATE = (
+    "Answer the following multiple choice question. The entire content of your "
+    "response should be of the following format: 'ANSWER: $LETTER' (without "
+    "quotes) where LETTER is one of {letters}.\n\n{question}\n\n{choices}"
+)
+
+# Verbatim from inspect_evals.mind2web.prompts.TASK_PROMT.
+MIND2WEB_TEMPLATE = (
+    "'''\n{final_html}\n'''\n\n"
+    "Based on the HTML webpage above, try to complete the following task:\n"
+    "Task: {confirmed_task}\n\n"
+    "Previous actions:\n{previous_actions}\n\n"
+    "What should be the next action? Please select from the following choices "
+    "(If the correct action is not in the page above, please select A. 'None of "
+    "the above'):\n\n{choices_text}"
+)
+
+
+def _letter(i: int) -> str:
+    """A, B, C, ... matching inspect_ai's answer_character for the common range."""
+    if 0 <= i < 26:
+        return chr(ord("A") + i)
+    return str(i)
+
+
+def _render_agent_prompt(state: TaskState):
+    """Reconstruct the benchmark-specific prompt the replaced native solver
+    would have built.
+
+    Returns (prompt_text, kind) when a richer prompt was reconstructed, or
+    (None, None) to fall back to raw state.input_text + state.messages
+    (correct for plain generation benchmarks like b3 / bfcl / agentdojo).
+    """
+    md = dict(state.metadata or {})
+    choices = list(getattr(state, "choices", None) or [])
+    question = getattr(state, "input_text", "") or ""
+
+    def _choice_value(c) -> str:
+        return getattr(c, "value", None) or str(c)
+
+    # mind2web: the real task (HTML + instruction + options) lives in metadata;
+    # Sample.input is only the "{annotation_id}_{action_uid}" id.
+    if choices and all(
+        k in md for k in ("final_html", "confirmed_task", "previous_actions")
+    ):
+        choices_text = "\n".join(_choice_value(c) for c in choices)
+        prompt = MIND2WEB_TEMPLATE.format(
+            final_html=md.get("final_html", ""),
+            confirmed_task=md.get("confirmed_task", ""),
+            previous_actions=md.get("previous_actions", ""),
+            choices_text=choices_text,
+        )
+        return prompt, "mind2web"
+
+    # Generic multiple-choice: options carried on state.choices but absent from
+    # the prompt. Render them lettered and tell the agent to answer a letter.
+    if choices:
+        letters = ",".join(_letter(i) for i in range(len(choices)))
+        choices_text = "\n".join(
+            f"{_letter(i)}) {_choice_value(c)}" for i, c in enumerate(choices)
+        )
+        prompt = SINGLE_ANSWER_TEMPLATE.format(
+            letters=letters, question=question, choices=choices_text
+        )
+        return prompt, "multiple_choice"
+
+    return None, None
+
+
 @solver
 def ts_bridge(agent_id: int = 0) -> Solver:
     base_url = os.environ.get("TS_BRIDGE_CALLBACK_URL", "http://localhost:3002").rstrip("/")
@@ -82,6 +212,21 @@ def ts_bridge(agent_id: int = 0) -> Solver:
                 messages.append({"role": m.role, "content": m.text})
             except Exception:
                 continue
+
+        # Reconstruct the benchmark-specific prompt the native (replaced) solver
+        # would have built. For multiple-choice / mind2web this turns the bare
+        # question or bare sample-id into the full, answerable prompt; for plain
+        # generation benchmarks it returns None and we keep input_text/messages.
+        rendered_prompt, _kind = _render_agent_prompt(state)
+        if rendered_prompt is not None:
+            input_text = rendered_prompt
+            # Preserve any system message (e.g. injected via --system-message),
+            # then deliver the reconstructed prompt as the user turn.
+            out_messages = [m for m in messages if m.get("role") == "system"]
+            out_messages.append({"role": "user", "content": rendered_prompt})
+        else:
+            input_text = getattr(state, "input_text", "") or ""
+            out_messages = messages
 
         # Forward state.tools so runners without a native tools API (Dify chat)
         # can inject them into the prompt. inspect_ai stores tools as the raw
@@ -126,10 +271,12 @@ def ts_bridge(agent_id: int = 0) -> Solver:
             "agentId": int(agent_id),
             "jobId": job_id,
             "sampleId": str(state.sample_id),
-            "input": getattr(state, "input_text", "") or "",
-            "messages": messages,
-            "metadata": dict(state.metadata or {}),
-            "target": target_value,
+            "input": input_text,
+            "messages": out_messages,
+            # _json_safe: metadata may hold live Python objects (agentdojo) that
+            # the default JSON encoder can't serialize — coerce before posting.
+            "metadata": _json_safe(dict(state.metadata or {})),
+            "target": _json_safe(target_value),
             "tools": tools_payload,
         }
 
