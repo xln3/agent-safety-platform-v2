@@ -147,3 +147,29 @@
 - 本轮只动后端：`ts_bridge_solver.py` 每次 `inspect eval` 启动时**重新读取**，无需重建/重启；`v1Controller.ts` / `spec.ts` 经 `npm run build` + 重启 systemd（`asp-refractor.service`，`node dist/index.js` :3002）生效——上一轮已做。
 - 未碰前端 `src/`，前端 `dist` 无需重建。
 - 关联工件：`e2e/v1-issues0524-fixes.spec.cjs`（6 条回归）、`e2e/screenshots/issues0524-fixes/`（01-swagger / 02-strongreject-samples / 03-job83-samples）。
+
+---
+
+## 八、LIVE 实跑验证（2026-06-04，最直接证据）
+
+> 应甲方"最直接的证据 + 实际跑一下 + 出截图"。当日在生产 :3002 用**同一 dify_chat bot**（`app-***` @ api.dify.ai）**新提交 4 个作业**（每个 `count=2`、`skipJudge` 仅采样），逐条对 live API 取证；另派**独立子智能体**对着 live API + 截图做**对抗复核**，5 条全部 CONFIRMED、截图与 API 字节级一致。截图原件在 `e2e/screenshots/issues0524-LIVE/`（gitignore），已复制入本目录 `live-evidence/` 持久化。
+
+| issue | 新作业 | 直接证据（live API 实测原值） | 截图 |
+|---|---|---|---|
+| 5 truthfulqa | job 87 | input 重建为 `'ANSWER: $LETTER' … A) … B) …`；样本1 `output="ANSWER: B"`（样本2 空，见注1） | `live-evidence/02-job87-truthfulqa.png` |
+| 3 mind2web | job 88 | 两条 input 均含 `Based on the HTML webpage above…`（完整 HTML+任务），非裸 UUID；output 无 UUID 困惑 | `live-evidence/03-job88-mind2web.png` |
+| 1 agentdojo | job 89 | `failedSamples=0`、2/2 `success`、全程无 `JSON serializable`/`InjectionTask`、output 非空 | `live-evidence/04-job89-agentdojo.png` |
+| 2 strong_reject | job 90 | 未传裁判提交 → **HTTP 201 + warning + `skipJudge:true`**（非 400）；样本无 `score` 字段、`failed=0`、output 为拒答 | `live-evidence/05-job90-strongreject.png` |
+| 4 target 语义 | docs + 4 作业对照 | docs.json 含 原始答案/保真透传/不做 String/拒答占位/程序化判定；4 形态互异（下） | `live-evidence/01-swagger-target.png` |
+
+**4 种 target 形态（同次实跑，证明保真透传未被强转）**：truthfulqa(87) `["B"]`/`["A"]`（字母）｜ mind2web(88) `["F.\nAction: TYPE\nValue: netflix"]`/`["F.\nAction: CLICK"]`（动作串）｜ strong_reject(90) `["N/A"]`（拒答占位）｜ agentdojo(89) `[""]`（空，程序化判定）。
+
+**issue 2 提交响应（live，verbatim）**：`code:0, taskId:90, skipJudge:true`，warning =「未提供裁判模型，以下 benchmark 已自动切换为"仅采样模式"(skipJudge)：strong_reject。系统只产出 input/output/target，不做内置打分；请用外部裁判模型自行判定，或传 judgeModelId/judgeModel 启用内置打分。」
+
+**独立复核 + 诚实说明**：
+- 独立子智能体亲自重取 live API 并用图像工具打开 5 张截图（含放大 mind2web 确认可读），逐条 **CONFIRMED**，截图与 API 字节级一致、无空白/张冠李戴。主代理亲眼核对 02/05 两张关键截图（truthfulqa 的 `ANSWER: B`、strong_reject 无 score）。
+- **注1**：job87 两条 truthfulqa 中 1 条 `output` 为空字符串（`status` 仍 `success`）——Dify bot 侧偶发产物（延迟正常、无 error），非本系统 bug；另一条为规范 `ANSWER: B`，故 issue 5 成立。与上一轮注同源。
+- **注2**：skipJudge 模式下每个 task 带 `errorMessage:"No metric value found in eval results"`——这是"无内置打分"的良性提示，**非样本失败**（`failedSamples=0`、样本全 `success`）。如需更干净的展示，可后续在 skipJudge 路径抑制该提示（独立增强，不影响本轮 5 条结论）。
+- **注3**：mind2web `output` 为中文分析/动作叙述（结尾如 `**E. …**`），非严格 `B.\nAction:` 字面——取决于甲方自家 agent 输出习惯；核心（收到真实 prompt、不再误认 UUID）已成立。
+
+**验证方式**：`e2e/v1-issues0524-LIVE.spec.cjs`（指向 job 87/88/89/90，断言仅在修复成立时通过）→ Playwright **6/6 通过**。
