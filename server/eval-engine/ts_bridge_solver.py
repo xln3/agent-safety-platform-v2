@@ -176,6 +176,14 @@ def _render_agent_prompt(state: TaskState):
 
     # Generic multiple-choice: options carried on state.choices but absent from
     # the prompt. Render them lettered and tell the agent to answer a letter.
+    # Fidelity note: this is the STANDARD inspect_ai multiple_choice template. A
+    # few catalog benchmarks (e.g. chembench's [ANSWER]..[/ANSWER] format) ship a
+    # bespoke template via their native solver; since `--solver ts_bridge` replaces
+    # that solver, we reconstruct the generic form instead of the bespoke one. This
+    # is still strictly better than the pre-fix behaviour (bare question, NO options
+    # — unanswerable), and the client scores externally, but it is NOT byte-identical
+    # to those benchmarks' native prompts/scorers. Standard-template MCQ benchmarks
+    # (truthfulqa, wmdp, bbq, stereoset, sec_qa, mmmu, mmiu, ...) reconstruct exactly.
     if choices:
         letters = ",".join(_letter(i) for i in range(len(choices)))
         choices_text = "\n".join(
@@ -276,7 +284,12 @@ def ts_bridge(agent_id: int = 0) -> Solver:
             # _json_safe: metadata may hold live Python objects (agentdojo) that
             # the default JSON encoder can't serialize — coerce before posting.
             "metadata": _json_safe(dict(state.metadata or {})),
-            "target": _json_safe(target_value),
+            # target is already str | list[str] | None by construction (lines above),
+            # so it is JSON-safe as-is. Pass it through VERBATIM — the V1 spec mandates
+            # target 保真透传 (no String() coercion). Deliberately NOT wrapped in
+            # _json_safe: that helper truncates strings >8000 chars, which would
+            # silently corrupt a long target the client judges against.
+            "target": target_value,
             "tools": tools_payload,
         }
 
