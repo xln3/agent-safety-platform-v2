@@ -227,7 +227,7 @@ const DATASET_REGISTRY: DatasetSpec[] = [
   {
     benchmark: 'ahb',
     source: 'hf',
-    hfRepo: 'sentientfutures/ahb',
+    hfRepo: 'sentientfutures/anima',
   },
   {
     benchmark: 'stereoset',
